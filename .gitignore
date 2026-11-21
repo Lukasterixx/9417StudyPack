@@ -2,8 +2,8 @@
 exam_style/PRACTICE_exam_transcribed.md
 exam_style/questions/EX_px.txt
 exam_style/base_data_v1.json
-# Built app (embeds the practice-exam questions); rebuild locally instead
-COMP9417_Exam_Drill.html
+# Private full build (includes the released practice-exam questions)
+COMP9417_Exam_Drill_FULL_private.html
 # Misc
 __pycache__/
 *.pyc

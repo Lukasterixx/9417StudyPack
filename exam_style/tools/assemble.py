@@ -67,7 +67,10 @@ if os.path.exists(ex_notes):
     D['units'].insert(0, {'id': 'EX', 'code': 'EX', 'short': 'Exam-style', 'title': 'Exam toolkit and exam-style practice', 'html': h, 'toc': toc,
                           'mins': max(1, round(len(src.split()) / 200)), 'gloss': None, 'noq': 0})
 nq = 0
+SKIP = [x for x in os.environ.get('EXCLUDE_BANKS', '').split(',') if x]
 for f in sorted(glob.glob(SP + '/work/questions/EX*.txt')):
+    if os.path.basename(f)[:-4] in SKIP:
+        continue
     parsed, errs = parse(f)
     if errs:
         print(os.path.basename(f), 'parse errors', errs[:3])
@@ -199,6 +202,11 @@ data = json.dumps(D, ensure_ascii=False, separators=(',', ':')).replace('</', '<
 page = head + '<script id="data" type="application/json">' + data + '</script>' + tail
 os.makedirs(SP + '/out', exist_ok=True)
 open(SP + '/out/COMP9417_Exam_Drill.html', 'w', encoding='utf8').write(page)
-body = page.split('<body style="margin:0">', 1)[1].rsplit('</body></html>', 1)[0]
+lb = SP + '/base/live_head_body.html'
+if os.path.exists(lb):
+    lhb = rep(open(lb, encoding='utf8').read(), '</style>\n<nav id="tabs"', '.opt.multi .l { border-radius: 6px }\n</style>\n<nav id="tabs"', 'css (live head)')
+    body = lhb + '<script id="data" type="application/json">' + data + '</script>' + tail.rsplit('</body></html>', 1)[0]
+else:
+    body = page.split('<body style="margin:0">', 1)[1].rsplit('</body></html>', 1)[0]
 open(SP + '/out/index.html', 'w', encoding='utf8').write(body)
 print(len(D['units']), 'units', len(D['qs']), 'questions', nq, 'exam-style', f'{len(page) / 1e6:.2f} MB')
