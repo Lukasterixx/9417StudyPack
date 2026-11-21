@@ -1,0 +1,166 @@
+{
+ "symbols": {
+  "x": "an input: the feature values for one example (a single number when there is only one feature)",
+  "y": "the true target value to predict; the tutorial also writes the whole list of targets as plain y",
+  "bf:y": "the list of all true target values, one per training example",
+  "hat:y": "the model's predicted value for an example",
+  "bar:x": "the sample mean of x: the average of the x values",
+  "bar:y": "the sample mean of y: the average of the y values",
+  "bar:X": "the sample mean: the average of the sampled values",
+  "theta": "a parameter the model learns: the weight on one feature (theta 0 is the intercept)",
+  "hat:theta": "the fitted parameter values the method ends up with",
+  "w": "the tutorial's name for the model's weights (w0 intercept, w1 slope)",
+  "hat:w": "the fitted weights found by least squares (tutorial notation)",
+  "beta": "the lab's name for the model's parameters (the same role as theta)",
+  "lambda": "the penalty strength: how much large weights are charged; zero gives plain least squares",
+  "alpha": "the learning rate: how big a step gradient descent takes; sklearn's alpha is penalty strength",
+  "X": "the design matrix: one row per example, one column per feature, first column all ones",
+  "T": "transpose: flips a vector or matrix so rows become columns",
+  "i": "counts features (0 to n) in the model; in statistics and tutorial formulas it counts data points",
+  "j": "counts training examples",
+  "n": "the number of features, not counting the intercept (slide notation)",
+  "m": "the number of training examples (the slides once also use m for a sample mean)",
+  "N": "the number of values in a sample; written N(mean, variance) it is the normal distribution",
+  "p": "the number of features (the tutorial counts the bias column, the lab does not)",
+  "k": "the number of nearest neighbours in k-NN; inside the distance formula it counts features",
+  "K": "the number of new features produced by a feature map",
+  "t": "counts gradient descent steps: the parameter value after t steps",
+  "J": "the cost: the total squared error of a candidate set of parameters",
+  "L": "the tutorial's name for the loss: the average squared error",
+  "h": "the prediction function: takes an input, returns the predicted value using the parameters",
+  "f": "the true underlying function; in k-NN, the target value stored for a training point",
+  "hat:f": "the model's learned estimate of the true function",
+  "E": "the expected value: the average over many repeats",
+  "P": "the probability (density) of what is written before the bar, given what follows",
+  "cal:L": "the likelihood: how probable the observed data is for a candidate parameter value",
+  "varepsilon": "random noise: the part of y the line cannot explain",
+  "sigma": "the standard deviation of the noise (its square is the variance)",
+  "mu": "the population mean: the average over the whole population",
+  "pi": "the constant 3.14159...",
+  "b": "the lab's name for a parameter (b0 intercept, b1 slope); in Laplace noise, the noise scale",
+  "r": "the Pearson correlation: a unit-free number from -1 to +1 for linear association",
+  "s": "the sample standard deviation (s squared is the sample variance)",
+  "F": "the unknown distribution the samples are drawn from",
+  "S": "a sum of products of deviations from the mean (S_xx for x, S_xy for x and y)",
+  "R": "the R squared score: how much of the variation in y the model explains",
+  "D": "an indicator variable: 1 if the patient takes the drug, 0 if not",
+  "z": "the interaction feature: the drug indicator multiplied by age",
+  "u": "any vector, used as a stand-in input; in the derivative hints, the variable being differentiated",
+  "v": "an arbitrary vector in the derivative hint",
+  "A": "an arbitrary matrix in the derivative hint",
+  "g": "an example function whose lowest value is used to compare min and arg min",
+  "I": "the identity matrix: ones on the diagonal, zeros elsewhere; adding lambda I adds lambda to the diagonal",
+  "Phi": "the design matrix of the new features, one row per example, one column per new feature",
+  "phi": "the feature map: turns an input into a new list of features",
+  "bb:R": "the set of real numbers (R to the p is lists of p real numbers)",
+  "Delta": "a change in the value that follows",
+  "q": "labels the query point: the new input we want a prediction for",
+  "d": "the distance between two points",
+  "sum": "add up the term that follows, once for every value of the index shown",
+  "min": "the smallest value the expression that follows can take",
+  "arg": "the input value that gives the best score, rather than the score itself (read with min)",
+  "partial": "the slope of the cost with respect to one parameter, nudging only that one",
+  "norm": "the length of a vector; squared, it is the sum of its squared entries",
+  "abs": "the size of the number inside, ignoring its sign",
+  "mid": "given: what comes after the bar is known or fixed",
+  "sim": "is drawn from, or is distributed as",
+  "propto": "is proportional to: equal up to a fixed constant factor",
+  "exp": "e raised to the power of the term that follows",
+  "log": "the natural logarithm of the term that follows",
+  "infty": "infinity: no limit",
+  "w:var": "the variance: the average squared spread around the mean",
+  "w:cov": "the covariance: how much two variables move together",
+  "w:rmse": "root mean squared error: a typical prediction miss, in the units of y",
+  "w:mae": "mean absolute error: the average size of the miss, ignoring sign",
+  "w:adjusted": "labels the version of R squared adjusted for the number of features",
+  "w:mse": "mean squared error: the average squared prediction miss",
+  "w:bias": "how far the model's average prediction is from the true value",
+  "w:variance": "how much the model's prediction changes from one training set to another",
+  "w:irreducible error": "the noise error that no model can remove",
+  "w:diag": "a matrix with the listed numbers down the diagonal and zeros elsewhere",
+  "w:age": "the patient's age, used as a feature"
+ },
+ "sections": {
+  "The big picture": {
+   "beta": "the lab's name for the model's parameters (theta in the slides, w in the tutorial)",
+   "alpha": "the lab's penalty strength (sklearn's alpha), the same role as lambda",
+   "p": "the number of features in the tutorial (it includes the bias column) and the lab (it does not)"
+  },
+  "Gradient descent": {
+   "J": "the cost being reduced: squared error of the current parameters (one example, or summed over all)",
+   "i": "counts the parameters (features) being updated",
+   "j": "counts training examples; x_ji is feature i of example j"
+  },
+  "Probabilistic interpretation": {
+   "N": "the normal (Gaussian) distribution, written with its mean and variance",
+   "b": "the scale of Laplace noise: larger b means wider noise",
+   "sigma": "the standard deviation of the Gaussian noise"
+  },
+  "Statistics background": {
+   "n": "the number of values in the sample",
+   "i": "counts the values in the sample",
+   "X": "one random value drawn from the population",
+   "theta": "an unknown population parameter we want to estimate from the sample",
+   "p": "the probability of heads on a bent coin: an example of a population parameter",
+   "sigma": "the population standard deviation (Greek letters are for populations, not samples)"
+  },
+  "Univariate linear regression": {
+   "w": "the tutorial's weights: w0 is the intercept and w1 the slope",
+   "i": "counts data points",
+   "j": "counts data points"
+  },
+  "Multiple linear regression": {
+   "w": "a person's weight, the quantity predicted from height and body frame",
+   "hat:w": "the predicted body weight of a person",
+   "h": "a person's height, one of the inputs",
+   "b": "a person's body frame, one of the inputs"
+  },
+  "Linear regression for curve shapes": {
+   "n": "the number of data points (tutorial notation)",
+   "i": "counts data points",
+   "p": "the number of original input features before the feature map",
+   "w": "the weights on the new features",
+   "hat:w": "the fitted weights on the new features"
+  },
+  "Regularisation": {
+   "i": "counts the features being penalised; the slides' first penalty sum starts at 1, skipping the intercept",
+   "lambda": "the penalty strength; the sources disagree on whether the intercept is also charged",
+   "norm": "the length of the weight vector; squared, the sum of squared weights (may include the intercept)",
+   "I": "the identity matrix; lambda I adds lambda to every diagonal entry, intercept's included (sklearn skips it)",
+   "X": "the design matrix (one row per example); in the lab results, X_3 and X_4 are named feature columns",
+   "n": "the number of features in the penalty sum; in the lab data, 38 is the sample count"
+  },
+  "Local (nearest": {
+   "i": "labels one training point; in the average it counts the k neighbours",
+   "j": "the second of the two points whose distance is measured",
+   "f": "the target value stored for a training point",
+   "n": "the number of features; in x_n it names the nearest training point to the query",
+   "k": "the number of nearest neighbours; inside the distance sum, a feature index"
+  },
+  "Bias-variance": {
+   "f": "the true underlying function that generates the targets",
+   "E": "the expected value over many possible training sets and noise"
+  },
+  "Model evaluation": {
+   "R": "the R squared score: 1 for perfect, 0 for matching the mean-only guess",
+   "m": "the number of samples (adjusted R squared uses m-1 and m-n-1)",
+   "n": "the number of features"
+  },
+  "Worked examples": {
+   "n": "the number of data points (tutorial notation)",
+   "i": "counts data points",
+   "w": "the tutorial's weights: w0 is the intercept and w1 the slope",
+   "p": "the number of columns of X, including the column of ones"
+  },
+  "Exam traps": {
+   "theta": "a parameter of the model (in theta1 x over theta2 plus x, not a plain weight)"
+  },
+  "Errors and inconsistencies": {
+   "n": "the number of samples in the tutorial and lab; the number of features in the slides",
+   "h": "the prediction function; in the p.67 typo, a person's height",
+   "w": "the tutorial's weights; in the p.67 typo, a person's body weight",
+   "alpha": "sklearn's name for the penalty strength (like lambda); elsewhere the learning rate",
+   "z": "the interaction feature D times Age; in the Q2(a) hint, it is mixed up with the vector u"
+  }
+ }
+}

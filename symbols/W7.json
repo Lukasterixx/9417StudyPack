@@ -1,0 +1,124 @@
+{
+ "symbols": {
+  "x": "an input: the feature values of one example (x_1, x_2 are single features)",
+  "m": "the number of training examples; in the tutorial, the boosting round number",
+  "i": "counts training examples; in the weighted vote, counts the models",
+  "epsilon": "a model's weighted error: the share of the total weight sitting on its mistakes",
+  "alpha": "a model's weight in the final vote (tutorial); gradient boosting's step size",
+  "w": "an example's weight: how much it counts when training the next model",
+  "y": "the true label (+1 or -1 in AdaBoost) or target value of an example",
+  "k": "the number of models in the ensemble",
+  "j": "counts the models (boosting rounds) in the slides' notation",
+  "lambda": "a model's weight: how much say it gets in the final vote",
+  "h": "a weak learner: a simple classifier answering +1 or -1 (the tutorial's base model)",
+  "e": "Euler's number, about 2.718, raised to a power; as a subscript (W_e), marks the mistakes",
+  "sum": "add up the term that follows, once for every value of the index shown",
+  "C": "the combined classifier (ensemble) built so far, after a given round",
+  "t": "counts the models (boosting rounds or bootstrap samples) built one after another",
+  "L": "a base model L_j (slides); in the tutorial, the total exponential loss",
+  "hat:y": "the current prediction for an example (in a vote, one model's output)",
+  "J": "the loss, which measures training error; J_i is the loss on example i",
+  "W": "the total weight of all examples in this round",
+  "sigma": "the spread of the noise in the data (sigma squared is the noise variance); in the bagging variance formula, one model's spread",
+  "M": "a base model M_t in bagging; in the tutorial product, the total number of rounds",
+  "p": "the chance that one model gets the answer wrong",
+  "Z": "the total weight after an update, used to rescale the weights to add up to 1",
+  "ln": "the natural logarithm",
+  "D": "the training dataset; D_t is the bootstrap sample used for model t",
+  "rho": "the correlation between two models' predictions: how alike their errors are",
+  "n": "the number of training examples (the tutorial's letter; the slides use m)",
+  "c": "a subscript meaning correct: W_c is the total weight on correctly classified points",
+  "T": "the number of models (trees) to build",
+  "f": "the small model fitted to the residuals in gradient boosting",
+  "abs": "the size of the set: how many examples it holds",
+  "exp": "e raised to the power in brackets",
+  "w:err": "a label meaning mistakes: W_err is the total weight on misclassified points",
+  "d": "the number of features each random-forest tree gets",
+  "N": "the number of training examples",
+  "theta": "the parameters of a model, which training adjusts",
+  "Pr": "the probability of what follows",
+  "Y": "the class label, treated as a random outcome",
+  "mid": "given that: the condition after the bar is known to hold",
+  "w:sign": "+1 if the total is positive, -1 if negative",
+  "partial": "a partial derivative: how much the quantity changes when only the next variable changes",
+  "cal:R": "a region of the feature space that gets one class",
+  "nabla": "the gradient: direction in which the loss rises fastest (the slide writes the residual here, which is really the negative)",
+  "prod": "multiply the term that follows, once for every value of the index shown",
+  "K": "the number of models (the notebook's letter for k)",
+  "bb:E": "the expected value: the average over many possible training sets",
+  "hat:f": "the model's fitted prediction function, learned from one training set",
+  "w:bias": "the error from the model class being unable to capture the true relationship",
+  "w:var": "how much the prediction changes from one training set to another",
+  "F": "the true target function that generates the data",
+  "infty": "infinity: the number of examples keeps growing without limit",
+  "S": "one training set drawn from the data distribution",
+  "cal:D": "the distribution that training sets are drawn from",
+  "cal:A": "the learning algorithm that is run on each bootstrap sample",
+  "P": "the probability of the event shown",
+  "w:wrong": "marks the case where the models give the wrong answer",
+  "log": "the natural logarithm (the notes say natural log)",
+  "w:new": "marks the updated weight, after this round",
+  "in": "is a member of the set that follows",
+  "cal:X": "the set of all possible inputs",
+  "cal:H": "the set of candidate weak classifiers to choose from",
+  "w:if correct": "the case where the classifier got this point right",
+  "w:if wrong": "the case where the classifier got this point wrong"
+ },
+ "sections": {
+  "Combining models": {
+   "i": "counts the models being combined",
+   "alpha": "a mixture-of-experts weight that depends on the input, showing a model's expertise there",
+   "lambda": "a model's fixed weight in the vote",
+   "k": "the number of models being combined"
+  },
+  "Stability": {
+   "L": "the learning algorithm that is trained on each training set",
+   "k": "the number of neighbours used in kNN"
+  },
+  "Bias and variance as a tool": {
+   "y": "the observed target value of an example: true function plus noise",
+   "sigma": "the spread of the noise in the data; sigma squared is noise no model can remove",
+   "m": "the number of training examples, growing without limit"
+  },
+  "Bagging": {
+   "sigma": "the spread of one model's predictions; sigma squared is one model's variance",
+   "m": "the number of training examples (m' is the bootstrap sample size)"
+  },
+  "Random forests": {
+   "k": "the number of trees in the forest"
+  },
+  "Boosting": {
+   "i": "counts training examples"
+  },
+  "AdaBoost": {
+   "i": "counts training examples"
+  },
+  "Randomization": {
+   "N": "the number of random options a greedy algorithm tries"
+  },
+  "Gradient boosting": {
+   "alpha": "the step size: how much of each correction is added",
+   "J": "half the sum of squared misses between targets and predictions",
+   "y": "the true target value of an example",
+   "i": "counts training examples"
+  },
+  "Comparing the methods": {
+   "alpha": "gradient boosting's step size"
+  },
+  "Tutorial Q1": {
+   "m": "the boosting round number",
+   "alpha": "how much say the round's weak learner gets in the ensemble",
+   "L": "the total exponential loss of the ensemble over all examples",
+   "d": "a tiny change: dL/d(alpha) is the slope of the loss as alpha changes",
+   "C": "the ensemble built so far, after a given round",
+   "e": "Euler's number, about 2.718; as a subscript (W_e), marks the mistakes"
+  },
+  "Tutorial Q2": {
+   "m": "the boosting round number",
+   "x": "a feature of a point (x_1, x_2 are its two coordinates)",
+   "C": "the ensemble after a round (C_3); also the name of point C",
+   "D": "the name of the fourth point",
+   "alpha": "how much say the round's weak learner gets in the ensemble"
+  }
+ }
+}

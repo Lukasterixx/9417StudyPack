@@ -1,0 +1,831 @@
+=== Q
+topic: Ensembles
+kind: concept
+diff: 1
+source: W7 Bagging; style of practice exam Q5 (regression and averaging variant)
+--- stem
+A telecom analyst wants to predict a customer's monthly bill. From her 2000 training customers she builds 50 new training sets of 2000 customers each, always drawing customers at random **with replacement**. She fits one regression tree to each set and predicts a new customer's bill as the **average** of the 50 trees' predictions. This ensemble method is known as:
+--- A*
+Bagging
+>> Bootstrap samples of the rows, one model per sample, combined by averaging (a vote for classification): that is bootstrap aggregation.
+--- B
+Random forest
+>> A random forest would also give each tree a random subset of the features. Here every tree sees all the features, so it is plain bagging.
+--- C
+Boosting
+>> Boosting trains the models one after another, each focusing on the earlier models' errors. Here the 50 trees are built independently.
+--- D
+Bootstrapping
+>> Bootstrapping is just resampling, usually to measure the spread of a statistic. Here models are trained on the resamples and combined, which makes it bagging.
+--- explain
+The key details: resampling rows with replacement (bootstrap), one model per resample (trained independently, so in parallel), and the models combined by average or vote. No feature sampling, so not a random forest. No weights or sequence, so not boosting. Answer: bagging.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 1
+source: W7 AdaBoost
+--- stem
+Sam trains small decision trees with a single split, one after another, on the same 500 customers. After each tree, the customers it got wrong are given larger weights and the others smaller weights, and the next tree is trained on the re-weighted data. At the end, the trees vote, and a tree with a lower weighted error gets a bigger say. This ensemble method is known as:
+--- A
+Bagging
+>> Bagging resamples the rows and trains the models independently, with equal votes. It does not re-weight examples or train in sequence.
+--- B*
+AdaBoost
+>> Sequential weak learners, weights that favour previous mistakes, and a weighted vote: this is adaptive boosting.
+--- C
+Random forest
+>> A random forest trains many unpruned trees in parallel on bootstrap samples and random feature subsets. Nothing is re-weighted.
+--- D
+Stacking
+>> Stacking feeds the base models' predictions into another model that learns how to combine them. There is no re-weighting of examples.
+--- explain
+Training in sequence on re-weighted data (mistakes up, correct points down) and a vote in which a model with lower weighted error gets a larger weight is AdaBoost. Bagging and random forests are parallel and unweighted; stacking uses a second-level model.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 1
+source: W7 AdaBoost, model weight; style of practice exam Q4
+--- stem
+In AdaBoost, a base classifier has a weighted error of 0.15. Use the model weight alpha = 0.5 ln((1 - error) / error) with the natural logarithm. What is alpha?
+--- A*
+0.8673
+>> ln(0.85 / 0.15) = ln 5.6667 = 1.7346, and half of that is 0.8673.
+--- B
+1.7346
+>> This forgets the factor 0.5 in front of the logarithm.
+--- C
+0.3767
+>> This uses a base-10 logarithm: 0.5 log10(5.6667) = 0.3767. The course uses the natural log.
+--- D
+-0.8673
+>> This inverts the ratio and uses error / (1 - error). A model with error below 0.5 gets a positive weight.
+--- explain
+(1 - 0.15) / 0.15 = 0.85 / 0.15 = 5.6667. ln(5.6667) = 1.7346. Multiply by 0.5: alpha = 0.8673.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 1
+source: W7 Comparing the methods; style of practice exam Q6
+--- stem
+Which statement about ensemble methods is INCORRECT?
+
+1. Bagging trains its models independently of one another, so they can be trained in parallel.
+2. In AdaBoost, each new model is trained on data in which earlier mistakes carry a larger weight.
+3. Bagging mainly reduces bias, so it is the method of choice for high-bias models such as stumps.
+4. Boosting is built from weak learners that are only slightly better than random guessing.
+--- A
+Statement 1 is incorrect
+>> Statement 1 is true: bootstrap samples are drawn independently and each model is fitted without reference to the others.
+--- B
+Statement 2 is incorrect
+>> Statement 2 is true: AdaBoost raises the weight of misclassified examples so the next model concentrates on them.
+--- C*
+Statement 3 is incorrect
+>> Bagging mainly reduces variance and leaves bias unchanged, so it suits low-bias, high-variance models such as unpruned trees. Bagging stumps does little.
+--- D
+Statement 4 is incorrect
+>> Statement 4 is true: a weak learner only needs to beat chance, for example a stump, a perceptron or Naive Bayes.
+--- explain
+Bagging averages away variance but the average of models that share the same bias still has that bias. High-bias models are the job of boosting. The other three statements are standard facts.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 1
+source: W7 Bagging, how much of the data one sample contains
+--- stem
+A training set has n = 10 examples. A bootstrap sample of size 10 is drawn from it **with replacement**. Using the exact formula (not the large-n limit), what is the probability that one particular example appears in the sample at least once?
+--- A
+0.6126
+>> This is 1 - (0.9)^9: the exponent is off by one. There are 10 draws, not 9.
+--- B
+0.6862
+>> This is 1 - (0.9)^11: the exponent is off by one the other way. There are 10 draws.
+--- C*
+0.6513
+>> 1 - (0.9)^10 = 1 - 0.3487 = 0.6513.
+--- D
+0.6321
+>> This is the limit 1 - 1/e, which is only reached for large n. For n = 10 the exact value is a little higher.
+--- explain
+Each draw misses the example with probability 1 - 1/10 = 0.9. All 10 independent draws miss it with probability 0.9^10 = 0.3487. So it appears at least once with probability 1 - 0.3487 = 0.6513. (As n grows this tends to 1 - 1/e = 0.632.)
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 1
+source: W7 Bagging, bootstrap; style of practice exam Q5
+--- stem
+Ravi has the prices of 80 houses and wants to know how much the **median** price could vary from sample to sample. He draws 2000 samples of 80 houses from his data **with replacement**, computes the median of each sample, and looks at the spread of the 2000 medians. No prediction model is trained. This is known as:
+--- A*
+Bootstrapping
+>> Resampling the data with replacement to see how a statistic varies is the bootstrap itself, the building block that bagging uses.
+--- B
+Boosting
+>> Boosting trains weak models in sequence on re-weighted data. Nothing like that happens here.
+--- C
+Random forest
+>> A random forest needs trees trained on bootstrap samples with random feature subsets. Ravi trains no trees.
+--- D
+Bagging
+>> Bagging trains a model on each resample and combines the models' predictions. Ravi trains nothing and only studies the spread of a statistic.
+--- explain
+The bootstrap is resampling with replacement. Used only to measure a statistic's variability, it is called bootstrapping. Add "train a model on each resample and average or vote" and it becomes bagging.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 1
+source: W7 Gradient boosting
+--- stem
+To predict house prices, Mia starts with a constant prediction equal to the mean price. She then repeats: compute each house's residual (true price minus current prediction), fit a small regression tree to the residuals, and add a fraction of that tree's output to the current prediction. This is:
+--- A
+Bagging
+>> Bagging trains independent models on bootstrap samples. Here each tree depends on the previous predictions.
+--- B
+Random forest
+>> A random forest averages independently trained unpruned trees. Here the trees are small and fitted one after another.
+--- C
+AdaBoost
+>> AdaBoost re-weights examples for classification and gives each model a vote weight. It does not fit residuals.
+--- D*
+Gradient boosting
+>> Each new small model predicts what is still missing (the residual, which is the negative gradient of the squared error), and a step size scales its contribution.
+--- explain
+Fitting a new model to the residuals of the current ensemble and adding it with a learning rate is gradient boosting with squared error. The residual y - prediction is the negative gradient of the loss with respect to the prediction.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 1
+source: W7 Combining models, majority vote error
+--- stem
+Three classifiers make independent errors. Each is correct with probability 0.7. Their predictions are combined by majority vote. What is the probability that the majority vote is correct?
+--- A
+0.4410
+>> This is the probability that exactly two are correct, 3 x 0.7^2 x 0.3. The case where all three are correct also gives a correct vote.
+--- B*
+0.7840
+>> P(2 correct) + P(3 correct) = 3(0.49)(0.3) + 0.343 = 0.441 + 0.343 = 0.784.
+--- C
+0.9730
+>> This is the probability that at least one is correct, 1 - 0.3^3. The vote needs at least two correct.
+--- D
+0.3430
+>> This is the probability that all three are correct, 0.7^3. Two correct out of three is also a correct majority.
+--- explain
+The majority is correct when at least 2 of the 3 are correct. P(exactly 2) = 3 x 0.7^2 x 0.3 = 0.441. P(all 3) = 0.7^3 = 0.343. Total: 0.784, better than a single classifier (0.7).
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 1
+source: W7 Bias and variance as a tool, Boosting, Random forests
+--- stem
+(Select one or more.) Which statements about the choice of base learner are correct?
+--- A*
+Fully grown decision trees, which have low bias and high variance, are a natural base learner for bagging.
+>> Bagging averages away variance and keeps bias, so it is applied to low-bias, high-variance models such as unpruned trees.
+--- B*
+Decision stumps, which have high bias, are a natural base learner for boosting.
+>> Boosting reduces bias by combining many weak models in sequence, and stumps are the standard weak learner for AdaBoost.
+--- C
+Bagging decision stumps greatly reduces their bias.
+>> Averaging leaves bias unchanged. Stumps are high bias, so a bag of stumps is still a high-bias model.
+--- D
+Boosting only works if each base learner already has zero training error.
+>> Boosting needs only weak learners that are slightly better than chance. Zero-error learners would leave nothing to boost.
+--- explain
+Match the ensemble to the problem: bagging cuts variance, so use it with low-bias high-variance learners (deep trees). Boosting cuts bias, so use it with weak high-bias learners (stumps).
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 1
+source: W7 AdaBoost pros and cons; Bagging advantages
+--- stem
+In a data set, about 10% of the labels were entered wrongly at random. Which of these ensemble methods is most at risk of being hurt by this, because it keeps increasing the weight of the examples that are hard to classify?
+--- A
+Bagging of unpruned trees
+>> Bagging trains on bootstrap samples with no re-weighting, and averaging can help a lot when data are noisy.
+--- B
+A random forest
+>> A random forest is bagging plus feature sampling. No example is up-weighted, so it is not especially sensitive to wrong labels.
+--- C*
+AdaBoost
+>> Wrongly labelled points tend to be misclassified round after round, so their weights keep growing and later models spend effort fitting the noise.
+--- D
+A majority vote of independently trained models
+>> An unweighted vote just combines the models' answers. Nothing in it chases hard examples.
+--- explain
+AdaBoost multiplies the weight of every misclassified example each round. A wrongly labelled point is hard to get "right", so it gains weight again and again. Boosting is therefore susceptible to very noisy data, while bagging can help with it.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 1
+source: W7 Combining models (fusion model, stacking)
+--- stem
+Three different base models (a logistic regression, a decision tree and a k-NN classifier) are trained on a training set. Their predicted class probabilities on a separate validation set are then used as the three input features of a second logistic regression, which makes the final prediction. This is known as:
+--- A
+Bagging
+>> Bagging uses many copies of one learner trained on bootstrap samples and combines them by voting or averaging. Here a second model learns the combination.
+--- B
+Boosting
+>> Boosting trains weak learners in sequence on re-weighted data. Here the base models are of different kinds and are not trained in sequence.
+--- C
+Random forest
+>> A random forest is made of trees only, with bootstrap samples and feature subsets. Nothing here is resampled.
+--- D*
+Stacking
+>> The base models' outputs become features for a fusion model. The slides call this a fusion model and the usual name is stacking.
+--- explain
+Treating each model's output as a feature and training another model on those features is stacking (the slides' fusion model). It should be trained on held-out data, not on the data the base models were trained on.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 2
+source: W7 Random forests; style of practice exam Q7
+--- stem
+Unpruned decision trees are each trained on a bootstrap sample of the rows, and the trees are combined by majority vote. According to the course, which single change turns this procedure into a random forest?
+--- A*
+The trees are also restricted to random subsets of the features
+>> A random forest adds a second source of randomness: besides a bootstrap sample of the rows, the trees can only use randomly chosen features.
+--- B
+Each tree's rows are drawn without replacement
+>> Without replacement a full-size sample is the whole data set, so all trees would see the same rows. A forest uses bootstrap samples (with replacement).
+--- C
+Each tree is pruned back to a single split
+>> Random forest trees are not pruned. Single-split trees are stumps, the usual weak learner for boosting.
+--- D
+Each tree is trained after the previous one, on its errors
+>> That is boosting. Random forest trees are trained independently and can be trained in parallel.
+--- explain
+Bagging resamples rows. A random forest also restricts the trees to random subsets of the features (without replacement), which makes the trees less alike and the average less correlated. Trees are still grown without pruning and trained independently.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 AdaBoost, weight update and normalisation
+--- stem
+AdaBoost starts with 6 training points, each with weight 1/6. The first stump misclassifies exactly 2 of them. After the update (misclassified weights multiplied by e^alpha, correct ones by e^(-alpha), alpha = 0.5 ln((1 - error)/error)) the weights are **normalised** to sum to 1. What is the new weight of a point the stump classified **correctly**?
+--- A
+0.2500
+>> This is the new weight of each misclassified point, 0.5 / 2. Correct points share the other half, 0.5 / 4 = 0.125 each.
+--- B*
+0.1250
+>> error = 1/3, e^alpha = sqrt(2). Correct points: (1/6)/sqrt(2) = 0.1179 before normalising, and the total is 0.9428, so 0.1179 / 0.9428 = 0.1250.
+--- C
+0.1179
+>> This is the weight before normalising, (1/6) e^(-alpha). The new weights must be divided by their total, 0.9428.
+--- D
+0.1667
+>> This is the old weight. Correct points are multiplied by e^(-alpha), which is below 1, so their weight falls.
+--- explain
+error = 2/6 = 1/3, so e^alpha = sqrt((2/3)/(1/3)) = sqrt(2) = 1.4142. Misclassified: (1/6)(1.4142) = 0.2357 each. Correct: (1/6)/1.4142 = 0.1179 each. Total = 2(0.2357) + 4(0.1179) = 0.9428. Normalised correct weight = 0.1179 / 0.9428 = 0.1250. Shortcut: after normalising, the mistakes hold half the weight and the correct points the other half, so each correct point gets 0.5 / 4 = 0.125.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 AdaBoost, weighted error; Exam traps
+--- stem
+In round 3 of AdaBoost the current weights of five training points are given below. The new stump misclassifies points 2 and 5.
+
+| Point | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|
+| Weight | 0.10 | 0.30 | 0.20 | 0.25 | 0.15 |
+
+What is the stump's model weight alpha = 0.5 ln((1 - error)/error), natural log?
+--- A*
+0.1003
+>> error = 0.30 + 0.15 = 0.45 (the weights of the mistakes). alpha = 0.5 ln(0.55/0.45) = 0.5 (0.2007) = 0.1003.
+--- B
+0.2027
+>> This counts mistakes, 2/5 = 0.4, which is only right when all weights are equal. The error is the sum of the weights on the mistakes.
+--- C
+0.2007
+>> This is ln(0.55/0.45) without the factor 0.5.
+--- D
+-0.1003
+>> This inverts the ratio. The stump beats chance (error 0.45 is below 0.5), so alpha is positive, though small.
+--- explain
+Once weights are no longer uniform, the weighted error is the sum of the weights on the misclassified points: 0.30 + 0.15 = 0.45. alpha = 0.5 ln((1 - 0.45)/0.45) = 0.5 ln(1.2222) = 0.5 (0.2007) = 0.1003. A stump with error near 0.5 gets almost no say.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 2
+source: W7 Random forests
+--- stem
+(Select one or more.) Which statements about a random forest, as defined in the course, are correct?
+--- A*
+The trees are normally grown without pruning.
+>> The algorithm trains each tree M_t without pruning. The trees have low bias and high variance, and averaging reduces the variance.
+--- B*
+Restricting the trees to random subsets of the features makes the trees less alike, which helps the average.
+>> Less similar trees have lower correlation, and the variance of an average falls when the correlation falls.
+--- C
+A random forest regressor can predict values far outside the range of the training targets.
+>> Each leaf predicts an average of training targets, so the forest's output stays within the range of the training targets.
+--- D
+The trees are trained one after another, each concentrating on the previous trees' mistakes.
+>> That describes boosting. The trees of a forest are trained independently and can be trained in parallel.
+--- explain
+A random forest is bagging of unpruned trees plus random feature subsets: parallel, independent, lower-correlation trees. It cannot extrapolate, because its prediction is an average of training targets.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 Combining models, majority vote error
+--- stem
+Five classifiers make independent errors. Each is correct with probability 0.8. They are combined by majority vote of the five. What is the probability that the majority vote is **wrong**, to 4 decimal places?
+--- A
+0.0512
+>> This is the probability that exactly 3 are wrong, 10 x 0.2^3 x 0.8^2. The cases with 4 and 5 wrong also make the vote wrong.
+--- B
+0.0576
+>> This leaves out the case where all five are wrong, 0.2^5 = 0.00032.
+--- C
+0.0067
+>> This is only the cases with 4 or 5 wrong. The vote is already wrong when 3 of the five are wrong.
+--- D*
+0.0579
+>> Wrong means 3, 4 or 5 of the five are wrong: 0.0512 + 0.0064 + 0.00032 = 0.05792.
+--- explain
+The vote is wrong when more than half, i.e. at least 3, of the 5 are wrong, with p(wrong) = 0.2. P(3) = 10 (0.008)(0.64) = 0.0512. P(4) = 5 (0.0016)(0.8) = 0.0064. P(5) = 0.00032. Sum = 0.05792, about 0.0579. Much smaller than the single-model error of 0.2.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 2
+source: W7 Combining models, majority vote error (the p > 0.5 warning)
+--- stem
+Many classifiers make independent errors, and each one is correct with probability only 0.4 (worse than random guessing on a two-class problem). A majority vote is taken over 3 of them, then over 5, then over 101. What happens to the probability that the vote is correct?
+--- A*
+It falls below 0.4 and tends to 0.
+>> With 3 voters it is 0.352, with 5 it is 0.317. A majority of voters that are usually wrong is usually wrong, more reliably as voters are added.
+--- B
+It rises above 0.4 and tends to 1.
+>> Voting only helps when each voter is right more than half the time. With a per-voter accuracy of 0.4 it does the opposite.
+--- C
+It stays at 0.4, since all the voters are equally good.
+>> The vote's accuracy is a binomial tail probability, not the single accuracy. It changes with the number of voters.
+--- D
+It rises to 0.5 and stays there.
+>> The vote has no pull towards 0.5. The majority moves with the voters' bias and falls towards 0.
+--- explain
+For independent voters, voting amplifies whichever side is more likely. If each is correct with probability above 0.5 the vote improves and tends to 1; below 0.5 it gets worse and tends to 0. For p = 0.4: 3 voters give 3(0.16)(0.6) + 0.064 = 0.352, and 5 voters give 0.317.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 Bagging, correlated models (background formula)
+--- stem
+The variance of the average of k predictors, each with variance sigma^2 and each pair with correlation rho, is rho sigma^2 + (1 - rho) sigma^2 / k.
+
+Predictors with sigma^2 = 4 and rho = 0.3 are averaged, with k = 10. What is the variance of the average?
+--- A
+0.40
+>> This is sigma^2 / k, which is right only for uncorrelated predictors (rho = 0). Here rho = 0.3 puts a floor of 1.2 under the variance.
+--- B
+2.92
+>> This swaps rho and (1 - rho): 0.7 x 4 + 0.3 x 4 / 10. The shared term is rho sigma^2 and the divided term is (1 - rho) sigma^2 / k.
+--- C*
+1.48
+>> 0.3 x 4 + 0.7 x 4 / 10 = 1.2 + 0.28 = 1.48.
+--- D
+1.20
+>> This is only the first term, rho sigma^2, which is the floor reached as k grows. With k = 10 the second term, 0.28, is still there.
+--- explain
+Plug in: rho sigma^2 = 0.3 x 4 = 1.2. (1 - rho) sigma^2 / k = 0.7 x 4 / 10 = 0.28. Total = 1.48. Averaging cut the variance from 4 to 1.48, but not to 0.4, because the correlated part (1.2) never averages away.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 2
+source: W7 Bias and variance as a tool, diagnosis table
+--- stem
+A fully grown decision tree has 0% training error and 22% validation error, while a human expert makes about 2% errors on the same task. Which next step is the most sensible?
+--- A*
+Average many trees, each trained on a bootstrap sample.
+>> The training error is already below the human level, so bias is low. The big train-validation gap is variance, and bagging targets variance.
+--- B
+Replace the tree with a model class that has a lower bias.
+>> Bias is not the problem: the training error is already 0%. A lower-bias model would be even more likely to overfit.
+--- C
+Boost decision stumps in order to reduce the bias.
+>> Boosting mainly reduces bias. This model's problem is the gap between training and validation error, which is variance.
+--- D
+Train on fewer examples, so that the tree has less data to overfit.
+>> Less data increases variance. Variance falls with more data, regularisation or averaging.
+--- explain
+Training error near or below the human level means low bias. A large gap to validation error means high variance. Fixes for variance: more data, regularisation, or an ensemble that averages, such as bagging. Bias fixes (a more expressive model, boosting) would not help here.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 Gradient boosting, squared-error step
+--- stem
+Gradient boosting with squared error is used on three training points with y = (2, 6, 13). The initial prediction for every point is the mean of y, 7. The first tree fits the residuals **exactly**, and its output is added to the prediction with learning rate 0.3. What is the sum of squared errors, the sum of (y - prediction)^2 over the three points, after this one update?
+--- A
+18.60
+>> This is 0.3 x 62. The update multiplies each residual by (1 - 0.3), so the squares are multiplied by 0.49.
+--- B*
+30.38
+>> Residuals (-5, -1, 6) become (-3.5, -0.7, 4.2) after the update, and 12.25 + 0.49 + 17.64 = 30.38.
+--- C
+43.40
+>> This scales the sum of squares (62) by (1 - 0.3) instead of (1 - 0.3)^2. The errors shrink by 0.7, so their squares shrink by 0.49.
+--- D
+5.58
+>> This uses 0.3^2 x 62, as if only 30% of each residual were left. The update removes 30% of each residual and keeps 70%.
+--- explain
+Residuals: 2 - 7 = -5, 6 - 7 = -1, 13 - 7 = 6. Before: 25 + 1 + 36 = 62. New predictions: 7 + 0.3(-5) = 5.5, 7 + 0.3(-1) = 6.7, 7 + 0.3(6) = 8.8. New errors: -3.5, -0.7, 4.2, giving 12.25 + 0.49 + 17.64 = 30.38. Check: 0.7^2 x 62 = 30.38.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 2
+source: W7 Bagging, out-of-bag idea (background, not on slides)
+--- stem
+(Select one or more.) A bagged ensemble draws, for each tree, a bootstrap sample of n = 1000 rows with replacement from the 1000 training rows. Which statements are correct?
+--- A*
+For a given tree, roughly 37% of the training rows are not in its bootstrap sample.
+>> A row is missed by all n draws with probability (1 - 1/n)^n, which is about 0.368 for large n.
+--- B*
+The rows left out of a tree's sample can be used to estimate its error on unseen data.
+>> These out-of-bag rows were not used to train that tree, so they act like a validation set for it, without a separate split.
+--- C
+A tree is trained on its out-of-bag rows.
+>> Out-of-bag rows are the ones that are not in the tree's training sample. The tree is trained on its bootstrap sample.
+--- D
+A row that is left out of one tree's sample is left out of every tree's sample.
+>> Each tree draws its own sample independently, so a row is typically out of some trees' samples and in others'.
+--- explain
+Each bootstrap sample contains about 63.2% of the distinct rows, leaving about 36.8% out-of-bag. Those rows are unseen by that tree, so predictions on them give a free error estimate. The samples are drawn independently, so the left-out rows differ from tree to tree.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 2
+source: W7 Bagging, bootstrap with replacement
+--- stem
+For each model in her ensemble, Lena draws a training set of size n from the n training rows **without replacement** (instead of with replacement), and trains one model on each set with a learning algorithm that has no randomness of its own. What is the consequence?
+--- A*
+Every set is the whole data set, so the models see the same data and have no diversity.
+>> Drawing n rows without replacement from n rows just reorders them. The sets are identical, so a deterministic learner gives the same model each time.
+--- B
+Each set contains about 63% of the distinct rows, as it does in bagging.
+>> The 63% figure comes from sampling with replacement, where repeats take up slots. Without replacement there are no repeats.
+--- C
+The models become more different from one another than the models of bagging are.
+>> Quite the opposite: bagging's repeats and gaps create different data sets, but here every set is the whole data set.
+--- D
+Each model is trained on fewer rows, so each one is a higher-variance model than before.
+>> Each set still contains all n rows, so nothing is lost and nothing changes between the models.
+--- explain
+Bootstrap means sampling with replacement. Duplicates and missing rows are what make the samples different. Without replacement, a sample of full size is a permutation of the data set, so every model sees the same data.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 Bagging, out-of-bag idea (background, not on slides); style of practice exam Q8
+--- stem
+A bagged ensemble has trees that were each trained on a bootstrap sample. For each of six training points, three trees did not have that point in their sample (they are "out-of-bag" for it). The table shows the true class and those three trees' votes.
+
+| Point | True | Out-of-bag votes |
+|---|---|---|
+| 1 | spam | spam, spam, ham |
+| 2 | ham | spam, ham, spam |
+| 3 | spam | ham, ham, spam |
+| 4 | ham | ham, ham, ham |
+| 5 | spam | spam, ham, spam |
+| 6 | ham | ham, spam, ham |
+
+The out-of-bag prediction for a point is the majority of its three votes. What is the out-of-bag error rate, the fraction of the six points whose out-of-bag prediction is wrong?
+--- A
+0.3889
+>> This counts every wrong single vote, 7 of 18. The out-of-bag prediction is the majority vote, so we count wrong points.
+--- B
+0.8333
+>> This counts points that received at least one wrong vote, 5 of 6. A point is wrong only if the majority vote is wrong.
+--- C
+0.6667
+>> This is the fraction of points predicted correctly (4 of 6), the accuracy, not the error.
+--- D*
+0.3333
+>> Majority votes: spam (right), spam (wrong), ham (wrong), ham (right), spam (right), ham (right). 2 of 6 are wrong.
+--- explain
+Take the majority of the three votes for each point and compare with the truth. Point 1: spam, correct. Point 2: spam, wrong. Point 3: ham, wrong. Point 4: ham, correct. Point 5: spam, correct. Point 6: ham, correct. Wrong: 2 of 6 = 0.3333.
+
+=== Q
+topic: Model selection
+kind: calc
+diff: 2
+source: R2 Bias-variance decomposition; W7 Bias and variance as a tool
+--- stem
+At a test input x, three models have the following (bias, variance), where bias is E[prediction] - truth. The noise variance in the data is 0.04. The expected squared error at x equals bias^2 + variance + noise variance.
+
+| Model | Bias | Variance |
+|---|---|---|
+| 1 | 0.4 | 0.02 |
+| 2 | 0.2 | 0.15 |
+| 3 | 0.1 | 0.30 |
+
+What is the expected squared error of the best of the three models?
+--- A
+0.39
+>> This adds the bias without squaring it: Model 2 is then best with 0.2 + 0.15 + 0.04. Bias enters the error squared.
+--- B
+0.18
+>> This leaves out the noise variance, 0.04, for Model 1 (0.16 + 0.02). Noise is in the data and no model can remove it.
+--- C*
+0.22
+>> Model 1: 0.4^2 + 0.02 + 0.04 = 0.16 + 0.02 + 0.04 = 0.22. Model 2 gives 0.23 and Model 3 gives 0.35.
+--- D
+0.23
+>> This is Model 2's value, 0.04 + 0.15 + 0.04. It is only 0.01 higher, but Model 1 is lower.
+--- explain
+Squared bias + variance + noise: Model 1: 0.16 + 0.02 + 0.04 = 0.22. Model 2: 0.04 + 0.15 + 0.04 = 0.23. Model 3: 0.01 + 0.30 + 0.04 = 0.35. Best is Model 1 with 0.22, even though it has the largest bias, because bias is squared and its variance is tiny.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 2
+source: W7 AdaBoost, pros and cons; Gradient boosting
+--- stem
+(Select one or more.) Which statements are correct?
+--- A*
+In AdaBoost a mislabelled example keeps gaining weight if models keep getting it wrong, so label noise can hurt.
+>> Each round multiplies the weight of misclassified points by e^alpha. A wrong label is repeatedly misclassified, so the boosted model may chase it.
+--- B*
+In gradient boosting with squared error each new tree is fitted to the residuals of the current ensemble.
+>> The residual y - prediction is the negative gradient of the squared-error loss, so fitting it is a gradient-descent step on the predictions.
+--- C*
+The training error of a boosted ensemble can keep falling while its test error starts to rise.
+>> Boosting can overfit. A run with many rounds fits the training data ever more closely, so the number of rounds should be chosen with validation data.
+--- D
+Boosting is less sensitive to noisy labels than bagging is.
+>> It is the reverse: bagging can help a lot with noisy data, while boosting is susceptible to very noisy data.
+--- explain
+Boosting keeps working on the hard examples, which are often the noisy ones, so it can overfit and is more sensitive to label noise than bagging. Gradient boosting with squared error fits residuals. Training error falling does not mean test error is falling.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 AdaBoost, normalised update
+--- stem
+In AdaBoost the weights currently sum to 1. A stump has weighted error 0.1. Mistakes are then multiplied by e^alpha and correct points by e^(-alpha), where alpha = 0.5 ln((1 - error)/error). **Before** renormalising, what is the total weight of all points?
+--- A
+1.2
+>> This multiplies the mistakes by 3 but leaves the correct points at 0.9. Correct points are multiplied by e^(-alpha) = 1/3.
+--- B*
+0.6
+>> e^alpha = 3. Mistakes: 0.1 x 3 = 0.3. Correct: 0.9 / 3 = 0.3. Total = 0.6.
+--- C
+1.0
+>> The total does not stay at 1. Mistakes grow and correct points shrink, and for any error other than 0.5 the total falls below 1.
+--- D
+0.3
+>> This is the total of the mistakes only (0.1 x 3). The correct points, 0.9 / 3 = 0.3, also count.
+--- explain
+error = 0.1 so e^alpha = sqrt(0.9/0.1) = 3. Mistakes: 0.1 x 3 = 0.3. Correct: 0.9 x (1/3) = 0.3. Total 0.6 (which equals 2 sqrt(0.1 x 0.9) = 0.6). Dividing by 0.6 gives the mistakes weight 0.3 / 0.6 = 0.5 in total: after normalising, the mistakes hold exactly half the weight.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 Random forests (features chosen without replacement)
+--- stem
+A forest has 20 trees. Each tree is given d = 10 of the p = 100 features, chosen at random without replacement (once per tree), independently of the other trees. What is the probability that one particular feature is used by **none** of the 20 trees?
+--- A
+0.8784
+>> This is 1 - 0.9^20, the probability that the feature is used by at least one tree.
+--- B
+0.9000
+>> This is the probability that a single tree misses the feature. There are 20 trees, so raise it to the power 20.
+--- C
+0.1000
+>> This is the probability that a given tree includes the feature, d/p. It is not the probability that all 20 trees miss it.
+--- D*
+0.1216
+>> A tree includes the feature with probability 10/100 = 0.1, so it misses it with probability 0.9. All 20 trees miss it: 0.9^20 = 0.1216.
+--- explain
+Choosing 10 of 100 features without replacement includes any given feature with probability 10/100 = 0.1. So a tree misses it with probability 0.9. Independent trees all miss it with probability 0.9^20 = 0.1216, so about 12% of such features would not be used in the whole forest.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 2
+source: W7 Random forests (features chosen without replacement)
+--- stem
+A data set has 6 features, including Temp and Wind. A random-forest tree is given 3 of the 6 features, chosen at random **without replacement**, all subsets equally likely. What is the probability that the tree's three features include both Temp and Wind?
+--- A*
+0.2
+>> C(4,1) / C(6,3) = 4/20 = 0.2, or (3/6)(2/5) = 0.2.
+--- B
+0.25
+>> This is (3/6)(3/6): it treats the second pick as independent of the first, as if features were chosen with replacement.
+--- C
+0.5
+>> This is the probability that the subset contains Temp (3/6), or Wind alone, not both.
+--- D
+0.4
+>> This is the probability of the second feature given the first, 2/5. It must be multiplied by the probability that the first is chosen, 3/6.
+--- explain
+Choose 3 of 6 features without replacement. The subsets containing both Temp and Wind are those with one extra feature out of the other 4: C(4,1) = 4. All subsets: C(6,3) = 20. So P = 4/20 = 0.2. Equivalent: P(Temp in) = 3/6, then P(Wind in | Temp in) = 2/5, so (3/6)(2/5) = 0.2.
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 2
+source: W7 Gradient boosting (training vs test error)
+--- stem
+Gradient boosting with squared error and learning rate 0.1 is run for 500 rounds. The training error falls steadily in every round. The test error reaches its lowest value after about 40 rounds and then slowly rises. What is the most sensible conclusion?
+--- A*
+Boosting can overfit, so pick the number of rounds with validation data.
+>> Training error always improves as more small corrections are added, but past some point they fit noise. The test error shows where to stop.
+--- B
+There is a bug, because training error and test error should always fall together.
+>> Training error falling while test error rises is the usual overfitting pattern. It does not indicate a bug.
+--- C
+Use even more rounds, since the test error will surely fall again after a while.
+>> There is no reason for it to fall again. More rounds fit the training set more closely, which here increases the gap.
+--- D
+Boosting reduces variance, so extra rounds cannot possibly hurt the test error.
+>> Boosting is mainly a bias-reduction method. It can overfit, so extra rounds can hurt.
+--- explain
+Each round adds a small model of the training residuals, so the training error keeps falling. After enough rounds the new trees mostly fit noise, so the test error rises. The number of rounds is a tuning parameter chosen on validation data (a smaller learning rate needs more rounds).
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 2
+source: W7 Bagging, correlated models (background formula)
+--- stem
+(Select one or more.) The variance of the average of k predictors, each with variance sigma^2 and each pair with correlation rho, is rho sigma^2 + (1 - rho) sigma^2 / k. Which statements are correct?
+--- A*
+With rho = 0.2, adding more predictors can never push the variance of the average below 0.2 sigma^2.
+>> The second term goes to 0 as k grows, but the first term, rho sigma^2, does not depend on k.
+--- B*
+With rho = 0, the variance of the average is sigma^2 / k.
+>> The first term vanishes and the second term is sigma^2 / k, so independent predictors average away completely as k grows.
+--- C
+With rho = 1, the variance of the average is sigma^2 / k.
+>> With rho = 1 the second term vanishes and the variance is sigma^2, however many predictors there are: identical models gain nothing from averaging.
+--- D
+Choosing random feature subsets in a random forest is meant to increase rho.
+>> It is meant to decrease rho, so that the floor rho sigma^2 falls and the trees' errors cancel more.
+--- explain
+The formula has a shared part, rho sigma^2, that no number of models removes, and a private part that shrinks as 1/k. So the way to improve an average beyond a point is to make the models less correlated, which is what bootstrap samples and random feature subsets are for.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 3
+source: W7 AdaBoost, model weight and weighted vote; style of practice exam Q4
+--- stem
+Two classes, +1 and -1. AdaBoost with a logistic regression base classifier is run for three rounds, giving models m1, m2, m3 with weighted errors 0.30, 0.20, 0.35. For a new point the three models output P(+1) = 0.65, 0.55, 0.58. Each base model predicts +1 if its output is above the threshold 0.6 and -1 otherwise, and has weight alpha = 0.5 ln((1 - error)/error) in the vote. What does the boosted model predict?
+--- A
++1
+>> This comes from using a threshold of 0.5, where all three models say +1 and the weighted sum is 1.4263. With the threshold 0.6 only m1 says +1.
+--- B*
+-1
+>> Thresholded votes are +1, -1, -1 with weights 0.4236, 0.6931, 0.3095. The sum is 0.4236 - 0.6931 - 0.3095 = -0.5790, which is negative.
+--- C
+0 (indifferent between the two classes)
+>> The weighted sum is -0.5790, not 0. The weights are different, so an exact tie would be a coincidence.
+--- D
+Undefined
+>> The sign of a non-zero weighted sum is defined. The thresholds only decide the base models' votes.
+--- explain
+alpha = 0.5 ln((1 - e)/e): m1: 0.5 ln(0.7/0.3) = 0.4236. m2: 0.5 ln(0.8/0.2) = 0.6931. m3: 0.5 ln(0.65/0.35) = 0.3095. Thresholded at 0.6: m1 (0.65) gives +1, m2 (0.55) gives -1, m3 (0.58) gives -1. Sum = 0.4236 - 0.6931 - 0.3095 = -0.5790, so predict -1. With a threshold of 0.5 the answer would flip to +1: the threshold is the trap.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 3
+source: W7 AdaBoost, weighted vote; style of practice exam Q4
+--- stem
+AdaBoost labels are +1 and -1. Four base models have weighted errors 0.10, 0.30, 0.15, 0.25. For a new point their outputs are 0.35, 0.90, 0.45, 0.60. A base model predicts +1 if its output is **above 0.4**, otherwise -1. With alpha_j = 0.5 ln((1 - error_j)/error_j) (natural log), what is the weighted sum, the sum over the models of alpha_j times its prediction, the quantity whose sign is the boosted prediction? Give it to 4 decimal places.
+--- A*
+0.7416
+>> Predictions -1, +1, +1, +1 with alphas 1.0986, 0.4236, 0.8673, 0.5493 give -1.0986 + 0.4236 + 0.8673 + 0.5493 = 0.7416.
+--- B
+-0.9930
+>> This uses a threshold of 0.5, which makes the predictions -1, +1, -1, +1, and a negative sum. The stem says 0.4.
+--- C
+1.4833
+>> This is the sum when each alpha is computed without the factor 0.5. The weights alpha = 0.5 ln(...) are half as big.
+--- D
+2
+>> This is an unweighted sum of the four votes (-1 + 1 + 1 + 1). AdaBoost weights each vote by its alpha.
+--- explain
+alpha_j = 0.5 ln((1 - e_j)/e_j): 0.5 ln 9 = 1.0986, 0.5 ln(7/3) = 0.4236, 0.5 ln(0.85/0.15) = 0.8673, 0.5 ln 3 = 0.5493. Predictions with threshold 0.4: 0.35 -> -1, 0.90 -> +1, 0.45 -> +1, 0.60 -> +1. Sum = -1.0986 + 0.4236 + 0.8673 + 0.5493 = 0.7416 > 0, so the boosted model predicts +1. (With threshold 0.5 the sum would be -0.9930 and the prediction would be -1.)
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 3
+source: W7 Bagging, correlated models (background formula)
+--- stem
+The variance of the average of k predictors, each with variance sigma^2 and each pair with correlation rho, is rho sigma^2 + (1 - rho) sigma^2 / k.
+
+Predictors have sigma^2 = 9 and rho = 0.2. What is the smallest number of predictors k for which the variance of the average is at most 2.5?
+--- A
+4
+>> This ignores the correlation: 9 / k <= 2.5 gives k >= 3.6. With rho = 0.2 there is a floor of 1.8, so far more predictors are needed.
+--- B
+3
+>> This divides only the (1 - rho) part by k and drops the floor: 7.2 / k <= 2.5 gives k >= 2.88. The floor 1.8 is part of the variance too.
+--- C*
+11
+>> 1.8 + 7.2 / k <= 2.5 needs k >= 10.29, so k = 11 (variance 2.4545).
+--- D
+10
+>> With k = 10 the variance is 1.8 + 0.72 = 2.52, which is just above 2.5. The inequality gives 10.29, which must be rounded up.
+--- explain
+Variance = 0.2 x 9 + 0.8 x 9 / k = 1.8 + 7.2 / k. We need 1.8 + 7.2 / k <= 2.5, so 7.2 / k <= 0.7 and k >= 10.286. The smallest whole number is 11 (variance 2.4545; with k = 10 it is 2.52). Note the floor is 1.8: no number of predictors gets below it.
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 3
+source: W7 Gradient boosting (fitting a weak tree to residuals)
+--- stem
+Gradient boosting with squared error is used on three points.
+
+| x | 1 | 2 | 3 |
+|---|---|---|---|
+| y | 2 | 6 | 16 |
+
+The initial prediction for every point is the mean of y. The first tree is a stump that splits into {x = 1, x = 2} and {x = 3}, and predicts in each leaf the **average residual** of the points in that leaf. The tree's output is added with learning rate 0.5. What is the new prediction for x = 2?
+--- A
+5
+>> This uses x = 1's residual, 8 + 0.5(-6). The leaf value is the average of the two residuals, not one of them.
+--- B*
+6
+>> Mean = 8, residuals (-6, -2, 8). The left leaf predicts (-6 + -2)/2 = -4, so 8 + 0.5(-4) = 6.
+--- C
+7
+>> This uses the point's own residual, 8 + 0.5(-2). The stump predicts the leaf average, -4, for both x = 1 and x = 2.
+--- D
+4
+>> This adds the full leaf value, 8 - 4, and forgets to multiply by the learning rate 0.5.
+--- explain
+Initial prediction: (2 + 6 + 16)/3 = 8. Residuals: -6, -2, 8. The stump predicts the average residual in each leaf: left leaf (-6 - 2)/2 = -4, right leaf 8. New prediction for x = 2: 8 + 0.5 x (-4) = 6. (For x = 1 it is also 6, and for x = 3 it is 8 + 0.5 x 8 = 12.)
+
+=== Q
+topic: Ensembles
+kind: calc
+diff: 3
+source: R2 Bias-variance decomposition; W7 Bagging, correlated models (background formula)
+--- stem
+At a test input x, a single fully grown tree has squared bias 0.05 and variance 0.32. The noise variance in the data is 0.10. A bagged ensemble averages 20 such trees whose predictions have pairwise correlation 0.25. Bagging leaves the bias unchanged, and the variance of an average of k predictors is rho sigma^2 + (1 - rho) sigma^2 / k. What is the expected squared error (squared bias + variance + noise variance) of the bagged ensemble?
+--- A
+0.166
+>> This treats the 20 trees as independent, variance 0.32/20 = 0.016. The trees are correlated, which leaves a floor of 0.08.
+--- B
+0.142
+>> This leaves out the noise variance, 0.10 (0.05 + 0.092). Noise stays in the expected error however good the model is.
+--- C
+0.192
+>> This leaves out the squared bias, 0.05 (0.092 + 0.10). Bagging does not remove bias, so it is still in the total.
+--- D*
+0.242
+>> Variance of the average = 0.25(0.32) + 0.75(0.32)/20 = 0.08 + 0.012 = 0.092. Total = 0.05 + 0.092 + 0.10 = 0.242.
+--- explain
+Variance of the average: 0.25 x 0.32 + 0.75 x 0.32 / 20 = 0.08 + 0.012 = 0.092 (down from 0.32). Bias and noise do not change. Expected squared error = 0.05 + 0.092 + 0.10 = 0.242 (a single tree: 0.05 + 0.32 + 0.10 = 0.47).
+
+=== Q
+topic: Ensembles
+kind: concept
+diff: 3
+source: W7 Combining models (stacking, mixture of experts)
+--- stem
+(Select one or more.) Which statements about combining models are correct?
+--- A*
+In stacking, the fusion model should be trained on data that were not used to fit the base models.
+>> Predictions on the base models' own training data are too good, so the fusion model would favour the models that fit the training data best.
+--- B*
+In a mixture of experts, the weight of each model can depend on the input x.
+>> The weight alpha_i(x) says how much each expert is trusted for that input, so an expert can dominate in the region it knows well.
+--- C
+In a simple weighted vote, the weight of each model is a function of the input x.
+>> A weighted vote uses constant weights lambda_i. Weights that depend on x are what makes it a mixture of experts.
+--- D
+A fusion model is best trained on the base models' predictions for their own training data, because those are the most accurate.
+>> This makes the fusion model biased towards models that overfit. Held-out predictions are what it should be trained on.
+--- explain
+Fixed weights: weighted vote. Weights that are functions of x: mixture of experts. A model trained on the base models' outputs (stacking, the slides' fusion model) needs held-out predictions, otherwise it trusts the models that overfit the training data.

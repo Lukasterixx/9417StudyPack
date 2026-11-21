@@ -1,0 +1,976 @@
+=== Q
+topic: Evaluation metrics
+kind: calc
+diff: 1
+source: W2 Evaluating binary classifiers (metrics); style of practice exam Q8/Q9
+--- stem
+A fraud detector is tested on 200 transactions, with fraud as the positive class. It flags 45 frauds correctly (TP), misses 15 frauds (FN), wrongly flags 10 genuine transactions (FP) and correctly passes 130 genuine ones (TN). What is its recall (true positive rate)?
+--- A*
+0.7500
+>> Recall = TP / (TP + FN) = 45 / 60 = 0.75: of the real frauds, the share that was found.
+--- B
+0.8182
+>> This is the precision, 45 / (45 + 10) = 0.8182. Precision divides by everything flagged, not by everything that is really positive.
+--- C
+0.9286
+>> This is the specificity, TN / (TN + FP) = 130 / 140. It describes the genuine transactions, not the frauds.
+--- D
+0.8750
+>> This is the accuracy, (45 + 130) / 200. It counts the true negatives as well, which recall never uses.
+--- explain
+Recall divides the true positives by all actual positives: 45 / (45 + 15) = 45 / 60 = 0.7500. The other three options are precision (0.8182), accuracy (0.8750) and specificity (0.9286) computed from the same counts.
+
+=== Q
+topic: Evaluation metrics
+kind: calc
+diff: 1
+source: W2 Evaluating binary classifiers (FPR is the horizontal ROC axis); W2 exam traps
+--- stem
+A spam filter is tested on 400 emails: 100 are spam and 300 are legitimate. The filter flags 80 of the spam emails and also wrongly flags 30 legitimate emails. With spam as the positive class, what is the false positive rate (FPR)?
+--- A
+0.3000
+>> 30 / 100 divides the false positives by the number of spam emails. FPR must divide by the actual negatives (300).
+--- B
+0.2000
+>> 1 - recall = 20 / 100 = 0.2 is the miss rate on spam (FN rate). It says nothing about how many legitimate emails are flagged.
+--- C
+0.2727
+>> 30 / 110 = 0.2727 is 1 - precision, the share of flagged emails that are legitimate. FPR divides by the actual negatives, not by the flagged emails.
+--- D*
+0.1000
+>> FPR = FP / (FP + TN) = 30 / 300 = 0.1: the share of legitimate emails that were wrongly flagged.
+--- explain
+Actual negatives = the 300 legitimate emails. FP = 30, so TN = 270 and FPR = 30 / (30 + 270) = 30 / 300 = 0.1000.
+
+=== Q
+topic: Evaluation metrics
+kind: concept
+diff: 2
+source: W2 Evaluating binary classifiers; style of practice exam Q8/Q9 (the all-known-positives trap)
+--- stem
+A new test kit is tried on 60 people who are all known to be infected (the positive class). The kit returns a positive result for 45 of them. Using only the results on this group, which of the following can be calculated? (Select one or more.)
+--- A*
+The number of false negatives (15)
+>> Everyone in the group is truly infected, so each of the 60 people either is found (TP = 45) or missed (FN = 15). The count of misses is simply 60 - 45 = 15.
+--- B
+False positive rate
+>> FPR = FP / (FP + TN) needs actual negatives. The group has none, so FP + TN = 0 and the rate is undefined.
+--- C
+Specificity
+>> Specificity = TN / (TN + FP) also divides by the number of actual negatives, which is 0 here, so it is undefined.
+--- D*
+Recall (0.75)
+>> All 60 are actual positives, so TP = 45 and FN = 15, and recall = 45 / 60 = 0.75.
+--- explain
+With no actual negatives in the group, FP = 0 and TN = 0. Everything that involves only the actual positives can be computed: TP = 45, FN = 15 and recall = 45/60. Metrics that divide by the actual negatives (FPR, specificity) are 0/0.
+
+=== Q
+topic: Evaluation metrics
+kind: concept
+diff: 1
+source: W2 Evaluating binary classifiers (accuracy can mislead on unbalanced data)
+--- stem
+Of 1000 patients, 20 are truly sick. A lazy classifier predicts "healthy" for every patient. With "sick" as the positive class, what are its accuracy and recall?
+--- A
+accuracy 100%, recall 0%
+>> The 20 sick patients are all classified wrongly, so accuracy cannot be 100%. It is 980 / 1000 = 98%.
+--- B*
+accuracy 98%, recall 0%
+>> 980 of 1000 predictions are right, but none of the 20 sick patients is found (TP = 0), so recall = 0 / 20 = 0.
+--- C
+accuracy 98%, recall 98%
+>> The 98% is the share of healthy patients, which is what the accuracy picks up. Recall only looks at the sick patients, and none were found.
+--- D
+accuracy 2%, recall 100%
+>> This swaps the roles: the classifier is right on the 980 healthy patients and wrong on the 20 sick ones, so accuracy is 98%, and it never predicts "sick" so recall is 0.
+--- explain
+Accuracy = (TP + TN) / total = (0 + 980) / 1000 = 0.98. Recall = TP / (TP + FN) = 0 / 20 = 0. A high accuracy on unbalanced data can hide a useless classifier.
+
+=== Q
+topic: Evaluation metrics
+kind: calc
+diff: 2
+source: W2 ROC and AUC (AUC as the share of positive-negative pairs ranked correctly)
+--- stem
+A classifier gives these scores to 8 test examples (4 positive, 4 negative):
+
+| Score | 0.95 | 0.90 | 0.80 | 0.70 | 0.60 | 0.50 | 0.40 | 0.20 |
+|---|---|---|---|---|---|---|---|---|
+| True class | + | + | - | + | - | + | - | - |
+
+AUC equals the fraction of (positive, negative) pairs in which the positive example has the higher score. What is the AUC?
+--- A
+0.7500
+>> This is 12 of 16 pairs, one fewer than the true count of 13. Recount the negatives below the positive scored 0.70 (three of them) and below the one scored 0.50 (two).
+--- B*
+0.8125
+>> Count, for each positive, the negatives scored below it: 4 + 4 + 3 + 2 = 13 of the 16 pairs, so AUC = 13/16 = 0.8125.
+--- C
+0.8750
+>> This would be 14 of 16 pairs, only 2 lost. In fact 3 are lost: the positive at 0.70 loses to the negative at 0.80, and the positive at 0.50 loses to 0.80 and 0.60. So 13 pairs are won.
+--- D
+0.6875
+>> This is 11 / 16, two pairs too few. The two top positives already win 8 pairs, and the other two positives win 3 + 2 = 5 more, not 3.
+--- explain
+Pairs won by each positive: 0.95 beats all 4 negatives, 0.90 beats 4, 0.70 beats the 3 negatives scored below it (0.60, 0.40, 0.20), 0.50 beats 2 (0.40, 0.20). Total 4 + 4 + 3 + 2 = 13 out of 4 x 4 = 16, so AUC = 13/16 = 0.8125.
+
+=== Q
+topic: Evaluation metrics
+kind: calc
+diff: 2
+source: W2 ROC and AUC (one point on the curve per threshold)
+--- stem
+A scoring classifier produces these scores on 10 test examples:
+
+| Score | 0.9 | 0.8 | 0.7 | 0.6 | 0.5 | 0.4 | 0.3 | 0.2 | 0.15 | 0.1 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| True class | + | + | - | + | - | + | - | + | - | + |
+
+An example is predicted positive when its score is at least the threshold 0.55. Which point (FPR, TPR) of the ROC curve does this threshold give?
+--- A
+FPR = 1/6, TPR = 1/2
+>> The one false positive must be divided by the 4 actual negatives, not by the 6 actual positives.
+--- B
+FPR = 1/4, TPR = 3/4
+>> 3/4 is the precision (3 of the 4 flagged are positive), not the TPR. TPR divides the 3 true positives by all 6 actual positives.
+--- C*
+FPR = 1/4, TPR = 1/2
+>> Predicted positive: 0.9, 0.8, 0.7, 0.6, so TP = 3 and FP = 1. There are 6 positives and 4 negatives: TPR = 3/6 = 1/2, FPR = 1/4.
+--- D
+FPR = 1/2, TPR = 1/4
+>> The two rates are swapped. TPR is on the vertical axis and is found among the positives (3 of 6), FPR among the negatives (1 of 4).
+--- explain
+Flagged positive (score >= 0.55): 0.9 (+), 0.8 (+), 0.7 (-), 0.6 (+). So TP = 3, FP = 1. Actual positives: 6, actual negatives: 4. TPR = 3/6 = 0.5 and FPR = 1/4 = 0.25.
+
+=== Q
+topic: Evaluation metrics
+kind: concept
+diff: 2
+source: W2 ROC and AUC (changing the threshold moves along the curve)
+--- stem
+A logistic regression model scores each test example. The decision threshold is lowered from 0.7 to 0.4, so more examples are predicted positive. Which of the following MUST hold? (Select one or more.)
+--- A
+The precision does not decrease.
+>> Precision can go either way: the newly flagged examples may be mostly negatives, which lowers TP / (TP + FP).
+--- B*
+The TPR does not decrease.
+>> Every example flagged at 0.7 is still flagged at 0.4, so TP can only stay the same or grow, and TPR = TP / P does too.
+--- C*
+The FPR does not decrease.
+>> The set of flagged examples only grows, so FP can only stay the same or grow, and so does FPR = FP / N.
+--- D
+The AUC increases.
+>> AUC summarises the whole curve over all thresholds, so moving the threshold only moves along the same ROC curve and leaves AUC unchanged.
+--- explain
+Lowering the threshold flags a superset of examples. TP and FP can only rise or stay put, so TPR and FPR cannot fall. Precision is a ratio of the two and can rise or fall. AUC does not depend on any single threshold.
+
+=== Q
+topic: Evaluation metrics
+kind: calc
+diff: 1
+source: W2 Metrics (F1 is a harmonic mean); W2 exam traps
+--- stem
+A classifier has precision 0.9 and recall 0.1. What is its F1 score?
+--- A
+0.5000
+>> This is the arithmetic mean (0.9 + 0.1) / 2. F1 is a harmonic mean, which punishes a low recall far more.
+--- B
+0.0900
+>> 0.9 x 0.1 is only the product. F1 is twice the product divided by the sum, which doubles this to 0.18.
+--- C*
+0.1800
+>> F1 = 2 x 0.9 x 0.1 / (0.9 + 0.1) = 0.18 / 1 = 0.18. The harmonic mean is pulled towards the smaller of the two numbers.
+--- D
+0.3000
+>> This is the geometric mean sqrt(0.9 x 0.1). F1 uses the harmonic mean, 2PR / (P + R).
+--- explain
+F1 = 2 x precision x recall / (precision + recall) = 2 x 0.9 x 0.1 / 1.0 = 0.1800.
+
+=== Q
+topic: Evaluation metrics
+kind: calc
+diff: 3
+source: W2 Metrics (confusion matrix from a described scenario)
+--- stem
+A disease affects 20% of a group of 400 people. A test has sensitivity 0.75 (the share of diseased people who test positive) and specificity 0.95 (the share of healthy people who test negative). Among the people who test positive, what fraction is truly diseased (the precision)?
+--- A*
+0.7895
+>> Diseased = 80, so TP = 60. Healthy = 320, so FP = 5% of 320 = 16. Precision = 60 / 76 = 0.7895.
+--- B
+0.9100
+>> This is the accuracy (60 + 304) / 400. It counts the true negatives, which precision never uses.
+--- C
+0.9375
+>> This takes 5% of the 80 diseased people as the false positives (60 / 64). A false positive is a healthy person, so the 5% applies to the 320 healthy people.
+--- D
+0.7500
+>> This is the sensitivity (recall), or what you get by taking 5% of all 400 people as false positives (60 / 80). The false positives come only from the 320 healthy people.
+--- explain
+Build the confusion matrix: diseased 0.2 x 400 = 80, healthy 320. TP = 0.75 x 80 = 60 and FN = 20. TN = 0.95 x 320 = 304 and FP = 16. Precision = TP / (TP + FP) = 60 / 76 = 0.7895.
+
+=== Q
+topic: k-NN
+kind: calc
+diff: 2
+source: W2 Nearest neighbour classification (the prediction can change with k); style of practice exam Q13
+--- stem
+A 2D training set has classes A and B:
+
+| x1 | x2 | class |
+|---|---|---|
+| 1 | 1 | A |
+| 2 | 1 | B |
+| 0 | -2.5 | B |
+| 3 | 0 | A |
+| -2 | -3 | A |
+| -5 | 1 | B |
+| 4 | 4 | B |
+
+Using Euclidean distance, how is the query point (0, 0) classified by 1-NN, 3-NN and 5-NN (majority vote)?
+--- A
+1-NN: B, 3-NN: B, 5-NN: A
+>> The single nearest point is (1, 1), which has distance 1.41 and class A, so the 1-NN answer is A.
+--- B
+1-NN: A, 3-NN: B, 5-NN: B
+>> Neighbours four and five are each class A (distances 3.00 and 3.61), so the 5-NN vote is 3 A to 2 B, which gives A.
+--- C*
+1-NN: A, 3-NN: B, 5-NN: A
+>> Distances in order: 1.41 (A), 2.24 (B), 2.50 (B), 3.00 (A), 3.61 (A). The first neighbour is A, the first three are A, B, B (B wins), the first five are A, B, B, A, A (A wins).
+--- D
+1-NN: A, 3-NN: A, 5-NN: A
+>> The three nearest are A (1.41), B (2.24) and B (2.50), a 2 to 1 majority for B, so the 3-NN vote is not A.
+--- explain
+Euclidean distances from (0, 0): (1,1) 1.414 A; (2,1) 2.236 B; (0,-2.5) 2.500 B; (3,0) 3.000 A; (-2,-3) 3.606 A; (-5,1) 5.099 B; (4,4) 5.657 B. Votes: k=1 gives A; k=3 gives A, B, B so B; k=5 gives A, B, B, A, A so A.
+
+=== Q
+topic: k-NN
+kind: calc
+diff: 2
+source: W2 Distances (Minkowski, Euclidean and Manhattan can disagree)
+--- stem
+A training set has four labelled points:
+
+| x1 | x2 | class |
+|---|---|---|
+| 3 | 3 | A |
+| 5 | 0 | B |
+| 7 | 4 | A |
+| -6 | -6 | B |
+
+What does a 1-NN classifier predict for the query (0, 0) when it uses Euclidean distance, and when it uses Manhattan distance?
+--- A
+Euclidean: B, Manhattan: A
+>> The two are the wrong way round. The diagonal point (3,3) is relatively closer under Euclidean distance (4.24 against 5) and farther under Manhattan (6 against 5).
+--- B
+Euclidean: A, Manhattan: A
+>> Under Manhattan distance (3,3) is 3 + 3 = 6 away, while (5,0) is only 5 away, so the nearest point is the B point.
+--- C
+Euclidean: B, Manhattan: B
+>> Under Euclidean distance (3,3) is sqrt(18) = 4.24 away, which beats (5,0) at distance 5, so the nearest point is the A point.
+--- D*
+Euclidean: A, Manhattan: B
+>> Euclidean: (3,3) is at 4.24 and (5,0) at 5, so A. Manhattan: (3,3) is at 6 and (5,0) at 5, so B.
+--- explain
+Euclidean: sqrt(3^2 + 3^2) = 4.243 for (3,3) and 5 for (5,0), so the nearest is (3,3), class A. Manhattan: |3| + |3| = 6 for (3,3) and 5 for (5,0), so the nearest is (5,0), class B. The other two points are far away under both distances.
+
+=== Q
+topic: k-NN
+kind: calc
+diff: 3
+source: W2 Nearest neighbour classification; style of practice exam Q13 (cosine similarity: higher means closer)
+--- stem
+Documents are word-count vectors over three words. The query is q = (1, 2, 0). Training documents:
+
+| doc | vector | class |
+|---|---|---|
+| d1 | (2, 4, 1) | A |
+| d2 | (3, 1, 0) | B |
+| d3 | (0, 1, 3) | B |
+| d4 | (1, 3, 1) | B |
+| d5 | (5, 1, 1) | A |
+
+The neighbours are chosen by cosine similarity cos(q, d) = q.d / (|q||d|), where a HIGHER similarity means a closer document. What are the predicted classes for k = 1 and for k = 3?
+--- A
+k = 1: A, k = 3: A
+>> The three most similar documents are d1 (A), d4 (B) and d2 (B), a 2 to 1 vote for B.
+--- B
+k = 1: B, k = 3: A
+>> The most similar document is d1, which is class A, so k = 1 gives A. The three nearest then vote A, B, B, giving B.
+--- C*
+k = 1: A, k = 3: B
+>> The similarities are d1 0.976, d4 0.944, d2 0.707, d5 0.602, d3 0.283. The nearest is d1 (A); the nearest three are d1, d4, d2 = A, B, B, so B.
+--- D
+k = 1: B, k = 3: B
+>> This picks the document with the LOWEST similarity (d3) as the nearest, treating similarity like a distance. The nearest by similarity is d1.
+--- explain
+q = (1,2,0), |q| = sqrt5 = 2.236. cos(q,d1) = 10 / (2.236 x 4.583) = 0.976; d4 = 7 / (2.236 x 3.317) = 0.944; d2 = 5 / (2.236 x 3.162) = 0.707; d5 = 7 / (2.236 x 5.196) = 0.602; d3 = 2 / (2.236 x 3.162) = 0.283. Ranked from most similar: d1 (A), d4 (B), d2 (B), d5 (A), d3 (B). k = 1: A. k = 3: A, B, B so B.
+
+=== Q
+topic: k-NN
+kind: calc
+diff: 2
+source: W2 Distance-weighted kNN (w = 1/Dis^2); W2 exam traps (sklearn uses 1/d)
+--- stem
+For a query, the 5 nearest neighbours are at these distances: 1 (class A), 2 (class B), 2 (class B), 3 (class B), 4 (class A). The course weights each neighbour's vote by w = 1 / distance^2 and the class with the larger total weight wins. Which outcome is correct?
+--- A
+class B wins, total weights 1.3333 against 1.2500
+>> These totals come from weights 1/d, not 1/d^2 (B: 1/2 + 1/2 + 1/3, A: 1 + 1/4). The course squares the distance.
+--- B
+class A wins, total weights 1.0625 against 0.3611
+>> The A total is right, but the B total counts the two neighbours at distance 2 only once (1/4 + 1/9). Each of them votes, so B = 0.6111.
+--- C*
+class A wins, total weights 1.0625 against 0.6111
+>> A: 1/1 + 1/16 = 1.0625. B: 1/4 + 1/4 + 1/9 = 0.6111. The very near A neighbour outweighs the three farther B neighbours.
+--- D
+class B wins, 3 votes against 2
+>> That is the plain unweighted majority vote. With weights 1/d^2 the nearest neighbour counts for far more than the farther ones.
+--- explain
+w = 1/d^2: distance 1 gives 1, distance 2 gives 0.25, distance 3 gives 0.1111, distance 4 gives 0.0625. Class A = 1 + 0.0625 = 1.0625. Class B = 0.25 + 0.25 + 0.1111 = 0.6111. A wins, although the unweighted vote (3 to 2) would give B.
+
+=== Q
+topic: k-NN
+kind: calc
+diff: 3
+source: W2 Distance-weighted kNN (weighted average for a real-valued target)
+--- stem
+A k-NN regression uses the 3 nearest neighbours of a query. Their distances and target values are: distance 1 with y = 12, distance 2 with y = 20, distance 4 with y = 36. The prediction is the weighted average sum(w_i y_i) / sum(w_i) with weights w_i = 1 / distance_i^2. What is the prediction?
+--- A
+19.2500
+>> This is sum(w y) without dividing by sum(w). The weights must be normalised so that they add to 1.
+--- B*
+14.6667
+>> w = 1, 0.25, 0.0625. sum(w y) = 12 + 5 + 2.25 = 19.25 and sum(w) = 1.3125, so 19.25 / 1.3125 = 14.6667.
+--- C
+22.6667
+>> This is the plain mean (12 + 20 + 36) / 3, which ignores the distances.
+--- D
+17.7143
+>> This uses weights 1/d (1, 0.5, 0.25): 31 / 1.75. The course uses 1/d^2.
+--- explain
+Weights 1/d^2: 1, 1/4, 1/16. Numerator: 1(12) + 0.25(20) + 0.0625(36) = 12 + 5 + 2.25 = 19.25. Denominator: 1 + 0.25 + 0.0625 = 1.3125. Prediction = 19.25 / 1.3125 = 14.6667.
+
+=== Q
+topic: k-NN
+kind: concept
+diff: 1
+source: W2 Normalisation; W1 Local (nearest-neighbour) regression
+--- stem
+Each person is described by age (between 20 and 60 years) and yearly income (between 20000 and 100000 dollars). A k-NN classifier with Euclidean distance is run on these two raw features without any scaling. What is the most likely consequence?
+--- A
+Both features count equally, because Euclidean distance is invariant to the scale of each feature.
+>> Euclidean distance is not invariant to rescaling one feature. Changing income from dollars to thousands of dollars changes the neighbours.
+--- B*
+Income dominates the distance, so age has almost no influence on which points are nearest.
+>> Income gaps are in thousands and age gaps in tens, so the squared income differences swamp the squared age differences.
+--- C
+Age dominates the distance, because it is the smaller number.
+>> It is the other way round: the feature with the larger numerical range, here income, dominates the sum of squared gaps.
+--- D
+Nothing changes, because k-NN rescales every feature internally before measuring distance.
+>> Basic k-NN does no scaling of its own. Min-max or z-score normalisation has to be applied beforehand.
+--- explain
+A distance adds up the squared gaps of all features, so the feature with the biggest numbers dominates. Normalise the features (min-max or z-score) before using k-NN.
+
+=== Q
+topic: k-NN
+kind: concept
+diff: 2
+source: W2 Nearest neighbour classification (advantages, disadvantages, bias-variance); W2 Computational cost
+--- stem
+Which of the following statements about k-NN classification are correct? (Select one or more.)
+--- A
+With unweighted voting and k equal to the number of training examples (an odd number), different queries can get different predictions.
+>> With k = m every query is compared with the whole training set, so every prediction is the same majority class (there is no tie when m is odd).
+--- B*
+Training only stores the examples, so almost all of the work happens when a query arrives.
+>> This is lazy learning: no model is built in advance, and the whole cost is paid at prediction time.
+--- C*
+With a simple search, the time to classify one query grows in proportion to the number of training examples.
+>> The query is compared with all m stored examples, so the cost is O(m).
+--- D
+1-NN has high bias and low variance.
+>> It is the reverse: 1-NN follows every training point, so it has low bias and high variance. A larger k increases bias and lowers variance.
+--- explain
+Lazy learning and O(m) prediction cost are standard facts. 1-NN has low bias and high variance, not the opposite. With k = m and unweighted voting every query sees all the training data, so the prediction is always the majority class.
+
+=== Q
+topic: k-NN
+kind: concept
+diff: 1
+source: W2 Curse of dimensionality
+--- stem
+The number of features of a data set is increased from 5 to 500, while the number of training examples stays the same. Which problem is typical for k-NN?
+--- A
+Fewer training examples are needed, because the points are spread over a larger space.
+>> The opposite holds: the instance space has exponentially more cells, so exponentially more data is needed to populate it.
+--- B*
+Distances between points become almost equal, so the nearest neighbours carry little information.
+>> In high dimensions every point is about as far from the query as every other one, so the "nearest" neighbours are barely nearer than the rest.
+--- C
+Normalising each feature removes the problem.
+>> Normalising fixes unequal scales but not the curse of dimensionality. The remedies are removing or down-weighting irrelevant features.
+--- D
+The training time grows exponentially, because k-NN has to fit one parameter per feature.
+>> k-NN has no training step and no fitted parameters. The trouble is that distances stop being informative.
+--- explain
+The curse of dimensionality: with many features pairwise distances concentrate around one value, so the nearest point is hardly nearer than the farthest, and exponentially more data would be needed. Normalisation does not cure it.
+
+=== Q
+topic: k-NN
+kind: calc
+diff: 3
+source: W2 Evaluating lazy learners (LOOCV for 1-NN)
+--- stem
+Seven points on a line have these classes:
+
+| x | 1 | 2 | 4 | 7 | 8 | 10 | 11 |
+|---|---|---|---|---|---|----|----|
+| class | P | N | N | P | P | N | N |
+
+The leave-one-out cross-validation (LOOCV) of a 1-NN classifier removes each point in turn, and predicts its class from the nearest of the other six points. How many of the 7 points are misclassified?
+--- A
+3 of 7
+>> The point at 4 has nearest neighbour 2 (distance 2, class N) and the point at 8 has nearest neighbour 7 (distance 1, class P), so both are right. Only the points at 1 and 2 are wrong.
+--- B*
+2 of 7
+>> The point at 1 is predicted from the point at 2 (N, wrong) and the point at 2 from the point at 1 (P, wrong). All the others are predicted correctly.
+--- C
+0 of 7
+>> The training error of 1-NN is 0, because each point is its own nearest neighbour, but in LOOCV the point is left out, so it cannot vote for itself.
+--- D
+1 of 7
+>> The two points 1 and 2 are each other's nearest neighbour and have different classes, so both are wrong, not just one of them.
+--- explain
+Nearest other point and its class: 1 to 2 (N, wrong); 2 to 1 (P, wrong); 4 to 2 (N, right); 7 to 8 (P, right); 8 to 7 (P, right); 10 to 11 (N, right); 11 to 10 (N, right). Two errors, so the LOOCV error is 2/7 = 0.2857. The training error of 1-NN would be 0.
+
+=== Q
+topic: k-NN
+kind: concept
+diff: 1
+source: W2 Practical problems and noise; W2 Advantages, disadvantages and bias-variance
+--- stem
+A 1-NN classifier has 0% training error but 24% validation error. Some labels in the training data are known to be wrong (noise). Which change is most likely to lower the validation error?
+--- A
+Keep k = 1, since 0% training error shows the model is good.
+>> A 1-NN model always has 0% training error, because each point is its own nearest neighbour. This says nothing about generalisation.
+--- B
+Train on only half of the training examples.
+>> Fewer examples give a sparser, more erratic boundary and do not remove the noise. They do not lower the variance.
+--- C*
+Increase k to about 15, so a few mislabelled neighbours can be outvoted.
+>> A larger k smooths the decision boundary: it adds bias but lowers variance, and noisy labels are outvoted.
+--- D
+Add 20 extra features that contain random noise.
+>> Irrelevant features make "similar" points look distant, and k-NN treats all features as equally important. This usually hurts.
+--- explain
+1-NN has low bias and high variance and fits the noise. Raising k averages over more neighbours (more bias, less variance), which is the usual remedy for noisy labels. Choose k with a validation set or cross-validation.
+
+=== Q
+topic: k-NN
+kind: calc
+diff: 1
+source: W2 Distances; style of practice exam Q13 (similarity versus distance)
+--- stem
+Two document vectors are a = (1, 2, 2) and b = (2, 1, 2). The cosine similarity is cos(a, b) = a.b / (|a||b|), and the cosine distance is defined as 1 - cos(a, b). What is the cosine distance?
+--- A*
+0.1111
+>> a.b = 2 + 2 + 4 = 8 and |a| = |b| = 3, so cos = 8/9 = 0.8889 and the distance is 1 - 0.8889 = 0.1111.
+--- B
+0.6800
+>> This divides a.b by (1+2+2)(2+1+2) = 25 (sums instead of lengths) to get 0.32 and then subtracts from 1. The norms |a| and |b| are square roots of sums of squares.
+--- C
+0.8889
+>> This is the cosine similarity. The distance is 1 minus the similarity, so near-identical directions give a small distance.
+--- D
+0.4759
+>> This is the angle between the vectors in radians (arccos 0.8889), which is not the cosine distance defined in the question.
+--- explain
+a.b = 1(2) + 2(1) + 2(2) = 8. |a| = sqrt(1 + 4 + 4) = 3 and |b| = sqrt(4 + 1 + 4) = 3. cos = 8 / 9 = 0.8889. Cosine distance = 1 - 0.8889 = 0.1111. Similarity: high means close. Distance: low means close.
+
+=== Q
+topic: Decision trees and entropy
+kind: calc
+diff: 1
+source: W4 Entropy (k classes; maximum is log2 k); W4 exam traps (log base)
+--- stem
+A basket holds 8 fruits: 4 apples, 2 pears and 2 plums. What is the entropy of the "fruit type" column, in bits (log base 2)?
+--- A
+1.0000
+>> Entropy can exceed 1 bit when there are more than two classes. Here the three types give 1.5 bits.
+--- B
+1.5850
+>> This is log2 3, the maximum entropy for three classes. It would apply only if the three types were equally common.
+--- C*
+1.5000
+>> -(0.5 log2 0.5 + 0.25 log2 0.25 + 0.25 log2 0.25) = 0.5 + 0.5 + 0.5 = 1.5.
+--- D
+1.0397
+>> This is the same entropy computed with the natural logarithm (1.5 x ln 2). The course uses base 2.
+--- explain
+p = 1/2, 1/4, 1/4. H = -(1/2)(-1) - (1/4)(-2) - (1/4)(-2) = 0.5 + 0.5 + 0.5 = 1.5 bits.
+
+=== Q
+topic: Decision trees and entropy
+kind: calc
+diff: 3
+source: W4 Entropy; style of practice exam Q20 (entropy of a derived column)
+--- stem
+A data set has two numeric columns X and Y:
+
+| X | 0 | 1 | 2 | 1 | 2 | 0 |
+|---|---|---|---|---|---|---|
+| Y | 1 | 1 | 0 | 0 | 1 | 0 |
+
+Compute the entropy, in bits, of the derived column X + Y.
+--- A
+2.0000
+>> That would need four equally common values. The values 1 and 2 each occur twice but 0 and 3 only once, so the entropy is a little lower.
+--- B*
+1.9183
+>> X + Y = 1, 2, 2, 1, 3, 0. Probabilities 1/6, 2/6, 2/6, 1/6: H = 2 x (1/3)(1.585) + 2 x (1/6)(2.585) = 1.0566 + 0.8617 = 1.9183.
+--- C
+2.5850
+>> This is log2 6, the entropy if all 6 values were different. The column has only four distinct values (0, 1, 2, 3).
+--- D
+1.5850
+>> This is the entropy of the column X alone (each of 0, 1, 2 appears twice). The question is about the derived column X + Y.
+--- explain
+X + Y gives 1, 2, 2, 1, 3, 0: the value 0 once, 1 twice, 2 twice, 3 once. H = -2(1/6)log2(1/6) - 2(1/3)log2(1/3) = 2(0.4308) + 2(0.5283) = 0.8617 + 1.0566 = 1.9183 bits.
+
+=== Q
+topic: Decision trees and entropy
+kind: calc
+diff: 2
+source: W4 Information gain (conditional entropy is the size-weighted entropy of the children)
+--- stem
+Eight patients are described by Cough (yes or no) and the class Sick:
+
+| Cough | yes | yes | yes | no | no | no | no | no |
+|---|---|---|---|---|---|---|---|---|
+| Sick | yes | yes | no | yes | yes | no | no | no |
+
+What is the conditional entropy H(Sick | Cough), in bits?
+--- A
+0.0488
+>> This is the information gain, H(Sick) - H(Sick | Cough) = 1 - 0.9512. The question asks for the conditional entropy.
+--- B
+0.9710
+>> This is the entropy of the larger child (Cough = no) alone. The conditional entropy averages both children.
+--- C
+0.9446
+>> This is the plain average of the two child entropies, (0.9183 + 0.9710) / 2. The children must be weighted by their sizes (3/8 and 5/8).
+--- D*
+0.9512
+>> Cough = yes: 3 rows, [2 yes, 1 no], entropy 0.9183. Cough = no: 5 rows, [2 yes, 3 no], entropy 0.9710. Weighted: (3/8)(0.9183) + (5/8)(0.9710) = 0.9512.
+--- explain
+H(Sick) = 1 (4 yes, 4 no). Cough = yes: [2+,1-], H = 0.9183. Cough = no: [2+,3-], H = 0.9710. H(Sick | Cough) = 3/8 x 0.9183 + 5/8 x 0.9710 = 0.3444 + 0.6069 = 0.9512. (The gain would be 1 - 0.9512 = 0.0488.)
+
+=== Q
+topic: Decision trees and entropy
+kind: calc
+diff: 2
+source: W4 Information gain; W4 exam traps (weighted children, parent entropy)
+--- stem
+A node holds 16 training examples, 8 positive and 8 negative. Splitting on attribute A gives three children with class counts [6+, 1-] (7 examples), [2+, 2-] (4 examples) and [0+, 5-] (5 examples). What is the information gain of the split, in bits?
+--- A
+0.4083
+>> This is 1 - 0.5917, the gain computed from the first child only. All three children enter the weighted average.
+--- B*
+0.4911
+>> Parent entropy 1. Child entropies 0.5917, 1, 0. Weighted: (7/16)(0.5917) + (4/16)(1) + 0 = 0.5089. Gain = 1 - 0.5089 = 0.4911.
+--- C
+0.4694
+>> This averages the three child entropies with equal weights, (0.5917 + 1 + 0) / 3 = 0.5306. The children must be weighted by 7/16, 4/16 and 5/16.
+--- D
+0.5089
+>> This is the weighted child entropy, the entropy left AFTER the split. The gain subtracts it from the parent entropy of 1.
+--- explain
+Entropy of [6+,1-] = -(6/7)log2(6/7) - (1/7)log2(1/7) = 0.5917. Entropy of [2+,2-] = 1. Entropy of [0+,5-] = 0. Weighted average = (7 x 0.5917 + 4 x 1 + 5 x 0) / 16 = 0.5089. Gain = 1 - 0.5089 = 0.4911.
+
+=== Q
+topic: Decision trees and entropy
+kind: calc
+diff: 2
+source: W4 Gini impurity (formula 1 - sum of squared class proportions)
+--- stem
+The Gini impurity of a node with class proportions p_j is 1 - sum_j p_j^2. A node has 10 examples, 6 positive and 4 negative. A split sends [5+, 1-] to the left child (6 examples) and [1+, 3-] to the right child (4 examples). What is the weighted Gini impurity of the two children after the split?
+--- A*
+0.3167
+>> Left: 1 - (25/36 + 1/36) = 0.2778. Right: 1 - (1/16 + 9/16) = 0.375. Weighted: 0.6 x 0.2778 + 0.4 x 0.375 = 0.3167.
+--- B
+0.1633
+>> This is the decrease in Gini, 0.48 - 0.3167. The question asks for the impurity remaining after the split.
+--- C
+0.3264
+>> This is the plain average (0.2778 + 0.375) / 2. The children must be weighted by 6/10 and 4/10.
+--- D
+0.4800
+>> This is the Gini impurity of the parent node, 1 - (0.36 + 0.16), before any split.
+--- explain
+Left child [5+,1-]: Gini = 1 - (5/6)^2 - (1/6)^2 = 1 - 0.6944 - 0.0278 = 0.2778. Right child [1+,3-]: Gini = 1 - 0.0625 - 0.5625 = 0.375. Weighted: (6/10)(0.2778) + (4/10)(0.375) = 0.1667 + 0.15 = 0.3167. Lower is purer.
+
+=== Q
+topic: Decision trees and entropy
+kind: calc
+diff: 3
+source: W4 Information gain (choosing the root attribute); style of practice exam Q16
+--- stem
+Eight days are described by three yes/no attributes, with the class "Cycle":
+
+| Day | Sunny | Weekend | Friend free | Cycle |
+|---|---|---|---|---|
+| 1 | yes | no | no | no |
+| 2 | no | yes | yes | no |
+| 3 | yes | yes | yes | yes |
+| 4 | yes | no | no | yes |
+| 5 | no | yes | no | no |
+| 6 | yes | yes | no | no |
+| 7 | yes | yes | yes | yes |
+| 8 | yes | no | yes | yes |
+
+ID3 picks the attribute with the largest information gain (bits) for the root. Which attribute is chosen, and what is its gain?
+--- A
+Weekend, gain 0.0488
+>> Weekend has gain 0.0488, the smallest of the three: its children [2+,3-] and [2+,1-] are almost as mixed as the parent.
+--- B
+Sunny, gain 0.6887
+>> 0.6887 is the weighted entropy left after splitting on Sunny. The gain is 1 - 0.6887 = 0.3113.
+--- C
+Friend free, gain 0.1887
+>> Friend free gives children [3+,1-] and [1+,3-], both with entropy 0.8113, so gain = 1 - 0.8113 = 0.1887. That is smaller than the gain of Sunny.
+--- D*
+Sunny, gain 0.3113
+>> Sunny = yes (days 1, 3, 4, 6, 7, 8) gives [4+, 2-] with entropy 0.9183; Sunny = no is pure. Gain = 1 - (6/8)(0.9183) = 0.3113. The other gains are 0.1887 and 0.0488.
+--- explain
+H(Cycle) = 1 (4 yes, 4 no). Sunny: yes has 6 days [4+,2-] (H = 0.9183), no has 2 days [0+,2-] (H = 0). Gain = 1 - 0.75 x 0.9183 = 0.3113. Friend free: yes [3+,1-], no [1+,3-], gain = 1 - 0.8113 = 0.1887. Weekend: yes [2+,3-], no [2+,1-], gain = 1 - (5/8)(0.9710) - (3/8)(0.9183) = 0.0488. Root = Sunny.
+
+=== Q
+topic: Decision trees and entropy
+kind: concept
+diff: 2
+source: W4 Gain ratio (information gain is biased towards many-valued attributes)
+--- stem
+A column "Row ID", with a different value in every row, is added to a training set. Which statement about choosing the root by plain information gain is correct?
+--- A
+The ID column is ignored, because a decision tree can use an attribute only once on a path.
+>> A discrete attribute is allowed once on a path, but it is allowed at the root. The problem is that it wins the root.
+--- B*
+The ID column reaches the maximum possible gain, because every child is pure, even though it is useless for new data.
+>> Each child holds one example and has entropy 0, so the gain equals the whole class entropy. Information gain favours attributes with many values.
+--- C
+The ID column has a negative gain, because it creates many branches.
+>> Information gain is never negative: it is the parent entropy minus a weighted average of child entropies, and that average cannot exceed the parent's.
+--- D
+The ID column has gain 0, because it is unrelated to the class.
+>> Gain 0 is for an attribute that leaves the class mix unchanged. Singleton children are pure, so the ID attribute scores the maximum.
+--- explain
+With one example per child, every child entropy is 0, so Gain = Entropy(S), the maximum. Gain ratio (gain divided by the split entropy) reduces this bias, but the ID-like attribute can still win (as Day does on PlayTennis).
+
+=== Q
+topic: Decision trees and entropy
+kind: concept
+diff: 2
+source: W4 Pruning; W4 Axis-parallel splits; W4 Pros and cons; W4 Hypothesis space search
+--- stem
+Which of the following statements about decision trees are correct? (Select one or more.)
+--- A
+Decision trees have low variance: a small change in the training data rarely changes the tree.
+>> Trees tend to overfit and are unstable, which means high variance. A different example near the root can change the whole tree.
+--- B*
+A test on a single numeric feature gives an axis-parallel decision boundary.
+>> A test such as x1 > t gives the line x1 = t, which is parallel to the other axes. A diagonal boundary needs a staircase of splits.
+--- C
+Greedy ID3 is guaranteed to find the smallest tree that fits the training data.
+>> ID3 is greedy hill-climbing on information gain with no backtracking, so it ends in a local optimum and may miss the smallest tree.
+--- D*
+Replacing a subtree by a leaf (pruning) never increases the accuracy on the training set.
+>> A bigger tree fits the training data at least as well as a smaller one made from it, so pruning keeps or lowers training accuracy. Its purpose is better validation accuracy.
+--- explain
+Pruning cannot improve training accuracy; trees have axis-parallel splits; trees have high variance; ID3 is greedy and not optimal. So only the pruning statement and the axis-parallel statement are correct.
+
+=== Q
+topic: Decision trees and entropy
+kind: calc
+diff: 2
+source: W4 Continuous attributes (Fayyad: only class-change boundaries are tested)
+--- stem
+A numeric feature has these sorted values with their classes: 12 N, 15 N, 18 Y, 21 Y, 25 N, 30 N, 34 Y. For a numeric attribute, a tree only needs to test the midpoint between neighbouring values whose classes differ. Which thresholds are tested?
+--- A*
+16.5, 23, 32
+>> The class changes between 15 and 18, between 21 and 25, and between 30 and 34, with midpoints 16.5, 23 and 32.
+--- B
+13.5, 16.5, 19.5, 23, 27.5, 32
+>> These are all 6 midpoints between neighbouring values. Midpoints between two values of the same class (such as 12 and 15) need not be tested.
+--- C
+15, 21, 30
+>> These are the last values before each class change. The tested threshold lies halfway between that value and the next one.
+--- D
+18, 25, 34
+>> These are the first values of each new class run, not thresholds. A threshold is the midpoint between the two values where the class changes.
+--- explain
+Sorted classes: N N | Y Y | N N | Y. The class changes three times: 15 to 18 (midpoint 16.5), 21 to 25 (midpoint 23), 30 to 34 (midpoint 32). With n = 7 values there are n - 1 = 6 possible splits, but only these 3 need testing.
+
+=== Q
+topic: Decision trees and entropy
+kind: concept
+diff: 3
+source: W4 Pruning (early stopping on XOR); W4 exam traps
+--- stem
+The class of a data set is Y = X1 XOR X2, and the four combinations of (X1, X2) are equally common. Which statement is correct?
+--- A
+The root node has Gini impurity 0, because the data set is perfectly predictable from the attributes.
+>> The Gini impurity of the root depends only on the class mix, which is 50/50, so it is 0.5 (the maximum for two classes), not 0.
+--- B*
+Each of X1 and X2 alone has information gain 0 at the root, so a pre-pruned tree that needs a positive gain never splits.
+>> Whichever attribute is used, each child still holds half of each class (entropy 1), so the gain is 0. Pre-pruning misses the structure that a full tree finds.
+--- C
+X1 has information gain 1 bit at the root, because the class depends on X1.
+>> The class depends on X1 and X2 together. Given X1 alone the class is still 50/50 in both children, so the gain is 0.
+--- D
+No decision tree can reach zero training error on this data.
+>> A tree of depth 2 (X1 at the root, X2 below each child) classifies all four combinations correctly.
+--- explain
+With 50% of each class in both children of any single-attribute split, the gain of X1 and of X2 is 0. A tree that stops when the best gain is 0 stays a single leaf, but a fully grown depth-2 tree fits the data perfectly. This is the early stopping problem of pre-pruning.
+
+=== Q
+topic: Decision trees and entropy
+kind: concept
+diff: 1
+source: W4 Entropy (shape and maximum)
+--- stem
+Which statement about the entropy of the class column at a node (log base 2) is correct?
+--- A
+Entropy can never exceed 1, whatever the number of classes.
+>> The limit of 1 holds for two classes only. With k classes the maximum is log2 k.
+--- B*
+With three equally common classes the entropy is about 1.585, which is more than 1 bit.
+>> The maximum entropy for k classes is log2 k, so for k = 3 it is log2 3 = 1.585.
+--- C
+A pure node, with only one class present, has entropy 1.
+>> A pure node has entropy 0: there is no uncertainty about the class.
+--- D
+Entropy is largest when one class makes up almost all of the examples.
+>> That is the nearly pure case, where the entropy is close to 0. Entropy peaks when the classes are equally common.
+--- explain
+Entropy is 0 for a pure node, maximal for equally common classes, and the maximum is log2 k for k classes. So only the statement about three equally common classes is correct.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 1
+source: W1 Train, validation and test data; style of practice exam Q1 (no tie)
+--- stem
+A decision tree is trained at five maximum depths. The errors are:
+
+| Depth | 2 | 4 | 6 | 8 | 10 |
+|---|---|---|---|---|---|
+| Training error | 24% | 15% | 9% | 4% | 0% |
+| Validation error | 27% | 19% | 16% | 21% | 26% |
+
+Which depth should be chosen for the final model?
+--- A
+10
+>> Depth 10 has the lowest training error (0%) but a validation error of 26%. It overfits.
+--- B
+2
+>> Depth 2 underfits: training error 24% and validation error 27% are both high. It is the simplest but not the best on validation data.
+--- C*
+6
+>> The validation error is lowest (16%) at depth 6. Deeper trees fit the training data better but generalise worse.
+--- D
+8
+>> Depth 8 has a validation error of 21%, higher than the 16% at depth 6, so the tree has started to overfit.
+--- explain
+Choose the setting with the lowest validation error: depth 6 (16%). Training error keeps falling with depth, so it is useless for choosing. The validation error falls and then rises again as the tree overfits.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 1
+source: W1 Bias-variance tradeoff (brief); R2 bias and variance
+--- stem
+On a task where the best achievable error is about 2%, two models have these errors. Model X: training error 2%, validation error 24%. Model Y: training error 21%, validation error 22%. Which diagnosis is correct?
+--- A*
+X overfits (high variance); Y underfits (high bias).
+>> X is perfect on the training data but much worse on new data. Y is poor on both, so it is too simple.
+--- B
+X underfits (high bias); Y overfits (high variance).
+>> This reverses the diagnosis. A large gap between training and validation error signals high variance (X); high error on both signals high bias (Y).
+--- C
+Both underfit, because neither validation error is close to 2%.
+>> X has a training error equal to the best achievable error (2%), so it fits the training data too well rather than too poorly.
+--- D
+Both overfit, because both have a validation error above the training error.
+>> Y has similar training and validation errors, both far above the achievable 2%, so it underfits.
+--- explain
+Overfitting (high variance): low training error, much higher validation error. Underfitting (high bias): both errors high and close to each other, well above the achievable error.
+
+=== Q
+topic: Model selection
+kind: calc
+diff: 1
+source: W2 Train-and-test and cross-validation
+--- stem
+A data set has 150 examples. In one round of 5-fold cross-validation, how many examples are used to train the model and how many to validate it?
+--- A*
+120 to train, 30 to validate
+>> The data is split into 5 folds of 30. One fold is held out for validation and the other four (120 examples) are used for training.
+--- B
+149 to train, 1 to validate
+>> This is leave-one-out cross-validation (K = 150).
+--- C
+100 to train, 50 to validate
+>> That would be 3-fold cross-validation, with folds of 50.
+--- D
+30 to train, 120 to validate
+>> This reverses the roles. The model is trained on the K - 1 folds and validated on the single held-out fold.
+--- explain
+Fold size = 150 / 5 = 30. Each round validates on one fold (30) and trains on the other four folds (4 x 30 = 120). Over the 5 rounds every example is used for validation exactly once.
+
+=== Q
+topic: Model selection
+kind: calc
+diff: 2
+source: W2 Train-and-test and cross-validation (K models per setting); W1 Model selection (grid search)
+--- stem
+You tune a k-NN classifier with 10-fold cross-validation. The grid has 6 values of k and 2 distance functions (Euclidean and Manhattan), and every combination is evaluated. Not counting any final refit on all the data, how many model fits (one fit per training split) are made in total?
+--- A
+12
+>> This is the number of settings. Every setting is trained once per fold, so it is multiplied by 10.
+--- B
+60
+>> This counts only one distance function (6 x 10). Both distance functions are in the grid.
+--- C
+121
+>> This adds one final refit of the chosen model on all the data, which the question says not to count.
+--- D*
+120
+>> 6 x 2 = 12 settings, and each is evaluated with 10 folds, so 12 x 10 = 120 fits.
+--- explain
+Settings = 6 values of k x 2 distances = 12. Each setting needs K = 10 fits (one per fold). Total = 12 x 10 = 120.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 2
+source: W1 Train, validation and test data; W2 Validation set; W2 exam traps
+--- stem
+Which of the following statements about training, validation and test data are correct? (Select one or more.)
+--- A*
+The test set should be used once, at the end, to estimate how the chosen model performs on new data.
+>> If the test set were used to choose the model, it would no longer be an independent check.
+--- B
+The training error is the best estimate of the error on new data.
+>> The model has already seen the training data, so its training error flatters it. 1-NN has 0% training error whatever its true quality.
+--- C*
+The validation set is used to compare hyperparameter settings such as tree depth or k.
+>> Hyperparameters are tuned on data that is neither the training set nor the test set.
+--- D
+Hyperparameters such as k can be tuned on the test set, provided the test set is not used to fit the model parameters.
+>> If the test set helps to choose k, the test error of the chosen model is no longer an independent check and is optimistic. The course tunes on a separate validation set.
+--- explain
+Training data fits the parameters, validation data chooses hyperparameters, test data gives the final estimate. Choosing hyperparameters on the test set and then quoting its error is optimistic.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 2
+source: W1 Bias-variance tradeoff (brief); W4 Overfitting in decision trees; W4 Pruning
+--- stem
+A decision tree has a training error of 2% and a validation error of 25%, while the best achievable error on this problem is about 2%. Which actions are likely to reduce the validation error? (Select one or more.)
+--- A*
+Prune the tree, or limit its maximum depth.
+>> The tree is overfitting (high variance). A simpler tree follows the noise less.
+--- B
+Switch to a model with many more parameters.
+>> More parameters mean more flexibility, which increases variance. The trouble here is variance, not bias.
+--- C
+Allow deeper trees.
+>> A deeper tree is more flexible and would overfit even more. The training error is already as low as it can be.
+--- D*
+Collect more training examples.
+>> More data reduces variance: it makes it harder for the tree to memorise chance patterns.
+--- explain
+Training error equals the achievable error and the validation error is far higher: high variance (overfitting). The remedies are simpler models (pruning, depth limit, regularisation) and more data. More flexibility makes it worse.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 2
+source: W2 Train-and-test and cross-validation
+--- stem
+Which of the following statements about cross-validation are correct? (Select one or more.)
+--- A*
+Leave-one-out cross-validation is K-fold cross-validation with K equal to the number of examples.
+>> Each example is its own fold, so m models are trained, each on m - 1 examples.
+--- B
+10-fold cross-validation trains just one model.
+>> It trains 10 models, one for each choice of the held-out fold, and averages the 10 validation errors.
+--- C*
+In K-fold cross-validation every example is used for validation exactly once.
+>> Each fold is the validation set in turn, and the folds do not overlap.
+--- D
+With 200 examples, leave-one-out cross-validation is cheaper than 10-fold cross-validation.
+>> LOOCV trains 200 models and 10-fold CV only 10, so LOOCV costs more here.
+--- explain
+K-fold CV partitions the data into K folds, trains K models and uses each fold once for validation. LOOCV is the case K = m, and costs m model fits, which is more than 10 whenever m > 10.
+
+=== Q
+topic: Model selection
+kind: calc
+diff: 2
+source: W2 Train-and-test and cross-validation (average of the fold errors)
+--- stem
+Two models are compared with 4-fold cross-validation (equal-size folds). The validation error in each fold is:
+
+| Fold | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|
+| Model A | 10% | 14% | 12% | 16% |
+| Model B | 8% | 20% | 9% | 11% |
+
+Which model has the lower cross-validation error, and what is it?
+--- A
+Model A, 10%
+>> 10% is A's first fold only. The CV error averages all four folds, and A's average is 13%.
+--- B
+Model A, 13%
+>> A has the larger mean error (13%). Do not choose by the worst fold (B's 20%); the CV error is the average over folds.
+--- C
+Model B, 8%
+>> 8% is B's best single fold. The CV error is the mean of all the fold errors.
+--- D*
+Model B, 12%
+>> The mean for B is (8 + 20 + 9 + 11) / 4 = 12%, against (10 + 14 + 12 + 16) / 4 = 13% for A.
+--- explain
+CV error = mean of the fold errors. A: (10 + 14 + 12 + 16) / 4 = 13%. B: (8 + 20 + 9 + 11) / 4 = 12%. B is preferred, with CV error 12%.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 3
+source: W1 Train, validation and test data (pick on validation, report test); W2 exam traps
+--- stem
+Four models are fitted to the same training data:
+
+| Model | Training error | Validation error | Test error |
+|---|---|---|---|
+| Linear model | 18% | 20% | 21% |
+| Tree, depth 3 | 12% | 14% | 15% |
+| Tree, depth 12 | 1% | 16% | 13% |
+| 15-NN | 13% | 17% | 18% |
+
+You must choose the final model using the proper procedure and then report an honest estimate of its error on new data. What should you do?
+--- A
+Choose the depth-3 tree and report 14%.
+>> The right model, but 14% is its validation error, which is the number that was used to select it. The course reports the model's test error.
+--- B
+Choose the depth-12 tree and report 13%.
+>> This chooses the model by looking at the test error, which then no longer gives an unbiased estimate.
+--- C
+Choose the depth-12 tree and report 1%.
+>> This picks the lowest training error. Training error only measures fit to the data the model has already seen.
+--- D*
+Choose the depth-3 tree and report 15%.
+>> The model is chosen by the lowest validation error (14%), and its error is then read off the untouched test set (15%).
+--- explain
+Step 1: compare the models on validation error and choose the lowest: the depth-3 tree (14%). Step 2: report that model's test error (15%), because the test set was not used for any choice. Choosing by test error (13%) makes the test estimate optimistic, reporting the validation error (14%) is not what the procedure says, and training error is not a measure of generalisation.

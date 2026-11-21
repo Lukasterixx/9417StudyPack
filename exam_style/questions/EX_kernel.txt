@@ -1,0 +1,916 @@
+=== Q
+topic: Kernels
+kind: calc
+diff: 2
+source: W5 Kernel trick, Tutorial Q4; style of practice exam Q2
+--- stem
+Let x = (x1, x2) and y = (y1, y2) have positive entries. A kernel is given by
+
+k(x, y) = e^(x1 + y1) + 9 x2^2 y2^2 + 0.16 x1 x2 y1 y2 + log(x2) log(y2).
+
+Which feature map phi satisfies k(x, y) = phi(x) . phi(y)?
+--- A
+phi(x) = (e^(x1), 3 x2^2, 0.08 x1 x2, log x2)
+>> Wrong. Halving 0.16 is not the right rule. The coefficient is shared between x and y, so it is square-rooted: 0.4 on each side, not 0.08.
+--- B*
+phi(x) = (e^(x1), 3 x2^2, 0.4 x1 x2, log x2)
+>> Right. Each term is (something in x) times (the same thing in y), so a coefficient c becomes sqrt(c) in each map entry: sqrt(9) = 3 and sqrt(0.16) = 0.4.
+--- C
+phi(x) = (e^(x1), 9 x2^2, 0.16 x1 x2, log x2)
+>> Wrong. This copies the coefficients without square roots, so the dot product would give 81 x2^2 y2^2 and 0.0256 x1 x2 y1 y2.
+--- D
+phi(x) = (e^(x1), 3 x2^2, 0.16 x1 x2, log x2)
+>> Wrong. The root was taken for the 9 but forgotten for the 0.16, so the cross term would be 0.0256 x1 x2 y1 y2 instead of 0.16.
+--- explain
+Match each term of k to one map entry, with the same entry evaluated at x and at y.
+e^(x1 + y1) = e^(x1) e^(y1), giving entry e^(x1).
+9 x2^2 y2^2 = (3 x2^2)(3 y2^2), giving 3 x2^2.
+0.16 x1 x2 y1 y2 = (0.4 x1 x2)(0.4 y1 y2), giving 0.4 x1 x2.
+log(x2) log(y2), giving log x2.
+So phi(x) = (e^(x1), 3 x2^2, 0.4 x1 x2, log x2).
+
+=== Q
+topic: Kernels
+kind: calc
+diff: 3
+source: W5 Kernel trick (expand and read off phi); style of practice exam Q2 and Q19
+--- stem
+Let x = (x1, x2) and y = (y1, y2) have positive entries. A kernel is
+
+k(x, y) = 8 x1^2 y1^2 + log(x1 x2) log(y1 y2) + e^(-(x1 + y1)).
+
+Which feature map phi satisfies k(x, y) = phi(x) . phi(y)?
+--- A
+phi(x) = (4 x1^2, log(x1 x2), e^(-x1))
+>> Wrong. Halving 8 gives 16 x1^2 y1^2 after the dot product. The correct entry is the square root of 8, not half of it.
+--- B
+phi(x) = (2 sqrt(2) x1^2, log x1, log x2, e^(-x1))
+>> Wrong. The dot product of (log x1, log x2) with (log y1, log y2) is log x1 log y1 + log x2 log y2, which lacks the cross terms of log(x1 x2) log(y1 y2).
+--- C*
+phi(x) = (2 sqrt(2) x1^2, log(x1 x2), e^(-x1))
+>> Right. 8 = (2 sqrt(2))^2, log(x1 x2) log(y1 y2) is one entry times itself in y, and e^(-(x1 + y1)) = e^(-x1) e^(-y1).
+--- D
+phi(x) = (8 x1^2, log(x1 x2), e^(-x1))
+>> Wrong. The coefficient 8 must be split between x and y, so each side carries sqrt(8) = 2 sqrt(2), not 8 (that would give 64 x1^2 y1^2).
+--- explain
+Read off one entry per term. 8 x1^2 y1^2 = (2 sqrt(2) x1^2)(2 sqrt(2) y1^2) because (2 sqrt(2))^2 = 8.
+log(x1 x2) log(y1 y2) is a single entry log(x1 x2) times itself at y. It must stay one entry: splitting it into log x1 and log x2 would lose the cross terms.
+e^(-(x1 + y1)) = e^(-x1) e^(-y1).
+So phi(x) = (2 sqrt(2) x1^2, log(x1 x2), e^(-x1)).
+
+=== Q
+topic: Kernels
+kind: calc
+diff: 2
+source: W5 Feature construction and Counting features, Common kernels (polynomial)
+--- stem
+The polynomial kernel k(x, y) = (x . y + 1)^2 is used on data with 4 features, so x = (x1, x2, x3, x4).
+
+Expand it and write k(x, y) = phi(x) . phi(y) with one entry in phi for each distinct term (a constant, the single x_i, the squares x_i^2, and the products x_i x_j with i < j, where the two orders of a product are merged into one entry with a sqrt(2)).
+
+How many entries does phi have?
+--- A
+10
+>> Wrong. 10 counts only the degree-2 terms (4 squares + 6 products). The constant 1 in the kernel also brings in the degree-1 terms and a constant.
+--- B
+14
+>> Wrong. This is 4 + 4 + 6 with the constant term left out. The 1 in (x . y + 1) also gives the entry 1 on each side.
+--- C
+25
+>> Wrong. 25 = 5^2 counts every ordered product of the 5 pieces (1, x1, ..., x4), so products such as x1 x2 and x2 x1 are counted twice.
+--- D*
+15
+>> Right. 1 constant + 4 linear + 4 squares + 6 cross products = 15, which is the same as C(6, 2) = 15.
+--- explain
+(x . y + 1)^2 expands into terms of degree 0, 1 and 2.
+Constant: 1 entry. Linear x_i: 4 entries. Squares x_i^2: 4 entries. Products x_i x_j, i < j: C(4, 2) = 6 entries.
+Total 1 + 4 + 4 + 6 = 15. (General formula: C(d + 2, 2) = C(6, 2) = 15.)
+
+=== Q
+topic: Kernels
+kind: calc
+diff: 1
+source: W5 Gram matrix, Common kernels (polynomial); negative dot product as a sign trap
+--- stem
+The kernel is k(x, y) = (x . y + 2)^2. Three training points are x1 = (1, 3), x2 = (2, -2), x3 = (0, 2). The Gram matrix G has entries G_ij = k(xi, xj).
+
+What is the entry G_12?
+--- A*
+4
+>> Right. x1 . x2 = 1*2 + 3*(-2) = -4, so G_12 = (-4 + 2)^2 = (-2)^2 = 4.
+--- B
+18
+>> Wrong. This squares the dot product first and then adds 2: (-4)^2 + 2 = 18. The kernel adds 2 first and squares the sum.
+--- C
+36
+>> Wrong. This subtracts the 2 instead of adding it: (-4 - 2)^2 = 36.
+--- D
+100
+>> Wrong. This uses x1 . x2 = 2 + 6 = 8, forgetting the minus sign on the second entry of x2: (8 + 2)^2 = 100.
+--- explain
+x1 . x2 = 1*2 + 3*(-2) = 2 - 6 = -4.
+G_12 = (x1 . x2 + 2)^2 = (-4 + 2)^2 = (-2)^2 = 4.
+(The Gram matrix is symmetric, so G_21 = 4 as well.)
+
+=== Q
+topic: Kernels
+kind: calc
+diff: 1
+source: W5 Common kernels (RBF), Exam traps (RBF denominator is 2 sigma^2 and the distance is squared); style of practice exam Q15
+--- stem
+The RBF kernel is k(x, y) = exp(-||x - y||^2 / (2 sigma^2)). Take x = (1, 2), y = (3, 4) and sigma = 2.
+
+What is k(x, y)? Give the answer to 4 decimal places.
+--- A
+0.0183
+>> Wrong. This is exp(-4), from dividing 8 by 2 and forgetting to divide by sigma^2 as well.
+--- B*
+0.3679
+>> Right. ||x - y||^2 = 4 + 4 = 8 and 2 sigma^2 = 8, so k = exp(-1) = 0.3679.
+--- C
+0.1353
+>> Wrong. This is exp(-2), from dividing 8 by sigma^2 = 4 and forgetting the factor 2 in the denominator 2 sigma^2.
+--- D
+0.7022
+>> Wrong. This uses the plain distance sqrt(8) = 2.828 instead of the squared distance: exp(-2.828 / 8) = 0.7022.
+--- explain
+Squared distance: (3 - 1)^2 + (4 - 2)^2 = 4 + 4 = 8.
+Denominator: 2 sigma^2 = 2 * 4 = 8.
+k = exp(-8 / 8) = exp(-1) = 0.3679.
+
+=== Q
+topic: Kernels
+kind: concept
+diff: 2
+source: W5 Showing that a function is a valid kernel (quick tests for an invalid kernel), Gram matrix
+--- stem
+Two training points give a 2 x 2 Gram matrix G with G_ij = k(xi, xj). Which of these matrices can NOT come from a valid kernel k?
+--- A
+[[1, -1], [-1, 1]]
+>> This one can come from a valid kernel. A negative off-diagonal entry is fine: take phi(x1) = 1 and phi(x2) = -1 in one dimension.
+--- B
+[[4, 0], [0, 9]]
+>> This one can come from a valid kernel. It is the Gram matrix of two perpendicular feature vectors, of lengths 2 and 3.
+--- C*
+[[1, 2], [2, 1]]
+>> Right. Cauchy-Schwarz needs k(x1, x2)^2 <= k(x1, x1) k(x2, x2), but 2^2 = 4 is larger than 1 * 1 = 1. (Its eigenvalues are 3 and -1.)
+--- D
+[[2, 1], [1, 2]]
+>> This one can come from a valid kernel. 1^2 <= 2 * 2 holds and the eigenvalues are 1 and 3, both non-negative.
+--- explain
+A Gram matrix of a valid kernel is symmetric with non-negative diagonal, and satisfies G_12^2 <= G_11 G_22 (Cauchy-Schwarz, since G_12 = phi(x1) . phi(x2)). Only [[1, 2], [2, 1]] breaks it: 4 > 1. A negative off-diagonal entry is allowed.
+
+=== Q
+topic: Kernels
+kind: concept
+diff: 2
+source: W5 Showing that a function is a valid kernel; sums and products of kernels
+--- stem
+Let x and y be vectors in R^2. (Select one or more.) Which of these functions are valid kernels?
+--- A*
+k(x, y) = (x . y)^3
+>> Valid. It is a product of kernels (the dot product three times), with feature entries made of products of three of x1 and x2, such as x1^3 and sqrt(3) x1^2 x2.
+--- B
+k(x, y) = 2 - x . y
+>> Not valid. For x = y = (2, 0) it gives 2 - 4 = -2, but a valid kernel has k(x, x) = ||phi(x)||^2 >= 0.
+--- C
+k(x, y) = ||x - y||^2
+>> Not valid. Take x = (0, 0) and y = (1, 0): k(x, y)^2 = 1 but k(x, x) k(y, y) = 0, which breaks Cauchy-Schwarz.
+--- D*
+k(x, y) = x . y + 3
+>> Valid. It is the dot product of phi(x) = (x1, x2, sqrt(3)) with phi(y): the constant 3 is itself a kernel, and the sum of two kernels is a kernel.
+--- explain
+A valid kernel is a dot product phi(x) . phi(y). Sums and products of kernels, positive constants and the dot product itself are valid. Two quick tests that reject a function: k(x, x) must be at least 0, and k(x, y)^2 <= k(x, x) k(y, y). The functions 2 - x . y and ||x - y||^2 fail these tests.
+
+=== Q
+topic: Kernels
+kind: concept
+diff: 2
+source: W5 Common kernels (RBF); style of practice exam Q15
+--- stem
+(Select one or more.) Consider the RBF kernel k(x, y) = exp(-||x - y||^2 / (2 sigma^2)) with sigma > 0. Which statements are correct?
+--- A*
+k(x, x) = 1 for every point x.
+>> True. The distance of a point to itself is 0, so the exponent is 0 and e^0 = 1. This is the largest value the kernel can take.
+--- B*
+0 < k(x, y) <= 1 for every pair of points x and y.
+>> True. The exponent is never positive, so the value is at most 1, and an exponential is always strictly positive.
+--- C
+k(x, y) becomes negative when x and y are far apart.
+>> False. It goes towards 0 but stays positive. It is the linear kernel (the plain dot product) that can be negative.
+--- D
+The feature map phi has the same number of entries as x.
+>> False. A Taylor expansion of the exponential shows that the RBF kernel corresponds to an infinite-dimensional feature space.
+--- explain
+The RBF kernel is a closeness score: exp of minus a non-negative number. So it equals 1 when the points coincide, lies strictly between 0 and 1 otherwise, and falls towards (but never below) 0 as the points move apart. Its feature space is infinite-dimensional.
+
+=== Q
+topic: Kernels
+kind: concept
+diff: 2
+source: W5 Common kernels (RBF, effect of sigma)
+--- stem
+An SVM with the RBF kernel k(x, y) = exp(-||x - y||^2 / (2 sigma^2)) is trained on data in which neighbouring training points are about 1 unit apart. The parameter sigma is then set to a very small value, such as 0.01. What happens?
+--- A
+The feature space shrinks to the same number of dimensions as the data, so the model becomes linear.
+>> Wrong. The feature space of an RBF kernel is infinite-dimensional for every sigma > 0.
+--- B*
+Distinct points get k near 0, so the kernel matrix is near the identity and the model can overfit.
+>> Right. With a tiny sigma only a point itself counts as similar (k(x, x) = 1), so the boundary can wrap around single points.
+--- C
+Every pair of points gets k close to 1, so the decision boundary becomes almost a straight line.
+>> Wrong. That is what a very large sigma does: distances become small compared with sigma, so the exponent is near 0.
+--- D
+The RBF kernel stops being a valid kernel once sigma falls below 1, so the SVM cannot be trained.
+>> Wrong. The RBF kernel is valid for every sigma > 0. Sigma only sets the length scale of the similarity.
+--- explain
+Here the squared distance between neighbours is about 1, so k is about exp(-1 / (2 * 0.0001)) = exp(-5000), which is practically 0. The kernel matrix is near the identity: each point resembles only itself. That gives a very flexible model that can overfit. A large sigma does the reverse.
+
+=== Q
+topic: Kernels
+kind: concept
+diff: 1
+source: W5 The kernel trick, Kernel perceptron
+--- stem
+Consider these four statements about kernels.
+
+1. A valid kernel k gives k(x, y) = phi(x) . phi(y) for some feature map phi.
+2. To use a polynomial kernel, the feature vectors phi(x) must first be computed explicitly for all training points.
+3. The RBF kernel corresponds to an infinite-dimensional feature space.
+4. A trained kernel perceptron needs the training points with alpha > 0 to classify a new point.
+
+Which statement is incorrect?
+--- A
+Statement 3 is incorrect
+>> Statement 3 is correct. A Taylor expansion of the exponential gives infinitely many feature entries.
+--- B
+Statement 4 is incorrect
+>> Statement 4 is correct. The prediction is a sum of alpha_i y_i k(x_i, x) over training points, so those points must be stored.
+--- C*
+Statement 2 is incorrect
+>> Right. The point of the kernel trick is that phi is never built: k is computed directly from x and y with one dot product and one power.
+--- D
+Statement 1 is incorrect
+>> Statement 1 is correct. It is the definition of a valid kernel: a dot product in some feature space.
+--- explain
+The kernel trick lets us use the dot product in the feature space without computing phi. Statement 2 says the opposite, so it is the incorrect one.
+
+=== Q
+topic: Kernels
+kind: calc
+diff: 3
+source: W5 Tutorial Q4(a), Showing that a function is a valid kernel (polynomial with constant)
+--- stem
+For x = (x1, x2) and y = (y1, y2), the kernel is k(x, y) = (x . y + 4)^2. Which feature map phi satisfies k(x, y) = phi(x) . phi(y)?
+--- A
+phi(x) = (x1^2, x2^2, sqrt(2) x1 x2, 8 x1, 8 x2, 16)
+>> Wrong. The coefficients 8 and 16 are shared between x and y, so each side carries their square roots, sqrt(8) and 4, not 8 and 16.
+--- B
+phi(x) = (x1^2, x2^2, sqrt(2) x1 x2, 4 x1, 4 x2, 4)
+>> Wrong. The linear entries 4 x1 would give 16 x1 y1 in the dot product, but the expansion has 2 * 4 = 8 x1 y1.
+--- C
+phi(x) = (x1^2, x2^2, x1 x2, sqrt(8) x1, sqrt(8) x2, 4)
+>> Wrong. The cross term in (x1 y1 + x2 y2)^2 is 2 x1 y1 x2 y2, so its entry needs sqrt(2), not 1.
+--- D*
+phi(x) = (x1^2, x2^2, sqrt(2) x1 x2, sqrt(8) x1, sqrt(8) x2, 4)
+>> Right. (x . y)^2 + 8 (x . y) + 16 gives the squares, the cross term with sqrt(2), the linear terms with coefficient 8 (so sqrt(8) each) and the constant 16 (so 4 each).
+--- explain
+Let s = x . y. Then (s + 4)^2 = s^2 + 8 s + 16.
+s^2 = x1^2 y1^2 + x2^2 y2^2 + 2 x1 x2 y1 y2, giving entries x1^2, x2^2, sqrt(2) x1 x2.
+8 s = 8 x1 y1 + 8 x2 y2, giving sqrt(8) x1 and sqrt(8) x2.
+16 gives the constant entry 4.
+So phi(x) = (x1^2, x2^2, sqrt(2) x1 x2, sqrt(8) x1, sqrt(8) x2, 4).
+
+=== Q
+topic: Kernels
+kind: calc
+diff: 3
+source: W5 Kernel trick (expand and read off phi); product of sums, style of practice exam Q19
+--- stem
+For x = (x1, x2) and y = (y1, y2), a kernel is given as a product of two sums:
+
+k(x, y) = (2 x1 y1 + 1)(3 x2 y2 + 1).
+
+Which feature map phi satisfies k(x, y) = phi(x) . phi(y)?
+--- A*
+phi(x) = (sqrt(6) x1 x2, sqrt(2) x1, sqrt(3) x2, 1)
+>> Right. Multiplying out gives 6 x1 x2 y1 y2 + 2 x1 y1 + 3 x2 y2 + 1, and each coefficient is square-rooted into the entry.
+--- B
+phi(x) = (6 x1 x2, 2 x1, 3 x2, 1)
+>> Wrong. Coefficients are shared between x and y, so they enter as square roots. This map would give 36 x1 x2 y1 y2 + 4 x1 y1 + 9 x2 y2 + 1.
+--- C
+phi(x) = (sqrt(6) x1 x2, sqrt(2) x1, sqrt(3) x2)
+>> Wrong. The product also contains 1 * 1 = 1, a constant term, which needs its own entry 1.
+--- D
+phi(x) = (2 x1 + 1, 3 x2 + 1)
+>> Wrong. This dot product is (2 x1 + 1)(2 y1 + 1) + (3 x2 + 1)(3 y2 + 1), a sum of two products rather than the product of two sums.
+--- explain
+Multiply out first: (2 x1 y1 + 1)(3 x2 y2 + 1) = 6 x1 y1 x2 y2 + 2 x1 y1 + 3 x2 y2 + 1.
+Each term is (entry of x)(entry of y): 6 -> sqrt(6) x1 x2, 2 -> sqrt(2) x1, 3 -> sqrt(3) x2, 1 -> 1.
+So phi(x) = (sqrt(6) x1 x2, sqrt(2) x1, sqrt(3) x2, 1), with 4 entries.
+
+=== Q
+topic: Kernels
+kind: calc
+diff: 2
+source: W5 When a linear classifier is not enough, Feature construction; style of practice exam Q22
+--- stem
+One-dimensional data: x = [-2, -1, 0, 1, 2] with labels y = [+1, -1, -1, -1, +1]. (Select one or more.) Which transformations x -> (x, f(x)) make the data linearly separable in the plane?
+--- A*
+(x, cos(pi x / 2))
+>> Separable. The second coordinate is -1, 0, 1, 0, -1, so the line "second coordinate = -0.5" has both positives below and all negatives above.
+--- B*
+(x, x^2)
+>> Separable. The second coordinate is 4, 1, 0, 1, 4, so the line "second coordinate = 2.5" puts both positives above and all negatives below.
+--- C
+(x, x^3)
+>> Not separable. The points are (-2, -8), (-1, -1), (0, 0), (1, 1), (2, 8) and the negative (0, 0) lies on the segment joining the two positives.
+--- D
+(x, sin(pi x / 2))
+>> Not separable. The second coordinate is 0, -1, 0, 1, 0, so the positives are (-2, 0) and (2, 0) and the negative (0, 0) lies between them.
+--- explain
+Compute the second coordinate for each of the five points.
+x^2: 4, 1, 0, 1, 4 gives a threshold at 2.5. Separable.
+x^3: -8, -1, 0, 1, 8: the negative at 0 sits on the segment between the positives (-2, -8) and (2, 8). Not separable.
+sin(pi x / 2): 0, -1, 0, 1, 0: the negative at (0, 0) sits between the positives (-2, 0) and (2, 0). Not separable.
+cos(pi x / 2): -1, 0, 1, 0, -1 gives a threshold at -0.5. Separable.
+Answer: (x, x^2) and (x, cos(pi x / 2)).
+
+=== Q
+topic: Kernels
+kind: concept
+diff: 2
+source: W5 Kernel trick (circle to plane), Tutorial Q6
+--- stem
+Class A has the four points (1, 0), (0, 1), (-1, 0), (0, -1) (a ring of radius 1). Class B has the four points (2, 0), (0, 2), (-2, 0), (0, -2) (a ring of radius 2). No straight line separates them in the original plane. Which transformation of (x1, x2) makes the two classes linearly separable?
+--- A
+(x1 + x2, x1 - x2)
+>> Wrong. This is a rotation and scaling of the plane, which is still a linear change of coordinates, so a ring stays a ring.
+--- B
+(x1, x2) with no change
+>> Wrong. This is the original plane, in which the two rings are nested and no straight line separates them.
+--- C*
+(x1^2, x2^2)
+>> Right. Class A maps to (1, 0) and (0, 1), with z1 + z2 = 1. Class B maps to (4, 0) and (0, 4), with z1 + z2 = 4. The line z1 + z2 = 2.5 separates them.
+--- D
+(x1 x2, x1 + x2)
+>> Wrong. Every point maps to (0, 1), (0, -1), (0, 2) or (0, -2), on a vertical line in the order B, A, A, B, so no line splits the classes.
+--- explain
+The classes differ by the radius, x1^2 + x2^2, so use the squares as features. Under (x1^2, x2^2), ring A lies on z1 + z2 = 1 and ring B on z1 + z2 = 4, which a straight line separates. The other maps either do not change the nested geometry or put both classes on one line in an interleaved order.
+
+=== Q
+topic: SVM and perceptron
+kind: calc
+diff: 1
+source: W5 Perceptron (update rule and algorithm), Linear classification and the perceptron
+--- stem
+A perceptron is trained with the rule: if y w . x <= 0, then w <- w + y x. Start with w = (0, 0) and go through the examples once, in this order:
+x1 = (1, 1) with y = +1; x2 = (-1, 2) with y = -1; x3 = (2, 0) with y = +1.
+
+What is w after this one pass?
+--- A
+(0, 3)
+>> Wrong. This adds x2 instead of subtracting it. Its label is -1, so the update is w - x2.
+--- B
+(1, 1)
+>> Wrong. This is w after only the first update. The perceptron also gets x2 wrong (w . x2 = 1 but y = -1), so it updates again.
+--- C
+(4, -1)
+>> Wrong. This adds x3 although x3 is already classified correctly: w . x3 = 4 > 0 with y = +1.
+--- D*
+(2, -1)
+>> Right. x1 updates (w = (1, 1)), x2 is a mistake (w = (1, 1) - (-1, 2) = (2, -1)), and x3 is already correct.
+--- explain
+Example 1: w = 0 gives y w . x = 0 <= 0, so update: w = (0, 0) + (1, 1) = (1, 1).
+Example 2: w . x2 = -1 + 2 = 1, y w . x = -1 <= 0, so update: w = (1, 1) - (-1, 2) = (2, -1).
+Example 3: w . x3 = 4, y w . x = 4 > 0, no update.
+After the pass, w = (2, -1).
+
+=== Q
+topic: SVM and perceptron
+kind: calc
+diff: 3
+source: W5 The perceptron in dual form, Gram matrix, Tutorial Q1
+--- stem
+Dual perceptron on three examples with labels y = (+1, -1, -1). Their dot products are in the Gram matrix
+
+G = [[4, 2, 0], [2, 2, 2], [0, 2, 4]]  (G_ij = xi . xj).
+
+Start with alpha = (0, 0, 0) and cycle through the examples in the order 1, 2, 3, 1, 2, 3, ... . Example i triggers an update alpha_i <- alpha_i + 1 whenever y_i * sum_j alpha_j y_j G_ji <= 0. Stop after a full pass with no update.
+
+What is the final alpha?
+--- A*
+(2, 3, 0)
+>> Right. The mistakes occur on examples 1, 2, 2, 1, 2 (in that order), five in total, giving alpha = (2, 3, 0).
+--- B
+(2, 2, 0)
+>> Wrong. This is the state before the last update of example 2. At that point example 2 still has a score of 0, so it is updated once more.
+--- C
+(1, 2, 0)
+>> Wrong. This is an intermediate state after the second pass. In the third pass example 1 has score 0 and is updated again.
+--- D
+(2, 3, 1)
+>> Wrong. Example 3 never makes a mistake: its score sum_j alpha_j y_j G_j3 stays negative, so y_3 times the score is positive and alpha_3 stays 0.
+--- explain
+Pass 1: example 1: score 0, update, alpha = (1, 0, 0). Example 2: score 1*(+1)*2 = 2, y_2 * 2 = -2, update, alpha = (1, 1, 0). Example 3: score = 1*(+1)*0 + 1*(-1)*2 = -2, y_3 * (-2) = 2 > 0, fine.
+Pass 2: example 1: score 4 - 2 = 2, fine. Example 2: score 2 - 2 = 0, update, alpha = (1, 2, 0). Example 3: score 0 - 4 = -4, fine.
+Pass 3: example 1: score 4 - 4 = 0, update, alpha = (2, 2, 0). Example 2: score 4 - 4 = 0, update, alpha = (2, 3, 0). Example 3: score -6, fine.
+Pass 4: scores 2, -2 (so y_2 times it is +2), and -6: no updates. Final alpha = (2, 3, 0), 5 mistakes.
+
+=== Q
+topic: SVM and perceptron
+kind: calc
+diff: 2
+source: W5 Perceptron (algorithm, homogeneous coordinates)
+--- stem
+A perceptron with a bias uses homogeneous coordinates x = (1, x). Training data (as vectors with the leading 1): example 1 is (1, 2) with y = +1; example 2 is (1, -1) with y = -1; example 3 is (1, 0) with y = -1.
+
+Start from w = (0, 0). Loop over examples 1, 2, 3 in this order repeatedly. Update w <- w + y x whenever y w . x <= 0 (a score of exactly 0 counts as a mistake). Stop after a full pass without updates.
+
+How many updates are made in total?
+--- A
+5
+>> Wrong. This would need two more mistakes, but with w = (-1, 2) the scores of the three examples are 3, -3 and -1, all on the correct side.
+--- B*
+3
+>> Right. Updates happen on example 1, then example 3, then example 3 again (w ends at (-1, 2)), and the next full pass has none.
+--- C
+2
+>> Wrong. After the second update w = (0, 2) gives example 3 a score of 0, which counts as a mistake under this rule, so it is updated again.
+--- D
+4
+>> Wrong. After the third update w = (-1, 2) classifies all three examples correctly, so no fourth update happens.
+--- explain
+Pass 1: example 1: score 0, update, w = (1, 2). Example 2: score 1 - 2 = -1, y = -1, y*score = 1 > 0, fine. Example 3: score 1, y = -1, y*score = -1 <= 0, update, w = (1, 2) - (1, 0) = (0, 2).
+Pass 2: example 1: score 4, fine. Example 2: score -2, fine. Example 3: score 0, update, w = (0, 2) - (1, 0) = (-1, 2).
+Pass 3: scores 3, -3, -1, all correct. Total updates: 3.
+
+=== Q
+topic: SVM and perceptron
+kind: calc
+diff: 1
+source: W5 The support vector machine: geometry (margin versus gap), Exam traps
+--- stem
+A trained hard-margin SVM has w = (3, 4) and t = 5, with the boundary w . x - t = 0 and the scaling such that the support vectors satisfy w . x - t = +1 or -1.
+
+What is the distance between the two margin lines w . x - t = +1 and w . x - t = -1?
+--- A
+0.2857
+>> Wrong. This is 2 / 7, using the sum 3 + 4 instead of the length sqrt(3^2 + 4^2).
+--- B
+0.08
+>> Wrong. This is 2 / ||w||^2 = 2 / 25. The distance divides by the length of w, not by its square.
+--- C*
+0.4
+>> Right. ||w|| = sqrt(9 + 16) = 5, and the two margin lines are 2 / ||w|| = 0.4 apart.
+--- D
+0.2
+>> Wrong. This is 1 / ||w||, the margin of the course: the distance from the boundary to one margin line, which is half of the gap.
+--- explain
+||w|| = sqrt(3^2 + 4^2) = 5.
+The boundary to one margin line is 1 / ||w|| = 0.2 (the margin). The gap between the two margin lines is twice that: 2 / ||w|| = 0.4.
+
+=== Q
+topic: SVM and perceptron
+kind: calc
+diff: 3
+source: W5 Reading off the solution, Lagrange multipliers and the dual problem, Tutorial Q7
+--- stem
+A hard-margin SVM (convention: boundary w . x - t = 0, constraints y_i (w . x_i - t) >= 1) is trained on just two points: (4, 3) with label +1 and (0, 0) with label -1. In the dual solution w = sum_i alpha_i y_i x_i, with sum_i alpha_i y_i = 0.
+
+What is the multiplier alpha for the point (4, 3)?
+--- A
+0.16
+>> Wrong. This is alpha_1 + alpha_2, the sum of the two multipliers, which is twice the multiplier of one point.
+--- B
+0.4
+>> Wrong. This is ||w|| = 0.4, the length of the weight vector, not the multiplier.
+--- C
+0.32
+>> Wrong. This is the first component of w = (0.32, 0.24), not alpha. The vector w = alpha (4, 3) equals 0.08 times (4, 3).
+--- D*
+0.08
+>> Right. Both points are support vectors with equal alpha, and w = alpha (4, 3). The condition w . (4, 3) = 2 gives 25 alpha = 2, so alpha = 0.08.
+--- explain
+Since sum alpha_i y_i = 0 and y = +1, -1, the two multipliers are equal: alpha_1 = alpha_2 = alpha.
+w = alpha (4, 3) - alpha (0, 0) = alpha (4, 3).
+Both points sit on the margin lines: w . (4, 3) - t = 1 and w . (0, 0) - t = -1. The second gives t = 1, and then w . (4, 3) = 2, i.e. 25 alpha = 2, so alpha = 0.08.
+Check: w = (0.32, 0.24), ||w|| = 0.4, margin 1 / ||w|| = 2.5 = half the distance between the points (5).
+
+=== Q
+topic: SVM and perceptron
+kind: concept
+diff: 2
+source: W5 Reading off the solution (support vectors define the boundary), Exam traps
+--- stem
+A hard-margin SVM is trained on 1-D data. The negative examples are at x = -3 and x = -1, and the positive examples are at x = 1 and x = 3. The boundary is at x = 0 and the support vectors are at -1 and +1.
+
+Which single change moves the boundary?
+--- A*
+Adding a new negative example at x = -0.5.
+>> Right. It is a new support vector between the old ones: the closest pair is now -0.5 and 1, so the boundary moves to x = 0.25.
+--- B
+Adding a new positive example at x = 6.
+>> Wrong. It is far from the boundary and outside the margin. The support vectors at -1 and 1 still define the same boundary.
+--- C
+Deleting the negative example at x = -3.
+>> Wrong. This point is not a support vector (its alpha is 0). Removing it leaves the boundary at x = 0.
+--- D
+Moving the positive example from x = 3 to x = 8.
+>> Wrong. The point is not a support vector and stays far outside the margin, so the boundary does not change.
+--- explain
+The hard-margin boundary is fixed by the support vectors, the closest points of the two classes (-1 and +1, giving x = 0). Moving, adding or removing points that stay outside the margin changes nothing. A new negative at -0.5 lies inside the old margin, so the closest pair becomes -0.5 and 1 and the boundary moves to the midpoint 0.25.
+
+=== Q
+topic: SVM and perceptron
+kind: calc
+diff: 2
+source: W5 Setting up (normalise), Reading off the solution (threshold t = w . x_j - y_j)
+--- stem
+A hard-margin SVM (convention: boundary w x - t = 0, constraints y_i (w x_i - t) >= 1) is trained on 1-D data. The negative points are x = -3 and x = -1. The positive points are x = 2 and x = 5.
+
+What are w and t?
+--- A
+w = 0.3333, t = 0.1667
+>> Wrong. This halves both values. The distance between the support vectors is 3, so 3 w = 2 and w = 2/3.
+--- B*
+w = 0.6667, t = 0.3333
+>> Right. The support vectors are -1 and 2, so 2w - t = 1 and -w - t = -1 give w = 2/3 and t = 1/3 (boundary at x = 0.5).
+--- C
+w = 1.5, t = 0.75
+>> Wrong. 1.5 is the margin (the distance from the boundary to a support vector), not w. In 1-D, w = 1 / margin = 0.6667.
+--- D
+w = 0.6667, t = 0.5
+>> Wrong. 0.5 is the location of the boundary, not t. The threshold is t = w * 0.5 = 0.3333.
+--- explain
+The closest points are the support vectors: x = -1 (negative) and x = 2 (positive).
+Margin conditions: 2w - t = +1 and -w - t = -1. Subtract the second from the first: 3w = 2, so w = 2/3 = 0.6667.
+Then t = -w + 1 = 1/3 = 0.3333, which puts the boundary at x = t / w = 0.5, midway between -1 and 2.
+Check the others: x = 5 gives (2/3)*5 - 1/3 = 3 >= 1 and x = -3 gives -2 - 1/3, so y(...) = 2.33 >= 1.
+
+=== Q
+topic: SVM and perceptron
+kind: concept
+diff: 1
+source: W5 Perceptron (algorithm), When a linear classifier is not enough, Exam traps (perceptron versus SVM)
+--- stem
+Which statement about the perceptron algorithm (update only on mistakes, starting from w = 0) is correct?
+--- A
+It always returns the maximum-margin separating line, whatever the order of the examples.
+>> Wrong. It stops at the first separator it finds. The maximum-margin line is what the SVM returns.
+--- B
+The final w is the same whatever order the examples are visited in, so the result is unique.
+>> Wrong. The result depends on the order of the examples (and on the starting point); different orders can give different separating lines.
+--- C*
+On separable data it stops after a finite number of updates.
+>> Right. Once a pass makes no mistakes, training ends. On separable data this is guaranteed to happen.
+--- D
+On data that are not linearly separable it eventually stops, with a few errors left.
+>> Wrong. A pass with no mistakes would mean zero training errors, which is impossible on non-separable data, so it keeps updating forever.
+--- explain
+The perceptron stops as soon as a full pass makes no mistakes. That happens in finitely many updates when the data are linearly separable, and never when they are not. It does not choose the best separator: the result depends on the order.
+
+=== Q
+topic: SVM and perceptron
+kind: concept
+diff: 2
+source: W5 Reading off the solution (support vectors), Support vectors define the maximum margin hyperplane
+--- stem
+(Select one or more.) Which statements about a hard-margin SVM trained on linearly separable data are correct?
+--- A*
+Every support vector lies on one of the lines w . x - t = +1 or w . x - t = -1.
+>> True. A positive multiplier means the constraint is tight, so the point sits exactly on a margin line, with a score equal to its own label.
+--- B
+The margin 1 / ||w|| becomes larger when ||w|| becomes larger.
+>> False. The margin is 1 / ||w||, so a larger ||w|| gives a smaller margin. Maximising the margin means making ||w|| small.
+--- C
+On separable data it always returns the same boundary as the perceptron.
+>> False. The perceptron stops at any separator it finds, depending on order, while the SVM picks the unique maximum-margin one.
+--- D*
+Deleting a training point that is not a support vector leaves the boundary unchanged.
+>> True. Only the support vectors (alpha > 0) enter w = sum alpha_i y_i x_i. Points with alpha = 0 can be removed without changing the boundary.
+--- explain
+Support vectors alone determine the max-margin boundary, and they sit on the margin lines. The margin shrinks as ||w|| grows, and the perceptron does not maximise the margin.
+
+=== Q
+topic: SVM and perceptron
+kind: concept
+diff: 1
+source: W5 Soft margin SVM (the parameter C), Exam traps (effect of C)
+--- stem
+A soft-margin SVM is trained on noisy, overlapping data, first with C = 0.01 and then with C = 100. Which description of the change is correct?
+--- A*
+With C = 100 the margin is narrower and fewer points break it.
+>> Right. A large C makes margin violations expensive, so the SVM narrows its margin to avoid them, tending towards the hard-margin solution.
+--- B
+With C = 100 the margin is wider and more points break it.
+>> Wrong. This is the effect of a small C, which makes violations cheap and so accepts more of them in return for a wide margin.
+--- C
+With C = 100 the margin is unchanged, because C only affects the kernel choice.
+>> Wrong. C is the price of slack in the objective (1/2)||w||^2 + C sum of slacks. It has nothing to do with the choice of kernel.
+--- D
+With C = 100 every multiplier alpha_i is forced to be exactly 0.
+>> Wrong. The multipliers satisfy 0 <= alpha_i <= C, so a larger C only allows larger multipliers.
+--- explain
+In the soft-margin objective (1/2)||w||^2 + C sum of slacks, C is the price of margin violation. High C: violations are costly, narrow margin, fewer errors, near hard margin. Low C: wide margin, more violations tolerated.
+
+=== Q
+topic: SVM and perceptron
+kind: concept
+diff: 2
+source: W5 Soft margin SVM (slack table, three cases)
+--- stem
+Consider these four statements about a soft-margin SVM, with dual variables alpha_i and slack variables xi_i >= 0 (each slack takes the smallest value the constraints allow, xi_i = max(0, 1 - y_i (w . x_i - t))).
+
+1. Every dual variable satisfies 0 <= alpha_i <= C.
+2. A point with slack xi_i > 1 is misclassified.
+3. A point with xi_i = 0 lies on or outside its margin line, on the correct side.
+4. A point with slack xi_i = 1 lies exactly on its margin line.
+
+Which statement is incorrect?
+--- A
+Statement 3 is incorrect
+>> Statement 3 is correct. Zero slack means y_i (w . x_i - t) >= 1, so the point obeys the hard-margin constraint.
+--- B*
+Statement 4 is incorrect
+>> Right. With xi_i = 1 the score y_i (w . x_i - t) equals 0, so the point lies on the decision boundary. The margin line has xi_i = 0.
+--- C
+Statement 1 is incorrect
+>> Statement 1 is correct. The extra constraint from the slack variables caps every multiplier at C.
+--- D
+Statement 2 is incorrect
+>> Statement 2 is correct. The slack is 1 - y_i (w . x_i - t), which exceeds 1 only when the score is negative, i.e. the point is on the wrong side.
+--- explain
+At the optimum xi_i = max(0, 1 - z_i) with z_i = y_i (w . x_i - t). So xi = 0 means z >= 1 (on or beyond the margin line), 0 < xi < 1 means inside the margin but correct, xi = 1 means on the decision boundary, and xi > 1 means misclassified. Statement 4 mixes up the margin line and the boundary.
+
+=== Q
+topic: SVM and perceptron
+kind: concept
+diff: 2
+source: W5 Linear classification and the perceptron, kNN link in W2; style of practice exam Q26
+--- stem
+(Select one or more.) On a linearly separable training set with two features and no two identical examples, which models can NOT be guaranteed to reach zero training error?
+--- A
+1-NN
+>> Can be guaranteed. Every training point is its own nearest neighbour (distance 0), so it is always classified correctly.
+--- B
+Perceptron
+>> Can be guaranteed. On separable data the perceptron stops after finitely many updates, and it stops only with zero training errors.
+--- C*
+A decision tree with a single split (a stump)
+>> Cannot be guaranteed. One axis-parallel cut cannot separate diagonal data such as positives (0, 1), (1, 2) and negatives (1, 0), (2, 1), which a line can separate.
+--- D*
+3-NN
+>> Cannot be guaranteed. With a positive at (0, 0) and negatives at (1, 0) and (2, 0), the point (0, 0) has two negative neighbours that outvote itself.
+--- explain
+1-NN and the perceptron always reach zero training error on separable, distinct data. A one-split tree and 3-NN do not: the stump cannot fit diagonal boundaries, and a lone point can be outvoted by two nearby neighbours of the other class.
+
+=== Q
+topic: SVM and perceptron
+kind: concept
+diff: 1
+source: W5 The kernel trick (kernel perceptron), Exam traps
+--- stem
+A kernel perceptron with an RBF kernel has been trained. To classify a new point x, which of these must be available?
+--- A
+A stored weight vector w in the RBF feature space.
+>> Wrong. The RBF feature space is infinite-dimensional, so w cannot be stored. That is why the dual form is used.
+--- B
+The kernel matrix of the training data only, without the training points.
+>> Wrong. The new point has to be compared with the training points through k(x_i, x), and that needs the x_i themselves.
+--- C
+Only the training points of the positive class.
+>> Wrong. Points of both classes vote, each with the sign of its label y_i.
+--- D*
+The training points with alpha > 0, their labels and their alpha values.
+>> Right. The prediction is sign(sum_i alpha_i y_i k(x_i, x)), so each contributing training point must be kept.
+--- explain
+Kernel perceptron prediction: sign(sum_i alpha_i y_i k(x_i, x)). Only points with alpha_i > 0 contribute, but those points (with labels and counts) must be stored, as there is no finite weight vector for the RBF kernel.
+
+=== Q
+topic: SVM and perceptron
+kind: calc
+diff: 2
+source: W5 Scoring classifiers, margins and loss functions (hinge loss)
+--- stem
+A scoring classifier gives these scores s(x) to three examples, with true labels y. The margin is z = y * s(x) and the hinge loss is L(z) = 1 - z for z <= 1 and 0 otherwise.
+
+| Example | s(x) | y |
+|---|---|---|
+| 1 | 2.0 | +1 |
+| 2 | 0.5 | +1 |
+| 3 | 0.3 | -1 |
+
+What is the average hinge loss over the three examples?
+--- A*
+0.6000
+>> Right. The margins are 2.0, 0.5 and -0.3, with hinge losses 0, 0.5 and 1.3, and (0 + 0.5 + 1.3) / 3 = 0.6.
+--- B
+0.4333
+>> Wrong. This is 1.3 / 3: it forgets that example 2 is correct but inside the margin (z = 0.5 < 1), where hinge loss still charges 0.5.
+--- C
+0.3333
+>> Wrong. This is the 0-1 loss (one mistake out of three), not the hinge loss.
+--- D
+0.6467
+>> Wrong. This averages the squared loss (1 - z)^2, cut off to 0 beyond z = 1: (0 + 0.25 + 1.69) / 3 = 0.6467.
+--- explain
+Margins z = y s(x): 2.0, 0.5 and -0.3.
+Hinge losses: z = 2.0 gives 0 (beyond 1); z = 0.5 gives 1 - 0.5 = 0.5; z = -0.3 gives 1 + 0.3 = 1.3.
+Average: (0 + 0.5 + 1.3) / 3 = 1.8 / 3 = 0.6.
+
+=== Q
+topic: SVM and perceptron
+kind: concept
+diff: 2
+source: W5 Nonlinear SVMs (number of alphas is m), Counting features
+--- stem
+An SVM with the polynomial kernel k(x, x') = (x . x' + 1)^3 is trained on 120 examples with 5 features each. The dual problem is solved for the multipliers alpha_i. How many unknown multipliers does it have?
+--- A
+176
+>> Wrong. This adds the number of examples and the number of feature-map entries (120 + 56), which has no meaning here.
+--- B*
+120
+>> Right. The dual has one alpha_i per training example, however large the implicit feature space is.
+--- C
+56
+>> Wrong. 56 = C(8, 3) is the number of entries the degree-3 feature map would have for 5 features, which the dual never builds.
+--- D
+5
+>> Wrong. This is the number of original features. The dual works with one multiplier per example, not per feature.
+--- explain
+In the dual, each training example has one multiplier alpha_i, so m = 120. The kernel only changes the numbers in the Gram matrix, not the number of unknowns. (The explicit feature map would have C(5 + 3, 3) = 56 entries, but it is never constructed.)
+
+=== Q
+topic: SVM and perceptron
+kind: calc
+diff: 3
+source: W5 Soft margin SVM (primal, reading the slack)
+--- stem
+A soft-margin SVM has w = (1, 1), t = 3 and C = 2. Each example gets the smallest slack allowed, xi = max(0, 1 - y (w . x - t)). The objective is (1/2)||w||^2 + C * (sum of slacks).
+
+| Example | x | y |
+|---|---|---|
+| 1 | (2, 2) | +1 |
+| 2 | (1, 1.5) | +1 |
+| 3 | (1.5, 0.5) | -1 |
+| 4 | (1.5, 1) | -1 |
+
+What is the value of the objective?
+--- A
+6.0
+>> Wrong. This forgets the factor 1/2 in front of ||w||^2: 2 + 2 * 2 = 6.
+--- B
+3.0
+>> Wrong. This leaves out the factor C: 1 + 2 = 3. The slack total is multiplied by C = 2.
+--- C*
+5.0
+>> Right. ||w||^2 = 2, so the first term is 1. The slacks are 0, 1.5, 0 and 0.5, summing to 2, so the penalty is 2 * 2 = 4. Total 5.
+--- D
+4.0
+>> Wrong. This counts only the misclassified example (slack 1.5): 1 + 2 * 1.5 = 4. Example 4 is correct but inside the margin, so it also has slack 0.5.
+--- explain
+Scores w . x - t: example 1: 4 - 3 = 1; example 2: 2.5 - 3 = -0.5; example 3: 2 - 3 = -1; example 4: 2.5 - 3 = -0.5.
+Margins z = y * score: 1, -0.5, 1, 0.5. Slacks max(0, 1 - z): 0, 1.5, 0, 0.5. Sum = 2.
+Objective = 0.5 * 2 + 2 * 2 = 1 + 4 = 5.
+
+=== Q
+topic: Linear regression
+kind: calc
+diff: 2
+source: W1 Univariate slope and intercept
+--- stem
+Three data points (x, y): (0, 1), (1, 3), (2, 4). A least-squares line y = theta0 + theta1 x is fitted. What is the fitted value at x = 3? Give the answer to 4 decimal places.
+--- A
+5.5000
+>> Wrong. This uses the right slope 1.5 but takes the first y (1) as the intercept, instead of ybar - theta1 xbar = 1.1667.
+--- B
+5.0000
+>> Wrong. This extrapolates the step between the last two points (slope 1) rather than using the least-squares slope.
+--- C
+7.1667
+>> Wrong. This uses the mean ybar = 2.6667 as the intercept: 2.6667 + 1.5 * 3 = 7.1667. The line passes through (xbar, ybar), not (0, ybar).
+--- D*
+5.6667
+>> Right. theta1 = 1.5 and theta0 = 8/3 - 1.5 = 1.1667, so the fitted value at x = 3 is 1.1667 + 4.5 = 5.6667.
+--- explain
+xbar = 1, ybar = 8/3. Sum of (x - xbar)(y - ybar) = (-1)(1 - 8/3) + 0 + (1)(4 - 8/3) = 5/3 + 4/3 = 3. Sum of (x - xbar)^2 = 2.
+theta1 = 3 / 2 = 1.5. theta0 = ybar - theta1 xbar = 8/3 - 1.5 = 1.1667.
+At x = 3: 1.1667 + 1.5 * 3 = 5.6667.
+
+=== Q
+topic: Linear regression
+kind: calc
+diff: 1
+source: W1 Sum of squares, Formula sheet (SSE, RMSE)
+--- stem
+A fitted line is yhat = 1.2 + 0.8 x. It is applied to three observations (x, y): (1, 2.3), (2, 2.6), (4, 4.0). What is the sum of squared residuals (SSE)?
+--- A*
+0.2900
+>> Right. The residuals y - yhat are 0.3, -0.2 and -0.4, with squares 0.09, 0.04 and 0.16, which sum to 0.29.
+--- B
+0.9000
+>> Wrong. This is the sum of the absolute residuals (0.3 + 0.2 + 0.4), not of their squares.
+--- C
+0.3109
+>> Wrong. This is the RMSE, sqrt(0.29 / 3), not the sum of squared residuals.
+--- D
+0.5385
+>> Wrong. This is sqrt(0.29), the square root of the sum of squares, not the sum itself.
+--- explain
+Predictions: x = 1: 2.0; x = 2: 2.8; x = 4: 4.4.
+Residuals y - yhat: 2.3 - 2.0 = 0.3; 2.6 - 2.8 = -0.2; 4.0 - 4.4 = -0.4.
+SSE = 0.09 + 0.04 + 0.16 = 0.29.
+
+=== Q
+topic: Linear regression
+kind: concept
+diff: 2
+source: W1 Ridge regression and LASSO, Exam traps
+--- stem
+(Select one or more.) Which statements about ridge and LASSO regression are correct?
+--- A
+With lambda = 0, ridge regression gives a different solution from ordinary least squares.
+>> False. At lambda = 0 the penalty disappears and ridge is exactly ordinary least squares.
+--- B*
+LASSO can set some coefficients to exactly zero.
+>> True. The absolute-value penalty has corners on the axes, so some coefficients land exactly at 0, giving a sparse model.
+--- C*
+Ridge shrinks coefficients towards zero but typically does not make them exactly zero.
+>> True. The squared penalty shrinks all coefficients smoothly, so they get smaller without being removed.
+--- D
+Increasing the ridge parameter lambda lowers the training error.
+>> False. A larger lambda restricts the weights more, so the training error can only stay the same or go up. Test error may improve.
+--- explain
+Ridge adds lambda times the sum of squared weights; LASSO adds lambda times the sum of absolute weights. Ridge shrinks, LASSO shrinks and can zero out coefficients. A larger lambda cannot lower the training error, and lambda = 0 is ordinary least squares.
+
+=== Q
+topic: Linear regression
+kind: calc
+diff: 3
+source: W1 Formula sheet (univariate ridge, tutorial form)
+--- stem
+Ridge regression with one feature minimises (1/n) * sum_i (y_i - w0 - w1 x_i)^2 + lambda * w1^2 (the intercept w0 is not penalised). The data (x, y) are (0, 1), (1, 3), (2, 4) and lambda = 0.5. What is the ridge slope w1? Give the answer to 4 decimal places.
+--- A
+1.0000
+>> Wrong. This divides the least-squares slope 1.5 by (1 + lambda). The ridge formula adds lambda to the variance in the denominator, not to 1.
+--- B
+1.5000
+>> Wrong. This is the ordinary least-squares slope, which is ridge with lambda = 0.
+--- C*
+0.8571
+>> Right. w1 = (mean of xy - xbar ybar) / (mean of x^2 - xbar^2 + lambda) = 1 / (2/3 + 0.5) = 0.8571.
+--- D
+1.2000
+>> Wrong. This adds lambda to the sum of squares Sxx = 2 (3 / 2.5) instead of to the average variance 2/3.
+--- explain
+xbar = 1, ybar = 8/3, mean of xy = (0 + 3 + 8) / 3 = 11/3, mean of x^2 = 5/3.
+Covariance term: 11/3 - 8/3 = 1. Variance term: 5/3 - 1 = 2/3.
+w1 = 1 / (2/3 + 0.5) = 1 / 1.1667 = 0.8571 (compare with the ordinary slope 1 / (2/3) = 1.5).
+
+=== Q
+topic: Linear regression
+kind: concept
+diff: 1
+source: W1 Exam traps ("linear" means linear in the parameters), Feature construction
+--- stem
+Which of these models is a linear regression model, in the sense of being linear in its parameters?
+--- A
+y = theta0 + theta1 exp(theta2 x)
+>> Wrong. The parameter theta2 sits inside the exponential, so the model is not a weighted sum of fixed features.
+--- B
+y = theta0 + theta1 x / (theta2 + x)
+>> Wrong. theta2 appears in a denominator, so the model is not linear in its parameters.
+--- C
+y = theta0 + theta1 sin(theta2 x)
+>> Wrong. theta2 sits inside the sine, so the model is not linear in theta2.
+--- D*
+y = theta0 + theta1 x + theta2 x^2
+>> Right. It is linear in theta0, theta1 and theta2: a weighted sum of the features 1, x and x^2. Polynomial regression is linear regression on a feature map.
+--- explain
+Linear regression means y is a weighted sum of fixed features with the unknowns as the weights. A quadratic in x qualifies because the squares of x are just another feature. When a parameter appears inside a function, in a denominator, or as an exponent, the model is not linear in its parameters.
+
+=== Q
+topic: Linear regression
+kind: calc
+diff: 1
+source: W1 Univariate intercept (the line passes through the centroid)
+--- stem
+A least-squares line with an intercept is fitted to some data. The sample means are xbar = 3 and ybar = 5, and the fitted slope is 2. What does the line predict at x = 4?
+--- A*
+7
+>> Right. The line passes through (xbar, ybar) = (3, 5), so at x = 4 it is 5 + 2 * (4 - 3) = 7. (Equivalently theta0 = 5 - 6 = -1, and -1 + 8 = 7.)
+--- B
+13
+>> Wrong. This treats ybar = 5 as the intercept: 5 + 2 * 4 = 13. The intercept is ybar - theta1 xbar = -1.
+--- C
+8
+>> Wrong. This is slope times x (2 * 4) with no intercept at all.
+--- D
+5
+>> Wrong. This is the prediction at x = 3 (the mean of x), where the line passes through ybar. At x = 4 the line has risen by the slope.
+--- explain
+The least-squares line with an intercept passes through (xbar, ybar).
+theta0 = ybar - theta1 xbar = 5 - 2 * 3 = -1.
+Prediction at x = 4: -1 + 2 * 4 = 7.
+

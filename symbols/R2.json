@@ -1,0 +1,197 @@
+{
+ "symbols": {
+  "x": "an input: one observed value, a query point, or (in the norm section) a vector of coordinates",
+  "y": "a target (response) value; in the tutorial's matrix formulas, the whole vector of targets",
+  "bb:y": "the vector of all observed target values, one per example",
+  "Y": "a training example's observed response (Y_i is the i-th), averaged or weighted to make a prediction",
+  "X": "a random observation (X_i is the i-th); in regression formulas, the design matrix of inputs",
+  "bar:X": "the sample mean: the average of the observations (also the MLE of a mean or a proportion)",
+  "bar:x": "the sample mean of x: the average of the x values",
+  "bar:y": "the sample mean of y: the average of the y values",
+  "hat:y": "the prediction at the query point",
+  "n": "the number of samples (tutorial and lab notation)",
+  "N": "the number of values in a sample (slide notation); written N(mean, variance) it is the normal distribution",
+  "m": "the slides' number of samples; also the slides' sample mean (p.58, p.60) and the tutorial's trial mean",
+  "i": "counts data points; in the p-norm formula it counts the coordinates of a vector",
+  "j": "counts data points (slide notation)",
+  "k": "kNN: the number of neighbours averaged; in ridge and LASSO, the size budget on the coefficients",
+  "d": "the number of features (dimensions) of the input space; in the box-car trap, a distance",
+  "p": "a probability of success (Bernoulli), the exponent in a p-norm, or the density p_theta, by context",
+  "q": "another exponent for a norm, compared with p",
+  "P": "a probability; in the MLE setting, the unknown distribution the data are drawn from",
+  "L": "the likelihood: how probable the observed data is for a candidate parameter value",
+  "cal:L": "the likelihood: how probable the observed data is for a candidate parameter value",
+  "theta": "the parameter being estimated; for the normal family it is (mean, variance), in regression the weights",
+  "Theta": "the parameter space: the set of all allowed parameter values",
+  "hat:theta": "the estimate of theta computed from data; as an estimator it varies from sample to sample",
+  "beta": "the regression coefficients (the tutorial's name for theta, the same role as w)",
+  "hat:beta": "the fitted regression coefficients",
+  "w": "the weights from Regression I (the same role as beta here)",
+  "mu": "the mean of the distribution (the population mean)",
+  "hat:mu": "the maximum likelihood estimate of the mean",
+  "sigma": "the standard deviation of the noise or distribution; sigma squared is its variance",
+  "hat:sigma": "the maximum likelihood estimate of sigma (its square divides by n, so it is biased)",
+  "s": "the sample standard deviation (s squared is the sample variance, dividing by N-1)",
+  "r": "the Pearson correlation: a unit-free number from -1 to +1 for linear association",
+  "lambda": "the penalty strength: the price per unit of coefficient size in ridge and LASSO",
+  "alpha": "a label for the constraint radius in the tutorial's figures; it is the same as k",
+  "varepsilon": "random noise added to the true function; it has mean 0 and variance sigma squared",
+  "epsilon": "random noise added to the true function (the tutorial's letter for it)",
+  "f": "the true underlying function that the data come from, before noise",
+  "hat:f": "the learned function, built from a random dataset, so it varies between datasets",
+  "bb:E": "the expected value: the average over many repeated datasets",
+  "h": "the bandwidth of the kernel smoother: how far its reach extends; larger h means a smoother fit",
+  "K": "the kernel: turns a scaled distance into a weight (unrelated to W5's kernels)",
+  "u": "the scaled distance (distance divided by h) that is fed to the kernel",
+  "cal:N": "the set of the k training points nearest to the query point",
+  "D": "one dataset out of the many imagined repeated datasets of the same size",
+  "T": "transpose: flips a vector or matrix so rows become columns",
+  "I": "the identity matrix: ones on the diagonal, zeros elsewhere",
+  "a": "a fixed constant multiplying a random quantity",
+  "c": "any fixed constant",
+  "g": "a function being tested against the rules for a norm",
+  "C": "a complexity setting from W5, mentioned as another tool against overfitting",
+  "bb:R": "the set of real numbers (R squared is pairs of them)",
+  "sum": "add up the term that follows, once for every value of the index shown",
+  "prod": "multiply together the term that follows, once for every value of the index shown",
+  "log": "the natural logarithm of the term that follows",
+  "exp": "e raised to the power of the term that follows",
+  "pi": "the constant 3.14159...",
+  "max": "the largest of the values listed",
+  "min": "the smallest value the expression that follows can take",
+  "arg": "the input value that gives the best score, rather than the score itself (read with max or min)",
+  "partial": "the slope with respect to one variable, nudging only that one",
+  "norm": "the length of the vector inside; the subscript says which rule, and a squared 2-norm is a sum of squares",
+  "abs": "the size of the number inside, ignoring its sign",
+  "infty": "infinity: no limit (the infinity norm is the largest coordinate size)",
+  "mid": "given: what comes after the bar is known or fixed",
+  "sim": "is distributed as, or is drawn from",
+  "in": "is an element of, or lies in",
+  "w:var": "the variance: the average squared spread around the mean; for an estimator, its spread across datasets",
+  "w:cov": "the covariance: how much two variables move together",
+  "w:bias": "systematic error: the average estimate minus the true value (not the bias weight or intercept)",
+  "w:variance": "how much the model's prediction changes from one dataset to another",
+  "w:irreducible error": "the noise error that no model can remove",
+  "w:mse": "mean squared error: an estimator's average squared miss, or in the decomposition, the expected test error",
+  "w:mle": "maximum likelihood estimate or estimator",
+  "w:ls": "least squares: the estimate that minimises the sum of squared errors",
+  "w:ridge": "labels the ridge regression estimate",
+  "w:lasso": "labels the LASSO estimate",
+  "w:bernoulli": "a distribution for a yes/no outcome: 1 with probability p, otherwise 0",
+  "w:subject to": "while obeying the condition that follows",
+  "w:is a knn of": "is one of the k nearest neighbours of",
+  "hat:p": "the maximum likelihood estimate of p: the proportion of successes in the data"
+ },
+ "sections": {
+  "The big picture": {
+   "m": "the slides' number of samples (and, on p.58 and p.60, their sample mean); the tutorial uses n"
+  },
+  "Estimation and unbiasedness": {
+   "x": "one value in the sample",
+   "i": "counts the values in the sample",
+   "m": "the sample mean, the slides' letter for it on p.58 and p.60 (not a count)"
+  },
+  "Covariance and correlation": {
+   "x": "the observed values of the first variable",
+   "y": "the observed values of the second variable",
+   "i": "counts the paired observations"
+  },
+  "Maximum likelihood estimation": {
+   "N": "the normal (Gaussian) distribution, written with its mean and variance",
+   "P": "the unknown distribution the observations are drawn from",
+   "p": "the density p_theta in the setting; in the results table, a Bernoulli success probability",
+   "theta": "the parameters of the assumed family; for the normal family, (mean, variance)",
+   "X": "a random observation; X_i is the i-th of the independent draws"
+  },
+  "Tutorial Q1(a)": {
+   "m": "a trial value of the mean, tried in place of mu",
+   "N": "the normal (Gaussian) distribution, written with its mean and variance"
+  },
+  "Tutorial Q1(b)": {
+   "p": "the probability of success (a 1)",
+   "k": "a possible outcome, 0 or 1",
+   "P": "the probability of the outcome shown"
+  },
+  "Tutorial Q1(c)": {
+   "m": "a trial value of the mean, tried in place of mu",
+   "s": "a trial standard deviation: s squared stands in for the variance sigma squared"
+  },
+  "Bias and variance of an estimator": {
+   "theta": "the true value of the quantity being estimated",
+   "N": "the normal (Gaussian) distribution, written with its mean and variance",
+   "p": "the probability of success for Bernoulli data",
+   "X": "a random observation; X_i is the i-th of the independent draws",
+   "bb:E": "the average over many repeated datasets of the same size",
+   "w:mse": "the estimator's mean squared error: its average squared miss from the true value"
+  },
+  "Tutorial Q2(a,b)": {
+   "p": "the probability of success for Bernoulli data"
+  },
+  "Tutorial Q2(c)": {
+   "N": "the normal (Gaussian) distribution, written with its mean and variance",
+   "T": "an example estimator: 0.8 times the sample mean",
+   "w:mse": "the estimator's mean squared error: its average squared miss from the true value"
+  },
+  "The probabilistic view of least squares": {
+   "X": "the design matrix: one row per example, one column per feature",
+   "P": "the probability (density) of the targets given the inputs and the weights",
+   "y": "the target value for an example, or the whole vector of targets in matrix form",
+   "m": "the number of samples (slide notation; the tutorial uses n)",
+   "N": "the normal (Gaussian) distribution, written with its mean and variance",
+   "theta": "the regression weights (the slides' name; the tutorial uses beta)",
+   "j": "counts the data points (slide notation; the tutorial uses i)",
+   "i": "counts the data points (tutorial notation; the slides use j)"
+  },
+  "p-norms": {
+   "p": "the exponent that picks which norm rule is used",
+   "x": "a vector, written as a list of coordinates",
+   "i": "counts the coordinates of the vector",
+   "norm": "the length of the vector under the rule the subscript names",
+   "g": "a function being tested for the three norm rules",
+   "c": "any fixed constant that scales a vector"
+  },
+  "Ridge and LASSO as constrained": {
+   "k": "the size budget on the coefficients (unrelated to the k of kNN)",
+   "alpha": "the tutorial's inconsistent label for the same budget k",
+   "lambda": "the price of coefficient size in the penalised form; larger lambda matches a smaller k",
+   "norm": "the size of the coefficient vector; ridge charges the squared 2-norm, LASSO the plain 1-norm",
+   "y": "the vector of target values",
+   "X": "the design matrix of inputs"
+  },
+  "Definitions": {
+   "w:bias": "the model's average prediction at a point minus the true value there",
+   "w:variance": "how much the prediction at a point changes from one dataset to another",
+   "bb:E": "the average over many possible training datasets"
+  },
+  "The decomposition": {
+   "bb:E": "the average over many training datasets and noise draws",
+   "w:mse": "the expected squared error of a prediction at a new point",
+   "w:var": "the variance: for f-hat, how much its prediction changes between datasets; for epsilon, the noise variance"
+  },
+  "kNN regression": {
+   "k": "the number of nearest neighbours that are averaged: the complexity dial",
+   "X": "a training point's input; X_i is the i-th",
+   "i": "counts training points; the sum picks only those among the k nearest",
+   "n": "the number of training points"
+  },
+  "Linear smoothing": {
+   "X": "a training point's input; X_i is the i-th",
+   "j": "counts all training points in the weights' total",
+   "i": "counts training points",
+   "norm": "the distance between the query point and a training point"
+  },
+  "The curse of dimensionality": {
+   "d": "the number of features (dimensions) of the points",
+   "n": "the number of random points sampled"
+  },
+  "Code you should recognise": {
+   "d": "the polynomial degree: the highest power of x added as a feature",
+   "x": "the single input column that the powers are built from"
+  },
+  "Exam traps": {
+   "d": "the distance from the query point to a training point (so u = d divided by h)",
+   "k": "kNN: the number of neighbours (small k is complex); in the budget, the coefficient size limit",
+   "p": "a Bernoulli probability, or the exponent of a p-norm, by context"
+  }
+ }
+}

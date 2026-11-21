@@ -1,0 +1,198 @@
+{
+ "symbols": {
+  "k": "the number of classes a node's examples can belong to",
+  "A": "an attribute (feature) that a tree node can test or split on",
+  "x": "the value of an input feature",
+  "X": "an input feature (attribute) of an example, such as length",
+  "S": "the set of training examples at the node being split",
+  "sum": "add up the term that follows, once for every value of the index shown",
+  "Y": "the target (output) values of a set of examples",
+  "p": "the share (proportion) of examples in the set that belong to one class",
+  "h": "the bandwidth: how far from the query point a training point still counts",
+  "i": "counts the subsets or branches a split creates",
+  "log": "logarithm, here base 2 (so entropy is measured in bits)",
+  "abs": "size of a set (number of examples in it), or absolute value of a number",
+  "m": "the number of examples in a subset",
+  "n": "the number of training examples (or values) in the data",
+  "j": "counts the classes, one term per class",
+  "B": "a second attribute or true/false variable",
+  "H": "entropy of a set: how mixed its classes are",
+  "w:gain": "information gain: how much a split reduces entropy",
+  "nu": "one possible value of attribute A",
+  "y": "the target value of an example",
+  "w:entropy": "how mixed the classes in a set are: 0 if pure, larger if mixed",
+  "bar:y": "the mean of the target values in a subset",
+  "u": "the input to the kernel: distance to the query point divided by bandwidth",
+  "C": "a third attribute or true/false variable",
+  "E": "the entropy of a set, as a number",
+  "in": "is an element of, ranges over the values in",
+  "N": "a No example (count of negatives), as in [3Y,2N]",
+  "f": "false, as in a test outcome X = f; the true function in smoothing",
+  "w:mse": "mean squared error of a subset: average squared gap from the subset's mean",
+  "hat:f": "the smoother's estimate of the true function at a point",
+  "K": "the kernel: turns a scaled distance into a weight",
+  "d": "the depth of the tree (number of levels of splits)",
+  "t": "true, as in a test outcome X = t",
+  "R": "the expected loss of an action; elsewhere a rectangular region of inputs",
+  "c": "a single constant value a leaf predicts",
+  "w": "the weight a training point gets in a prediction",
+  "hat:y": "the model's predicted value for the target",
+  "T": "the set of target values (examples) reaching a node",
+  "D": "a fourth attribute or true/false variable",
+  "w:values": "the set of possible values of an attribute",
+  "w:splitentropy": "entropy of the branch sizes alone: how finely the attribute chops the data, ignoring labels",
+  "w:cost": "what it costs to measure an attribute",
+  "alpha": "a possible action or prediction we could choose",
+  "mid": "given: the probability or loss is conditioned on what follows",
+  "lambda": "the loss: how costly an action is if a given class is the truth",
+  "P": "probability",
+  "pi": "the constant 3.14159, the ratio of a circle's circumference to its diameter",
+  "w:sd": "standard deviation: typical spread of the values around their mean",
+  "norm": "the distance (length) between two points; subscript 2 means ordinary straight-line distance",
+  "epsilon": "random noise added to the true function value",
+  "w:gini": "Gini impurity: another score for how mixed a node is, 0 if pure",
+  "w:gainratio": "information gain divided by split entropy",
+  "w:sdr": "standard deviation reduction: spread before the split minus weighted spread after",
+  "w:playtennis": "the label we predict: whether tennis is played that day",
+  "w:predicted class": "the class the tree predicts for the example",
+  "w:class": "a class (category) the example might truly belong to",
+  "v": "one possible value of an attribute",
+  "l": "the number of subsets a split creates",
+  "w:weighted average variance": "variance of each subset, averaged with larger subsets counting more",
+  "e": "Euler's number, about 2.718",
+  "infty": "infinity: a bandwidth that grows without limit",
+  "sim": "is drawn from (random noise follows this distribution)",
+  "w:normal": "an attribute value for Humidity: normal",
+  "w:high": "an attribute value for Humidity: high",
+  "w:weak": "an attribute value for Wind: weak",
+  "w:sunny": "an attribute value for Outlook: sunny",
+  "w:overcast": "an attribute value for Outlook: overcast",
+  "w:rain": "an attribute value for Outlook: rain",
+  "w:outlook": "an attribute: the weather outlook",
+  "w:humidity": "an attribute: how humid the day is",
+  "w:temperature": "an attribute: the day's temperature, a number",
+  "w:no": "the class label: tennis is not played"
+ },
+ "sections": {
+  "Decision tree representation": {
+   "X": "an input feature (such as length), or a true/false variable in a Boolean function",
+   "Y": "a second true/false variable in a Boolean function",
+   "n": "the number of true/false input variables (as in parity)",
+   "f": "false: the branch where the test fails",
+   "t": "true: the branch where the test passes"
+  },
+  "Entropy": {
+   "X": "a quantity that can take k possible values, each with some probability",
+   "p": "the probability (share) of one outcome or class",
+   "S": "a set of training examples whose class mix is measured",
+   "H": "entropy: the average bits needed to name the class, 0 if pure"
+  },
+  "Top-down induction": {
+   "k": "the number of clusters in k-means, another greedy method"
+  },
+  "Errors and disagreements": {
+   "h": "one class the example might belong to, summed over all classes",
+   "H": "the set of all classes"
+  },
+  "Gini impurity": {
+   "p": "the share of examples in the node that belong to class j"
+  },
+  "Information gain": {
+   "X": "an input feature; X_A is the value an example has for attribute A",
+   "S": "the set of examples being split; S_nu is the part with value nu"
+  },
+  "Gain ratio": {
+   "m": "the number of branches (equal-sized) an attribute splits into",
+   "S": "the set of examples being split; S_nu is the part with value nu"
+  },
+  "Costs": {
+   "x": "the example (its attribute values) we are predicting for",
+   "h": "one class the example might truly have, summed over all classes",
+   "H": "the set of all classes the example might belong to",
+   "R": "expected loss: average cost of taking action alpha given x",
+   "A": "an attribute whose measurement has a cost",
+   "i": "numbers the possible actions (predictions) we could take"
+  },
+  "Continuous attributes": {
+   "n": "the number of distinct values of the numeric attribute",
+   "t": "true: the test (such as temperature above a threshold) passes",
+   "f": "false: the test fails"
+  },
+  "Missing values": {
+   "n": "the node whose test uses the attribute with the missing value",
+   "p": "the probability assigned to one value of the attribute",
+   "i": "counts the possible values of the attribute",
+   "v": "one possible value of the attribute"
+  },
+  "Regression trees": {
+   "Y": "the set of target values of the examples at a node",
+   "y": "the target value of one example in the subset",
+   "i": "counts the subsets (groups) a threshold creates",
+   "j": "counts the examples inside one subset",
+   "m": "the number of examples in subset Y_i",
+   "w": "the share of examples in subset i (its size divided by the total)",
+   "R": "a rectangular region of the inputs; the tree predicts one level there",
+   "c": "the single constant a leaf predicts to minimise squared error"
+  },
+  "Model trees": {
+   "x": "the input feature, used both for splitting and as the regression variable",
+   "y": "the output (target) value, such as the curve cos(pi x) being approximated",
+   "T": "the set of target values at a node; T_i are the subsets after a split",
+   "i": "counts the subsets after the split"
+  },
+  "Linear smoothing": {
+   "x": "the input value; x_0 is the query point we predict at",
+   "X": "the input value of one training point",
+   "Y": "the target value of one training point",
+   "i": "counts training points (in the weighted sum)",
+   "j": "counts training points (in the denominator that normalises the weights)",
+   "n": "the number of training points",
+   "k": "the number of nearest neighbours that get weight 1/k in kNN",
+   "w": "the weight training point i gets for a query x: weights add to 1",
+   "y": "the target value being predicted or smoothed",
+   "hat:y": "the kNN regression prediction: a weighted average of training targets",
+   "abs": "absolute value: the distance of u from zero",
+   "f": "the true function, here sin(4x), that the smoother estimates"
+  },
+  "Formula sheet": {
+   "x": "the query point or example we predict for",
+   "i": "counts subsets or branches (or training points in the smoother)",
+   "j": "counts classes (or training points in the smoother denominator)",
+   "m": "the number of examples in a subset",
+   "n": "the number of values of a numeric attribute (or training points)",
+   "R": "expected loss of an action",
+   "T": "the set of target values at a node; T_i the subsets after the split",
+   "Y": "the target values of a group of examples; Y_i is one training target in the smoother",
+   "S": "the set of examples at the node; S_nu the part with value nu"
+  },
+  "Code you should recognise": {
+   "m": "the number of examples in the data",
+   "d": "the depth of the tree"
+  },
+  "Worked examples": {
+   "A": "a true/false variable (or a column of 0 and 1 values)",
+   "B": "a second true/false variable (or column)",
+   "C": "a third true/false variable (or column)",
+   "D": "a fourth true/false variable",
+   "E": "the entropy of a child set, as a number",
+   "N": "number of No examples, as in [0Y,2N]",
+   "Y": "number of Yes examples, as in [3Y,2N]",
+   "x": "the input value (such as temperature, or the cosine input)",
+   "y": "the output value, such as price or the line being fitted",
+   "f": "false in a tree test; elsewhere the true function sin(4x)",
+   "S": "the set of examples being split",
+   "H": "entropy of a set with the given share of Yes"
+  },
+  "Exam traps": {
+   "X": "an input feature (attribute)",
+   "h": "the bandwidth of the kernel smoother",
+   "i": "counts training points"
+  },
+  "Self-check": {
+   "A": "a true/false variable",
+   "B": "a true/false variable",
+   "C": "a true/false variable",
+   "D": "a true/false variable"
+  }
+ }
+}

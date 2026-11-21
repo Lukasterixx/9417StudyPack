@@ -1,0 +1,331 @@
+{
+ "symbols": {
+  "x": "one data point: its list of feature values; $x_j$ is feature j of it",
+  "p": "a probability, as in p(y | x): how likely something is",
+  "y": "the true label (class 0 or 1) of an example",
+  "i": "counts training examples: example number i",
+  "k": "the number of nearest neighbours that vote in kNN",
+  "w": "the weights on the features: one weight per feature in the linear score",
+  "T": "transpose: flips a column of numbers into a row so $x^T w$ is a score",
+  "beta": "the weights of logistic regression: one weight per feature",
+  "sum": "add up the term that follows, once for every value of the index shown",
+  "n": "the number of training examples",
+  "m": "the number of training examples",
+  "D": "Dis, short for distance (as in the Minkowski distance); in D_KL it is the KL divergence",
+  "mid": "given: what comes after the bar is known, as in p(x | y)",
+  "t": "the decision threshold: a score above it means positive",
+  "j": "counts features: feature number j",
+  "P": "probability of the event in brackets, as in P(y = 1 | x); in KL, the true distribution",
+  "z": "the weight on feature z_j in the weighted distance (0 removes it)",
+  "F": "the F in F_1 score; in FP, FN and FPR it stands for false",
+  "sigma": "the sigmoid function, which squashes a score into a probability between 0 and 1",
+  "a": "the coefficient on x_1 in the line a x_1 + b x_2 + c = 0",
+  "norm": "the length of a vector; with a subscript p, its p-norm",
+  "h": "the model's predicted probability of class 1 for an example, h_beta(x)",
+  "c": "the constant in the line equation, so the threshold is t = -c; in accuracy, c(x) is the true class of x",
+  "ln": "the natural logarithm",
+  "d": "the number of features (dimensions) of a data point",
+  "K": "the number of folds in K-fold cross-validation",
+  "f": "the true target function: the class or value of a stored example",
+  "N": "the number of actual negative examples",
+  "r": "counts attributes (features) when normalising or weighting a distance",
+  "b": "the coefficient on x_2 in the line a x_1 + b x_2 + c = 0",
+  "in": "is an element of: belongs to the set that follows",
+  "L": "the likelihood of the weights; in L_p it names the p-norm; in L_KL and L_XE just a letter",
+  "abs": "absolute value of a number; around a set, how many items it holds",
+  "O": "order of growth: the work grows in proportion to what is inside the brackets",
+  "q": "marks the query: the new point we want to classify, as in x_q",
+  "cal:L": "a loss: how badly predictions fit the labels (XE is cross-entropy, KL is KL-based)",
+  "hat:p": "the model's estimated probability that example i has label 1",
+  "X": "the table of training inputs, one row per example; in L_XE just a letter",
+  "max": "the largest of the values that follow; in min-max scaling, a feature's largest value",
+  "e": "Euler's number, about 2.718, as in the sigmoid",
+  "J": "the cost: average cross-entropy over the training set, which gradient descent minimises",
+  "log": "the logarithm; the base does not change which beta is best",
+  "mu": "the mean (centre) of a class's training points, mu_k",
+  "arg": "the input value that gives the result which follows, used with max or min",
+  "hat:P": "the model's estimated probability, from fitted weights",
+  "infty": "infinity; Minkowski order infinity keeps only the largest per-feature gap",
+  "delta": "vote indicator: 1 if the two things in brackets are equal, 0 otherwise",
+  "Q": "the estimated distribution, whose distance from the true distribution P the KL divergence measures",
+  "E": "just a letter in the label XE (cross-entropy), not a quantity",
+  "bb:R": "the real numbers; R^d is the space of points with d real features",
+  "min": "the smallest of the values that follow; in min-max scaling, a feature's smallest value",
+  "C": "the set of training examples belonging to one class, C_k",
+  "I": "indicator: 1 when the statement in brackets is true, 0 when false",
+  "cal:X": "the instance space: the set of all possible data points",
+  "V": "the set of possible classes in a kNN vote",
+  "hat:f": "the kNN prediction for the query: a class or an average value",
+  "v": "one candidate class from the set V in the kNN vote",
+  "sim": "is distributed as: the variable on the left follows the distribution on the right",
+  "w:bernoulli": "the Bernoulli distribution: a 0/1 outcome that is 1 with probability p",
+  "hat:y": "the predicted value for input x, a weighted or plain average of neighbours' targets",
+  "cal:N": "the set of the k nearest training points to x",
+  "u": "the distance scaled by the bandwidth: the input to a kernel",
+  "hat:w": "the estimated weights, found by fitting",
+  "prod": "multiply the term that follows, once for every value of the index shown",
+  "nabla": "the gradient: the direction in which the cost rises fastest, with one entry per weight",
+  "hat:c": "the classifier's predicted class for x",
+  "Y": "the target value of training example i in a weighted average",
+  "w:mle": "maximum likelihood estimate: the weights that make the training labels most probable",
+  "bf:x": "the vector of feature values of a data point",
+  "lambda": "the regularisation strength, a setting chosen by cross-validation",
+  "w:classification error": "the share of test examples classified wrongly",
+  "pi": "the constant 3.14159, in the Gaussian kernel",
+  "propto": "is proportional to: equal up to a constant that does not matter",
+  "alpha": "the learning rate: how big a step gradient descent takes"
+ },
+ "sections": {
+  "Linear classification in two dimensions": {
+   "t": "the decision threshold: a score above it means positive, equal to -c"
+  },
+  "Basic linear classifier": {
+   "p": "the centre (mean point) of the positive examples, not a probability",
+   "n": "the centre (mean point) of the negative examples, not a count",
+   "t": "the decision threshold: the score of the midpoint between the two centres"
+  },
+  "Logistic regression": {
+   "f": "the linear score x^T beta, before the sigmoid squashes it",
+   "e": "Euler's number, about 2.718, in the sigmoid"
+  },
+  "The model": {
+   "f": "the linear score x^T beta, before the sigmoid squashes it"
+  },
+  "Parameter estimation": {
+   "cal:L": "the likelihood of beta: how probable the training labels are"
+  },
+  "Tutorial Q3": {
+   "p": "the probability of label 1 (the Bernoulli parameter); in R^p, the number of weights; in D_KL(P||Q), a true probability",
+   "q": "the estimated probability in the KL example",
+   "z": "the raw linear score fed to the sigmoid",
+   "sigma": "the sigmoid; in the regression comparison, a noise standard deviation",
+   "norm": "vector length; in D_KL(P||Q) the double bar just separates true P from estimate Q",
+   "N": "the normal (Gaussian) distribution; elsewhere a count",
+   "P": "probability; in D_KL(P||Q), the true distribution",
+   "K": "just a letter in KL (KL divergence), not a quantity",
+   "L": "the likelihood of the weights; in KL and XE, just letters",
+   "X": "the table of training inputs, one row per example",
+   "a": "the true label, first argument of cross-entropy L_XE(a, b)",
+   "b": "the predicted probability, second argument of cross-entropy L_XE(a, b)",
+   "cal:L": "a loss: XE is cross-entropy, KL is the KL-divergence loss",
+   "D": "the divergence in D_KL: how far Q is from P",
+   "w": "the weights of the logistic model, one per feature",
+   "E": "just a letter in the label XE (cross-entropy)"
+  },
+  "Distances": {
+   "y": "the second data point being compared",
+   "z": "a third data point"
+  },
+  "Minkowski distance": {
+   "p": "the order of the distance: larger p lets the biggest gap dominate",
+   "y": "the second data point being compared",
+   "L": "the L in L_p norm: the name for the p-norm",
+   "D": "Dis, the distance function, written Dis_p",
+   "n": "the number of features (the slide's d)"
+  },
+  "Unit circles": {
+   "p": "the order of the Minkowski distance, changing the shape of the unit circle",
+   "y": "the second data point being compared"
+  },
+  "Distance metric": {
+   "p": "the Minkowski order; for p < 1 the triangle inequality fails",
+   "y": "the second data point being compared",
+   "z": "a third data point, used in the triangle inequality"
+  },
+  "Exemplars": {
+   "n": "the number of data points in the group"
+  },
+  "Nearest centroid": {
+   "k": "class number: which class's centroid or members",
+   "j": "counts the examples belonging to class k",
+   "mu": "the mean vector of class k's training points"
+  },
+  "The algorithm": {
+   "j": "counts the k nearest neighbours: neighbour number j",
+   "i": "counts neighbours",
+   "a": "the first item compared by the vote indicator delta",
+   "b": "the second item compared by the vote indicator delta"
+  },
+  "Distance-weighted kNN": {
+   "w": "how much neighbour i's vote counts: larger for closer points",
+   "i": "counts the k nearest neighbours: neighbour number i",
+   "K": "the kernel: turns distance to the query into a raw weight",
+   "h": "the bandwidth: how far the kernel reaches",
+   "X": "the training inputs; X_i is training point i",
+   "Y": "the target value of training point i"
+  },
+  "Distance-weighted vote": {
+   "w": "how much neighbour i's vote counts: larger for closer points",
+   "i": "counts the neighbours: neighbour number i"
+  },
+  "Computational cost of kNN": {
+   "log": "the logarithm: the work grows only slowly as m grows",
+   "m": "the number of training examples"
+  },
+  "Practical problems and noise": {
+   "x": "the first position coordinate of a voxel (the image location)",
+   "y": "the second position coordinate of a voxel",
+   "z": "the third position coordinate of a voxel"
+  },
+  "Code you should recognise": {
+   "d": "the distance from the query to a neighbour (sklearn weights by 1/d, the course by 1/d squared)"
+  },
+  "Lab 2": {
+   "y": "the training targets: the numbers to be predicted, one per training input",
+   "X": "the list of training inputs",
+   "k": "the number of nearest points averaged"
+  },
+  "Normalisation": {
+   "sigma": "a feature's standard deviation (not the sigmoid)",
+   "mu": "a feature's mean",
+   "j": "counts examples: example number j",
+   "r": "counts attributes: which feature is being scaled",
+   "x": "the value of attribute r for example j"
+  },
+  "Curse of dimensionality": {
+   "z": "the weight on feature j or r in the distance; 0 removes it"
+  },
+  "Evaluating binary classifiers": {
+   "T": "stands for true, as in TP, TN, TPR",
+   "F": "stands for false, as in FP, FN, FPR",
+   "P": "stands for positive, as in TP, FP, TPR",
+   "N": "stands for negative, as in TN, FN"
+  },
+  "Metrics": {
+   "T": "stands for true, as in TP, TN",
+   "F": "the F in F_1; in FP and FN it stands for false",
+   "P": "stands for positive, as in TP, FP",
+   "N": "stands for negative, as in TN, FN",
+   "c": "c(x) is the true class of x",
+   "abs": "how many items a set holds, as in the size of the test set"
+  },
+  "Confusion matrix": {
+   "T": "stands for true",
+   "F": "stands for false",
+   "P": "stands for positive",
+   "N": "stands for negative"
+  },
+  "ROC and AUC": {
+   "T": "stands for true, as in TPR",
+   "F": "stands for false, as in FPR",
+   "P": "the number of actual positives; in TPR it stands for positive",
+   "N": "the number of actual negatives; in FPR it stands for negative"
+  },
+  "Formula sheet": {
+   "p": "a probability, as in p(y | x); also the Minkowski order in Dis_p, or the positive class centre in w = p - n",
+   "y": "a class label; in a distance formula, the second data point",
+   "n": "number of training examples; also the negative class centre in w = p - n",
+   "z": "a score or log-odds; also a third data point, or a feature weight in the weighted distance",
+   "sigma": "the sigmoid; in the z-score it is instead a feature's standard deviation",
+   "T": "transpose in x^T w; in TP, TN, TPR it stands for true",
+   "P": "probability; also the number of actual positives; in TP and TPR it stands for positive",
+   "N": "the number of actual negatives; in TN and FPR it stands for negative",
+   "mu": "the mean: a class centre mu_k, or a feature's mean in the z-score",
+   "w": "the weights of the linear score; w_i is the weight of neighbour i in distance-weighted kNN",
+   "f": "the true target function of a stored example; in the sigmoid model, the linear score x^T beta",
+   "j": "counts features, or neighbours, or examples in a class, depending on the formula",
+   "i": "counts examples or neighbours",
+   "k": "number of neighbours in kNN; as a subscript in mu_k, the class number",
+   "c": "the line constant (t = -c); in accuracy, c(x) is the true class",
+   "a": "the coefficient on x_1 in the line",
+   "b": "the coefficient on x_2 in the line; in cross-entropy, the predicted probability",
+   "q": "the query point x_q; in the KL example, the estimated probability",
+   "h": "the model's predicted probability; in distance-weighted smoothing, the bandwidth",
+   "K": "folds in K-fold CV; in smoothing, the kernel function",
+   "norm": "vector length; in KL, the double bar separates the true distribution from the estimate",
+   "r": "counts attributes",
+   "e": "Euler's number in the sigmoid",
+   "t": "the decision threshold",
+   "L": "the likelihood; in L_p the p-norm label; in KL or XE just letters",
+   "abs": "absolute value; around a set, its size",
+   "F": "the F in F_1; in FP, FN, FPR it stands for false"
+  },
+  "Exam traps": {
+   "p": "a probability, as in p(y | x); also the Minkowski order in Dis_p, or the positive class centre in w = p - n",
+   "y": "a class label; in a distance formula, the second data point",
+   "n": "number of training examples; also the negative class centre in w = p - n",
+   "z": "a score or log-odds; also a third data point, or a feature weight in the weighted distance",
+   "sigma": "the sigmoid; in the z-score it is instead a feature's standard deviation",
+   "T": "transpose in x^T w; in TP, TN, TPR it stands for true",
+   "P": "probability; also the number of actual positives; in TP and TPR it stands for positive",
+   "N": "the number of actual negatives; in TN and FPR it stands for negative",
+   "mu": "the mean: a class centre mu_k, or a feature's mean in the z-score",
+   "w": "the weights of the linear score; w_i is the weight of neighbour i in distance-weighted kNN",
+   "f": "the true target function of a stored example; in the sigmoid model, the linear score x^T beta",
+   "j": "counts features, or neighbours, or examples in a class, depending on the formula",
+   "i": "counts examples or neighbours",
+   "k": "number of neighbours in kNN; as a subscript in mu_k, the class number",
+   "c": "the line constant (t = -c); in accuracy, c(x) is the true class",
+   "a": "the coefficient on x_1 in the line",
+   "b": "the coefficient on x_2 in the line; in cross-entropy, the predicted probability",
+   "q": "the query point x_q; in the KL example, the estimated probability",
+   "h": "the model's predicted probability; in distance-weighted smoothing, the bandwidth",
+   "K": "folds in K-fold CV; in smoothing, the kernel function",
+   "norm": "vector length; in KL, the double bar separates the true distribution from the estimate",
+   "r": "counts attributes",
+   "e": "Euler's number in the sigmoid",
+   "t": "the decision threshold",
+   "L": "the likelihood; in L_p the p-norm label; in KL or XE just letters",
+   "abs": "absolute value; around a set, its size",
+   "F": "the F in F_1; in FP, FN, FPR it stands for false"
+  },
+  "Self-check": {
+   "p": "a probability, as in p(y | x); also the Minkowski order in Dis_p, or the positive class centre in w = p - n",
+   "y": "a class label; in a distance formula, the second data point",
+   "n": "number of training examples; also the negative class centre in w = p - n",
+   "z": "a score or log-odds; also a third data point, or a feature weight in the weighted distance",
+   "sigma": "the sigmoid; in the z-score it is instead a feature's standard deviation",
+   "T": "transpose in x^T w; in TP, TN, TPR it stands for true",
+   "P": "probability; also the number of actual positives; in TP and TPR it stands for positive",
+   "N": "the number of actual negatives; in TN and FPR it stands for negative",
+   "mu": "the mean: a class centre mu_k, or a feature's mean in the z-score",
+   "w": "the weights of the linear score; w_i is the weight of neighbour i in distance-weighted kNN",
+   "f": "the true target function of a stored example; in the sigmoid model, the linear score x^T beta",
+   "j": "counts features, or neighbours, or examples in a class, depending on the formula",
+   "i": "counts examples or neighbours",
+   "k": "number of neighbours in kNN; as a subscript in mu_k, the class number",
+   "c": "the line constant (t = -c); in accuracy, c(x) is the true class",
+   "a": "the coefficient on x_1 in the line",
+   "b": "the coefficient on x_2 in the line; in cross-entropy, the predicted probability",
+   "q": "the query point x_q; in the KL example, the estimated probability",
+   "h": "the model's predicted probability; in distance-weighted smoothing, the bandwidth",
+   "K": "folds in K-fold CV; in smoothing, the kernel function",
+   "norm": "vector length; in KL, the double bar separates the true distribution from the estimate",
+   "r": "counts attributes",
+   "e": "Euler's number in the sigmoid",
+   "t": "the decision threshold",
+   "L": "the likelihood; in L_p the p-norm label; in KL or XE just letters",
+   "abs": "absolute value; around a set, its size",
+   "F": "the F in F_1; in FP, FN, FPR it stands for false"
+  },
+  "Errors and inconsistencies": {
+   "p": "a probability, as in p(y | x); also the Minkowski order in Dis_p, or the positive class centre in w = p - n",
+   "y": "a class label; in a distance formula, the second data point",
+   "n": "number of training examples; also the negative class centre in w = p - n",
+   "z": "a score or log-odds; also a third data point, or a feature weight in the weighted distance",
+   "sigma": "the sigmoid; in the z-score it is instead a feature's standard deviation",
+   "T": "transpose in x^T w; in TP, TN, TPR it stands for true",
+   "P": "probability; also the number of actual positives; in TP and TPR it stands for positive",
+   "N": "the number of actual negatives; in TN and FPR it stands for negative",
+   "mu": "the mean: a class centre mu_k, or a feature's mean in the z-score",
+   "w": "the weights of the linear score; w_i is the weight of neighbour i in distance-weighted kNN",
+   "f": "the true target function of a stored example; in the sigmoid model, the linear score x^T beta",
+   "j": "counts features, or neighbours, or examples in a class, depending on the formula",
+   "i": "counts examples or neighbours",
+   "k": "number of neighbours in kNN; as a subscript in mu_k, the class number",
+   "c": "the line constant (t = -c); in accuracy, c(x) is the true class",
+   "a": "the coefficient on x_1 in the line",
+   "b": "the coefficient on x_2 in the line; in cross-entropy, the predicted probability",
+   "q": "the query point x_q; in the KL example, the estimated probability",
+   "h": "the model's predicted probability; in distance-weighted smoothing, the bandwidth",
+   "K": "folds in K-fold CV; in smoothing, the kernel function",
+   "norm": "vector length; in KL, the double bar separates the true distribution from the estimate",
+   "r": "counts attributes",
+   "e": "Euler's number in the sigmoid",
+   "t": "the decision threshold",
+   "L": "the likelihood; in L_p the p-norm label; in KL or XE just letters",
+   "abs": "absolute value; around a set, its size",
+   "F": "the F in F_1; in FP, FN, FPR it stands for false"
+  }
+ }
+}

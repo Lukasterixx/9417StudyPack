@@ -1,0 +1,147 @@
+{
+ "symbols": {
+  "H": "the hypothesis space: the set of hypotheses the learner can choose from",
+  "epsilon": "the error goal: how much true error we accept (in agnostic learning, the allowed gap to training error)",
+  "h": "a hypothesis: one candidate classifier the learner could output",
+  "m": "the number of training examples (or of points, when testing shattering)",
+  "delta": "the allowed chance of failure: the sample may be unlucky with probability at most this",
+  "e": "the base of the exponential (about 2.718) in the bounds",
+  "C": "the class of possible target concepts; inside VC, the C of the name VC",
+  "V": "the V in VC (VC dimension) or in VS (version space), part of the name",
+  "n": "the length of an instance (number of variables)",
+  "cal:D": "the fixed, unknown probability distribution that instances are drawn from",
+  "ln": "the natural logarithm of the quantity that follows",
+  "r": "in the version-space diagram, the training error",
+  "d": "the VC dimension (how many points can be shattered); in the linear rule, the number of features",
+  "c": "the target concept: the true rule that gives each instance's correct label",
+  "x": "an instance: one example's input (a single number in the threshold and interval examples)",
+  "D": "the training set: the examples the learner sees (not the distribution)",
+  "S": "the set of points tested for shattering; in VS, the S of the name",
+  "theta": "a parameter the classifier tunes, usually a threshold (on one slide, the whole parameter vector)",
+  "in": "is an element of, or belongs to",
+  "X": "the instance space: the set of all possible instances",
+  "bf:x": "an instance as a vector: its list of attribute or feature values",
+  "i": "counts attributes, examples or points",
+  "k": "counts attributes or labels a hypothesis (h_k); in the proof, the number of bad hypotheses",
+  "t": "in the singleton class [x = t], the one special point",
+  "g": "the g in the more-general-than symbol: one hypothesis accepts at least what another accepts",
+  "j": "labels or counts hypotheses, as in h_j",
+  "y": "the label given to a point",
+  "bb:R": "the real numbers: any number on the number line",
+  "log": "the logarithm of the quantity that follows (base 2 in the VC bound)",
+  "Pr": "the probability of the event in the brackets",
+  "abs": "the number of elements in the set between the bars (|H| is the size of H)",
+  "alpha": "the one parameter of the sine classifier: its frequency",
+  "v": "the number of values attribute i can take",
+  "b": "the right end of the interval [a, b]",
+  "w": "the weights of a linear classifier: how much each feature counts",
+  "pi": "the number pi, about 3.14159",
+  "a": "the left end of the interval [a, b]",
+  "prod": "multiply together the term that follows, once for every value of the index shown",
+  "L": "the learner: the algorithm that picks a hypothesis from the data",
+  "f": "a classifier as a function: it maps a point to a label",
+  "infty": "infinity; VC dimension of infinity means arbitrarily large sets can be shattered",
+  "I": "the indicator: 1 when the condition inside is true, otherwise 0",
+  "mid": "such that: the set contains hypotheses that satisfy the condition on the right",
+  "w:sign": "the sign function: positive score gives +1 and negative gives -1",
+  "T": "the transpose: turns a column of numbers into a row",
+  "gamma": "the margin of a separable dataset, used in the perceptron mistake bound",
+  "R": "the largest length of any instance, in the perceptron mistake bound",
+  "max": "the largest value of the term that follows, over the values shown",
+  "norm": "the length of the vector inside",
+  "sum": "add up the term that follows, once for every value of the index shown",
+  "w:not": "negation: the event that the version space is not exhausted",
+  "w:error": "a hypothesis's error rate: calligraphic D subscript is true error, plain D is training error",
+  "w:best": "h_best: the hypothesis with the fewest training errors",
+  "w:size": "size(c): the encoding length of the target concept",
+  "w:consistent": "Consistent(h, D): h gives the right label on every training example"
+ },
+ "sections": {
+  "The big picture": {
+   "epsilon": "the error goal: how much true error we accept",
+   "e": "the base of the exponential in the bound"
+  },
+  "Setup, true error": {
+   "C": "the set of possible target concepts",
+   "D": "the sequence of training examples the learner sees"
+  },
+  "PAC learning": {
+   "C": "the set of possible target concepts",
+   "n": "the length of an instance, which resources may only grow polynomially with",
+   "c": "the target concept (and size(c) is its encoding length)"
+  },
+  "Concept learning and EnjoySport": {
+   "k": "labels a hypothesis (h_k), or counts attributes in the formulas",
+   "v": "the number of values attribute i can take"
+  },
+  "Version spaces": {
+   "S": "the S of VS (version space), or the specific boundary in the figure",
+   "r": "the training error of a hypothesis in the figure",
+   "D": "the training set that hypotheses must be consistent with"
+  },
+  "Sample complexity for finite": {
+   "e": "the base of the exponential e^(-epsilon m)",
+   "k": "the number of bad hypotheses (true error at least epsilon)",
+   "epsilon": "the error goal: the most true error we accept",
+   "H": "the finite hypothesis space; |H| is how many hypotheses it has"
+  },
+  "Agnostic PAC learning": {
+   "epsilon": "the gap we allow between true error and training error",
+   "e": "the base of the exponential in e^(-2m epsilon squared)",
+   "D": "the training set: error_D is training error",
+   "h": "a hypothesis; h_best is the one with fewest training errors"
+  },
+  "Infinite hypothesis": {
+   "abs": "the number of elements of the set: |X| counts instances",
+   "H": "the hypothesis space, here possibly infinite"
+  },
+  "Shattering": {
+   "S": "the set of points we try to label every possible way",
+   "f": "a classifier that maps a point to a label",
+   "theta": "the classifier's parameters: some value of them gets zero training error",
+   "T": "the transpose, as in the dot product of x with itself",
+   "y": "the label we try to give a point",
+   "m": "the number of points; there are 2^m ways to label them"
+  },
+  "VC dimension and number": {
+   "alpha": "the single frequency parameter of the sine classifier",
+   "I": "the indicator: 1 when the sine is positive, otherwise 0",
+   "theta": "one of the 100 threshold parameters; only their sum matters"
+  },
+  "Sample complexity from VC": {
+   "alpha": "the single frequency parameter of the sine classifier",
+   "d": "the VC dimension of a finite H, at most log base 2 of |H|",
+   "log": "the base-2 logarithm in the VC bound",
+   "I": "the indicator: 1 when the sine is positive, otherwise 0"
+  },
+  "Mentioned elsewhere": {
+   "gamma": "the margin of the separable data",
+   "R": "the largest length of any training instance",
+   "max": "the largest value over all instances i"
+  },
+  "Worked examples": {
+   "n": "the number of Boolean variables",
+   "epsilon": "the error goal; in the agnostic example, the allowed gap",
+   "alpha": "the sine classifier's frequency, built to fit chosen labels",
+   "w": "a weight of a linear classifier",
+   "theta": "a threshold the classifier tunes",
+   "i": "counts attributes, points or labels in the example",
+   "k": "counts attributes with their value counts"
+  },
+  "Formula sheet": {
+   "n": "the instance length that resources may only grow polynomially with",
+   "k": "labels a hypothesis (h_k) in the generality order",
+   "i": "counts attributes in the hypothesis-count products",
+   "v": "the number of values attribute i can take",
+   "d": "the number of features in the linear rule d + 1; the VC dimension elsewhere",
+   "epsilon": "the error goal; in the agnostic rows, the gap between true and training error",
+   "e": "the base of the exponential in the bounds",
+   "D": "the training set (in VS) or its error (error_D)"
+  },
+  "Exam traps": {
+   "d": "the number of features in d + 1; or the VC dimension in the bound with log base 2",
+   "epsilon": "the error goal; in the agnostic bound, the gap",
+   "delta": "the failure probability: 95% confidence means delta of 0.05"
+  }
+ }
+}

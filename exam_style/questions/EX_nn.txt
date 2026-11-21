@@ -1,0 +1,776 @@
+=== Q
+topic: Neural networks
+kind: calc
+diff: 1
+source: W8 Convolutional/fully connected layers, formula sheet (fully connected parameters); style of practice exam Q14
+--- stem
+A multilayer perceptron has 8 inputs, one fully connected hidden layer of 12 units and a fully connected output layer of 4 units. Every hidden unit and every output unit has its own bias. How many parameters does the network have in total?
+--- A*
+160
+>> Correct: 8*12 + 12 = 108 for the hidden layer and 12*4 + 4 = 52 for the output layer, and 108 + 52 = 160.
+--- B
+144
+>> This forgets all the biases: 8*12 + 12*4 = 96 + 48 = 144.
+--- C
+148
+>> This adds only the 4 output biases to the 144 weights and forgets the 12 hidden biases.
+--- D
+156
+>> This adds only the 12 hidden biases to the 144 weights and forgets the 4 output biases.
+--- explain
+Fully connected layer: n_in * n_out weights plus n_out biases. Hidden layer: 8*12 + 12 = 108. Output layer: 12*4 + 4 = 52. Total 108 + 52 = 160.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 Fully connected parameters (formula sheet); style of practice exam Q14, changed to two hidden layers and no biases
+--- stem
+A fully connected network has 6 inputs, then a hidden layer of 10 units, then a second hidden layer of 10 units, then 3 outputs. This network has **no bias terms anywhere**. How many weights does it have?
+--- A*
+190
+>> Correct: 6*10 + 10*10 + 10*3 = 60 + 100 + 30 = 190.
+--- B
+213
+>> This is the count with a bias on every unit: 190 + 10 + 10 + 3 = 213. The stem says there are no biases.
+--- C
+203
+>> This adds only the biases of the second hidden layer and the output (10 + 3) to 190, which the stem rules out.
+--- D
+210
+>> This adds the 20 biases of the two hidden layers to 190, which the stem rules out.
+--- explain
+Without biases a layer has n_in * n_out weights. Layers: 6*10 = 60, 10*10 = 100, 10*3 = 30. Total 190.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 1
+source: W8 Multi-layer networks, forward pass with ReLU; style of practice exam Q17 (diagram turned into a list of weights)
+--- stem
+A network has inputs x1, x2 and four hidden ReLU units, with ReLU(z) = max(0, z). The weights are given as a list, with the bias first:
+
+- h1 = ReLU(-1 + 0.8 x1 + 1.2 x2)
+- h2 = ReLU(0.5 - 1.5 x1 + 1.0 x2)
+- h3 = ReLU(0.2 + 0.5 x1 - 0.3 x2)
+- h4 = ReLU(-0.4 + 0.7 x1 + 0.9 x2)
+
+What is the output of the fourth hidden unit h4 when x1 = 1 and x2 = 2?
+--- A*
+2.1
+>> Correct: -0.4 + 0.7*1 + 0.9*2 = 2.1, which is positive, so ReLU passes it unchanged.
+--- B
+2.5
+>> This leaves out the bias: 0.7 + 1.8 = 2.5.
+--- C
+2.9
+>> This adds the bias instead of using -0.4: 0.4 + 0.7 + 1.8 = 2.9.
+--- D
+1.9
+>> This swaps the inputs: -0.4 + 0.7*2 + 0.9*1 = 1.9.
+--- explain
+net = -0.4 + 0.7*1 + 0.9*2 = -0.4 + 0.7 + 1.8 = 2.1. It is positive, so h4 = max(0, 2.1) = 2.1.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 Multi-layer networks, forward pass with ReLU and a linear output; style of practice exam Q25
+--- stem
+A network has inputs x1, x2, three hidden ReLU units and one **linear** output unit (no activation on the output). The weights are:
+
+- h1 = ReLU(0.5 + 2 x1 - 3 x2)
+- h2 = ReLU(-2 + 1 x1 + 1 x2)
+- h3 = ReLU(0.4 - 0.8 x1 + 1.2 x2)
+- output y = 0.1 + 1.0 h1 + 2.0 h2 - 3.0 h3
+
+What is y when x1 = 1 and x2 = 0.5?
+--- A*
+0.5
+>> Correct: h1 = 1.0, h2 = ReLU(-0.5) = 0, h3 = 0.2, so y = 0.1 + 1.0 + 0 - 0.6 = 0.5.
+--- B
+-0.5
+>> This forgets the ReLU on h2 and uses its net input -0.5 instead of 0: 0.1 + 1.0 - 1.0 - 0.6 = -0.5.
+--- C
+0.4
+>> This leaves out the output bias 0.1.
+--- D
+1.7
+>> This flips the sign of the h3 term: 0.1 + 1.0 + 0 + 0.6 = 1.7.
+--- explain
+h1 = ReLU(0.5 + 2 - 1.5) = 1.0. h2 = ReLU(-2 + 1 + 0.5) = ReLU(-0.5) = 0. h3 = ReLU(0.4 - 0.8 + 0.6) = 0.2. The output is linear: y = 0.1 + 1.0*1.0 + 2.0*0 - 3.0*0.2 = 0.5.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 The sigmoid unit, Multi-layer networks; tanh in Lab Ex 7
+--- stem
+A network has two inputs, two hidden units and a linear output. Here sigma(z) = 1/(1 + e^(-z)).
+
+- h1 = sigma(-1 + 0.5 x1 + 1.0 x2)
+- h2 = tanh(0.4 + 0.5 x1 - 1.2 x2)
+- output y = 0.3 + 2 h1 - 1 h2 (linear, no activation)
+
+What is y for x1 = 2, x2 = 1? Round only the final answer, to 4 decimals.
+--- A*
+1.5647
+>> Correct: h1 = sigma(1) = 0.7311, h2 = tanh(0.2) = 0.1974, y = 0.3 + 1.4621 - 0.1974.
+--- B
+1.5621
+>> This forgets the tanh and uses h2 = 0.2 directly: 0.3 + 1.4621 - 0.2.
+--- C
+1.2123
+>> This applies sigma instead of tanh to the second unit: sigma(0.2) = 0.5498.
+--- D
+2.1026
+>> This forgets the sigmoid on h1 and uses its net input 1 directly: 0.3 + 2 - 0.1974.
+--- explain
+Net of h1: -1 + 1 + 1 = 1, so h1 = sigma(1) = 0.7311. Net of h2: 0.4 + 1 - 1.2 = 0.2, so h2 = tanh(0.2) = 0.1974. Output: 0.3 + 2*0.7311 - 0.1974 = 1.5647.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 Perceptron, Multi-layer networks (XOR needs hidden units); step units
+--- stem
+Take the step function step(z) = 1 if z > 0, and 0 otherwise. A small network of step units has two binary inputs x1, x2 in {0, 1}:
+
+- h1 = step(x1 + x2 - 0.5)
+- h2 = step(x1 + x2 - 1.5)
+- output o = step(h1 - h2 - 0.5)
+
+For which inputs (x1, x2) is the output o equal to 1? (Select one or more.)
+--- A*
+(0, 1)
+>> Correct: h1 = step(0.5) = 1, h2 = step(-0.5) = 0, o = step(0.5) = 1.
+--- B*
+(1, 0)
+>> Correct: by symmetry with (0, 1), h1 = 1, h2 = 0, o = step(1 - 0 - 0.5) = 1.
+--- C
+(0, 0)
+>> Wrong: h1 = step(-0.5) = 0 and h2 = 0, so o = step(-0.5) = 0.
+--- D
+(1, 1)
+>> Wrong: h1 = step(1.5) = 1 but h2 = step(0.5) = 1, so o = step(1 - 1 - 0.5) = step(-0.5) = 0.
+--- explain
+Both hidden units depend only on the sum x1 + x2. h1 fires if the sum exceeds 0.5 (at least one input is 1), h2 fires if it exceeds 1.5 (both are 1). The output fires when h1 = 1 and h2 = 0, which means exactly one input is 1. This network computes XOR, which one unit alone cannot.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 1
+source: W8 Output layer (softmax)
+--- stem
+A network with three output units gives the raw scores (1.5, 0.5, -0.5) for classes 1, 2 and 3. After a softmax layer, what is the probability of class 2? Round to 4 decimals.
+--- A*
+0.2447
+>> Correct: e^0.5 / (e^1.5 + e^0.5 + e^-0.5) = 1.6487 / 6.7369.
+--- B
+0.2857
+>> This uses powers of 2 instead of e: 2^0.5 / (2^1.5 + 2^0.5 + 2^-0.5) = 1.4142 / 4.9497. Softmax uses e.
+--- C
+0.6225
+>> This applies a sigmoid to the one score, sigma(0.5), without normalising across the classes.
+--- D
+0.3333
+>> This is the 1/3 you would get if all three scores were equal. Here the scores differ.
+--- explain
+Exponentiate each score: e^1.5 = 4.4817, e^0.5 = 1.6487, e^-0.5 = 0.6065. They add up to 6.7369. P(class 2) = 1.6487 / 6.7369 = 0.2447.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 1
+source: W8 Output layer, Loss (categorical cross-entropy)
+--- stem
+For one training image the softmax output over three classes is (0.7, 0.2, 0.1) and the true class is class 2 (one-hot target (0, 1, 0)). What is the categorical cross-entropy loss -sum_i y_i ln(y_hat_i), using the natural log? Round to 4 decimals.
+--- A*
+1.6094
+>> Correct: only the true class counts, so the loss is -ln(0.2).
+--- B
+0.3567
+>> This is -ln(0.7): the loss of the class with the highest probability, not the true class.
+--- C
+2.3219
+>> This is -log2(0.2). The stem asks for the natural log.
+--- D
+0.2231
+>> This is -ln(0.8) = -ln(1 - 0.2). The loss uses the probability given to the true class, not one minus it.
+--- explain
+The target is one-hot, so every term except the true class is multiplied by 0. Loss = -ln(0.2) = 1.6094.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 Backpropagation (output delta and weight update), The sigmoid unit
+--- stem
+A single sigmoid unit o = sigma(w0 + w1 x) has w0 = -0.5 and w1 = 1.0. One training example has x = 1.5 and target t = 1. Use squared error E = (1/2)(t - o)^2, the course's error term delta = o(1 - o)(t - o), and the update Delta w = eta * delta * (input) with eta = 1. What is the new w1 after one update? Round only the final answer, to 4 decimals.
+--- A*
+1.0793
+>> Correct: net = 1, o = 0.7311, delta = 0.7311*0.2689*0.2689 = 0.05288, Delta w1 = 0.05288*1.5 = 0.0793.
+--- B
+1.4034
+>> This uses delta = t - o = 0.2689 and forgets the slope factor o(1 - o), which only belongs to the cross-entropy case. With squared error the factor is there.
+--- C
+0.9207
+>> This subtracts the change instead of adding it. With the course's delta (target minus output) the update is plus eta*delta*x.
+--- D
+1.0529
+>> This forgets to multiply by the input x = 1.5 and adds just 0.0529.
+--- explain
+net = -0.5 + 1.0*1.5 = 1.0, so o = sigma(1) = 0.7311. delta = o(1 - o)(t - o) = 0.7311 * 0.2689 * 0.2689 = 0.05288. Delta w1 = eta * delta * x = 0.05288 * 1.5 = 0.0793, so w1 = 1.0793.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 Optimisation and gradient descent (linear unit)
+--- stem
+A linear unit (no activation) is o = w0 + w1 x with w0 = 0.5 and w1 = 1.0. One training example has x = 2 and target t = 4. The error is E = (1/2)(t - o)^2. Do one gradient descent step with learning rate eta = 0.05, updating both weights (the bias input is 1). What is E after the step? Round to 4 decimals.
+--- A*
+0.6328
+>> Correct: the weights become w0 = 0.575 and w1 = 1.15, so o = 2.875 and E = 0.5 * 1.125^2.
+--- B
+1.2656
+>> This drops the factor 1/2 in the error: 1.125^2 = 1.2656.
+--- C
+1.7578
+>> This moves the weights uphill (a sign slip in the update): o = 2.125, E = 0.5 * 1.875^2.
+--- D
+0.7200
+>> This updates only w1 and leaves the bias alone: o = 0.5 + 1.15*2 = 2.8, E = 0.5 * 1.2^2.
+--- explain
+Start: o = 0.5 + 1.0*2 = 2.5, miss t - o = 1.5. Updates: Delta w0 = 0.05*1.5*1 = 0.075 and Delta w1 = 0.05*1.5*2 = 0.15. New weights w0 = 0.575, w1 = 1.15. New output 0.575 + 2.3 = 2.875, miss 1.125, E = 0.5*1.125^2 = 0.6328 (it was 0.5*1.5^2 = 1.125 before the step).
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 3
+source: W8 Backpropagation (hidden delta, BP notes)
+--- stem
+One input x = 1 feeds a hidden sigmoid unit h = sigma(a x) with a = 0, which feeds one sigmoid output unit o = sigma(v h) with v = 2 (no biases). The target is t = 1 and the error is E = (1/2)(t - o)^2. Use the course's convention delta_k = o(1 - o)(t - o) for the output and delta_h = h(1 - h) * v * delta_k for the hidden unit. What is delta_h? Round only the final answer, to 4 decimals.
+--- A*
+0.0264
+>> Correct: h = 0.5, o = sigma(1) = 0.7311, delta_k = 0.05288, delta_h = 0.25 * 2 * 0.05288.
+--- B
+0.0132
+>> This forgets the weight v = 2 on the wire from h to the output: 0.25 * 0.05288.
+--- C
+0.1058
+>> This forgets the hidden unit's own slope h(1 - h) = 0.25: 2 * 0.05288.
+--- D
+0.1345
+>> This uses delta_k = t - o = 0.2689 (the cross-entropy delta) instead of the squared-error delta: 0.25 * 2 * 0.2689.
+--- explain
+Forward: h = sigma(0) = 0.5, net_o = 2*0.5 = 1, o = sigma(1) = 0.7311. Output delta: 0.7311*0.2689*0.2689 = 0.05288. Hidden delta: h(1 - h) = 0.25, then 0.25 * v * delta_k = 0.25 * 2 * 0.05288 = 0.0264. The weight v is the old one, and delta_h is the blame sent back along it.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 3
+source: W8 Backpropagation (general hidden delta with ReLU, w' = w + eta * delta * x)
+--- stem
+One input x = 2 feeds a hidden ReLU unit h = ReLU(w x) with w = 0.5, which feeds a **linear** output y = v h with v = 3. The target is t = 1, E = (1/2)(t - y)^2 and eta = 0.1. Use the course's convention: output delta = t - y for a linear output, hidden delta = g'(net) * v * (output delta) with g' = 1 for a positive ReLU input, and update Delta w = eta * delta * (input). Compute both deltas from the old weights. What is the new value of w? (No biases.)
+--- A*
+-0.7
+>> Correct: delta_y = 1 - 3 = -2, delta_h = 1 * 3 * (-2) = -6, Delta w = 0.1 * (-6) * 2 = -1.2, so w = 0.5 - 1.2.
+--- B
+-0.62
+>> This uses the already updated v = 2.8 in the hidden delta. The deltas use the old weights: delta_h = -5.6 would give -0.62.
+--- C
+-0.1
+>> This forgets to multiply by the input x = 2: Delta w = 0.1 * (-6) = -0.6.
+--- D
+0.1
+>> This forgets the weight v in the hidden delta (delta_h = -2): Delta w = 0.1 * (-2) * 2 = -0.4.
+--- explain
+Forward: net_h = 0.5*2 = 1, h = 1, y = 3*1 = 3. Output delta (linear output): t - y = -2. Hidden delta: ReLU slope is 1 (net is positive), so delta_h = 1 * v * delta_y = 3 * (-2) = -6 (old v = 3). Update: Delta w = eta * delta_h * x = 0.1 * (-6) * 2 = -1.2, so w = 0.5 - 1.2 = -0.7.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 Perceptron learning (update rule w' = w + eta y x)
+--- stem
+A perceptron predicts +1 if w . x > 0 and -1 otherwise, where x includes a leading constant 1 for the bias, so w = (w0, w1, w2). The current weights are w = (0.5, -1, 2) and the learning rate is eta = 0.5. The training example is x = (1, 2, 1) with label y = -1. Using the rule "if y (w . x) <= 0 then w = w + eta y x", what are the weights after processing this example?
+--- A*
+(0, -2, 1.5)
+>> Correct: w . x = 0.5 - 2 + 2 = 0.5, so the example is predicted +1 but its label is -1. Subtract 0.5 * x = (0.5, 1, 0.5).
+--- B
+(1, 0, 2.5)
+>> This adds 0.5*x instead of subtracting it. For a negative example the update subtracts.
+--- C
+(0.5, -1, 2)
+>> This leaves w unchanged because the score 0.5 is positive. But the label is -1, so y (w . x) = -0.5 and the example is misclassified.
+--- D
+(-0.5, -3, 1)
+>> This subtracts x with eta = 1 instead of eta = 0.5.
+--- explain
+w . x = 0.5*1 + (-1)*2 + 2*1 = 0.5. y (w . x) = -0.5 <= 0, a mistake. Update: w = w + 0.5 * (-1) * (1, 2, 1) = (0.5 - 0.5, -1 - 1, 2 - 0.5) = (0, -2, 1.5).
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 Convolutional layer (output width formula)
+--- stem
+A convolutional layer takes a 33 x 33 input. It uses a 5 x 5 filter, zero-padding P = 2 on each side and stride S = 2. How wide is the output (number of positions along one side)?
+--- A*
+17
+>> Correct: (33 - 5 + 2*2)/2 + 1 = 32/2 + 1 = 17.
+--- B
+15
+>> This leaves out the padding: (33 - 5)/2 + 1 = 15.
+--- C
+16
+>> This uses P instead of 2P: (33 - 5 + 2)/2 + 1 = 16.
+--- D
+14
+>> This leaves out both the padding and the +1: (33 - 5)/2 = 14.
+--- explain
+Output width = (W - F + 2P)/S + 1 = (33 - 5 + 4)/2 + 1 = 16 + 1 = 17. It is an integer, so this stride fits.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 1
+source: W8 Convolutional layer (parameters of a conv layer)
+--- stem
+A convolutional layer receives a 32 x 32 RGB image (3 channels) and has 10 filters of size 5 x 5. Each filter has one bias. How many learnable parameters does the layer have?
+--- A*
+760
+>> Correct: each filter has 5*5*3 = 75 weights plus 1 bias, and 10*76 = 760.
+--- B
+750
+>> This forgets the 10 biases: 10 * 75 = 750.
+--- C
+260
+>> This forgets that each filter spans all 3 input channels: 10 * (5*5 + 1) = 260.
+--- D
+76
+>> This is the parameter count of a single filter. The layer has 10 filters.
+--- explain
+One filter: 5*5*3 = 75 weights + 1 bias = 76. With 10 filters: 10 * 76 = 760. The size of the image (32 x 32) does not matter, because every position shares the same filter.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 2
+source: W8 Convolutional layer, VGGNet weights (filter size x input depth x filters)
+--- stem
+A convolutional layer takes a 16 x 16 x 8 input volume and has 12 filters of size 3 x 3, with padding 1 and stride 1. Count only the weights and ignore the biases. How many weights does the layer have?
+--- A*
+864
+>> Correct: 3*3*8 = 72 weights per filter, and 12*72 = 864.
+--- B
+876
+>> This includes the 12 biases, which the stem says to ignore.
+--- C
+108
+>> This forgets the input depth of 8: 12 * 3*3 = 108.
+--- D
+72
+>> This is the weights of a single filter. The layer has 12 filters.
+--- explain
+Weights = filter size x filter size x input depth x number of filters = 3*3*8*12 = 864. The input width and height and the padding do not change the parameter count (they change the output size).
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 3
+source: W8 Generalisation and capacity (weight penalty adds 2 gamma w to the gradient)
+--- stem
+A network is trained with the penalised error E_total = E_data + gamma * sum of w^2, where gamma = 0.05. For one weight w = 2, the data part of the gradient is dE_data/dw = -0.3. Do one gradient descent step with learning rate eta = 0.1. What is the new value of w?
+--- A*
+2.01
+>> Correct: the penalty adds 2 * 0.05 * 2 = 0.2 to the gradient, giving -0.1, and w = 2 - 0.1*(-0.1).
+--- B
+2.03
+>> This ignores the penalty and uses only the data gradient: 2 - 0.1*(-0.3).
+--- C
+2.02
+>> This uses gamma*w = 0.1 as the penalty gradient and forgets the factor 2 that comes from differentiating w^2.
+--- D
+2.05
+>> This gets the sign of the penalty wrong and subtracts it: gradient -0.3 - 0.2 = -0.5. The penalty pulls the weight towards 0, so it adds to the gradient.
+--- explain
+d/dw of gamma w^2 = 2 gamma w = 2*0.05*2 = 0.2. Total gradient = -0.3 + 0.2 = -0.1. Step: w = 2 - eta * gradient = 2 - 0.1*(-0.1) = 2.01. Without the penalty the weight would grow further (2.03), so weight decay holds it back.
+
+=== Q
+topic: Neural networks
+kind: calc
+diff: 3
+source: W8 Optimisation and gradient descent (learning rate)
+--- stem
+Gradient descent is run on E(w) = (1/2) w^2, so dE/dw = w and each step is w <- w - eta w = (1 - eta) w. The start is w = 1. For which learning rates is |w| strictly smaller after every single step? (Select one or more.)
+--- A*
+eta = 0.5
+>> Correct: w is multiplied by 0.5 each step, so |w| halves each time.
+--- B*
+eta = 1.8
+>> Correct: w is multiplied by -0.8. It flips sign every step but its size shrinks to 0.8 of the previous size.
+--- C
+eta = 2.0
+>> Wrong: w is multiplied by -1, so |w| stays at 1 and the iterate just bounces between 1 and -1.
+--- D
+eta = 2.5
+>> Wrong: w is multiplied by -1.5, so |w| grows each step. The learning rate is too large and the iteration diverges.
+--- explain
+Each step multiplies w by (1 - eta). The size shrinks every step exactly when |1 - eta| < 1, that is 0 < eta < 2. So 0.5 (factor 0.5) and 1.8 (factor -0.8) work; 2.0 (factor -1) does not shrink and 2.5 (factor -1.5) diverges. A learning rate that is too big overshoots the minimum.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 1
+source: W8 The sigmoid unit (a step function cannot be used with gradient descent)
+--- stem
+Why can a unit with a hard step (threshold) activation not be trained directly by gradient descent on a loss?
+--- A*
+Its slope is zero almost everywhere and undefined at the jump, so the gradient gives no direction
+>> Correct: the step function is flat except at the jump, so a small change in a weight changes the loss by nothing. This is why the course replaces it by the smooth sigmoid.
+--- B
+Its output is bounded between two values, and gradient descent needs outputs that are unbounded above
+>> Wrong: the sigmoid is also bounded (0 to 1) and works. Boundedness is not the problem, flatness is.
+--- C
+It has too many weights to store, since each step unit needs one weight for every training example
+>> Wrong: a step unit has one weight per input (plus a bias), the same as any other unit.
+--- D
+It can only be used with a single input, so gradient descent cannot be applied to it at all
+>> Wrong: a step unit (perceptron) can have many inputs. The issue is the shape of its activation.
+--- explain
+Gradient descent follows the slope of the loss with respect to each weight. For a step activation the slope is 0 almost everywhere (and undefined at the jump), so it carries no information. A smooth activation such as the sigmoid has a useful slope everywhere.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 2
+source: W8 ReLU layer, Backpropagation (hidden delta with ReLU), Training deep networks
+--- stem
+Which of the following statements about ReLU, f(z) = max(0, z), are correct? (Select one or more.)
+--- A*
+A ReLU unit outputs 0 whenever its weighted input z is negative.
+>> Correct: this is the definition, f(z) = max(0, z) = 0 for z <= 0.
+--- B*
+For positive z the slope of ReLU is 1, so an active ReLU passes the backpropagated error through without shrinking it.
+>> Correct: g'(z) = 1 for z > 0, which is why ReLU helps with diminishing gradients (a sigmoid multiplies by at most 0.25).
+--- C
+The slope of ReLU is at most 0.25, like the sigmoid.
+>> Wrong: 0.25 is the largest slope of the sigmoid. ReLU has slope 1 for z > 0 and 0 for z < 0.
+--- D
+ReLU outputs always lie between 0 and 1.
+>> Wrong: ReLU is unbounded above, so f(5) = 5. Only the sigmoid squashes outputs into (0, 1).
+--- explain
+ReLU is max(0, z): zero for negative inputs, the identity for positive ones. Its slope is 0 or 1, so in backpropagation an active unit passes the blame through at full strength and an inactive unit passes none back.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 2
+source: W8 Perceptron, Neural networks for classification (a sigmoid unit has a linear boundary), Multi-layer networks (XOR)
+--- stem
+A single sigmoid unit with no hidden layer takes two binary inputs x1, x2 in {0, 1}, and we predict class 1 when its output is at least 0.5. Which of the following functions can this unit represent? (Select one or more.)
+--- A*
+x1 AND x2
+>> Correct: for example weights (-1.5, 1, 1) give output at least 0.5 only when both inputs are 1.
+--- B*
+x1 OR x2
+>> Correct: for example weights (-0.5, 1, 1) give output at least 0.5 when at least one input is 1.
+--- C
+x1 XOR x2
+>> Wrong: the points (0,1) and (1,0) are positive and (0,0) and (1,1) negative, and no straight line separates them. A sigmoid unit has a linear boundary, so XOR needs a hidden layer.
+--- D*
+NOT (x1 AND x2), also called NAND
+>> Correct: for example weights (1.5, -1, -1) give output at least 0.5 unless both inputs are 1. This is linearly separable.
+--- explain
+Output at least 0.5 exactly when the weighted sum w0 + w1 x1 + w2 x2 is at least 0, so the boundary is a straight line. AND, OR and NAND are linearly separable. XOR is not, so it needs at least one hidden layer.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 2
+source: W8 Generalisation and capacity (weight penalty), Dropout layer
+--- stem
+Which of the following can be used to reduce overfitting in a neural network? (Select one or more.)
+--- A*
+Add a term gamma * sum of w^2 to the loss (weight decay).
+>> Correct: the penalty pulls the weights towards 0 and so limits how flexible the network can be.
+--- B*
+Randomly set a fraction of the units to zero in each training pass (dropout).
+>> Correct: dropout stops units from co-adapting and acts like averaging many thinned networks.
+--- C
+Add many more hidden units and change nothing else.
+>> Wrong: more units give the network more capacity, which tends to make overfitting worse, not better.
+--- D
+Keep training until the training error reaches zero.
+>> Wrong: the training error can keep falling while the validation error rises. Fitting the training data perfectly usually means fitting its noise.
+--- explain
+Regularisers either penalise large weights (weight decay) or inject noise (dropout), and early stopping uses a validation curve. More capacity or more epochs on the training loss alone do the opposite.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 3
+source: W8 Neural networks for classification (cross-entropy gives delta = t - o), The sigmoid unit
+--- stem
+A sigmoid output unit confidently predicts 0.99 for an example whose true target is 0. Why does training with cross-entropy correct this mistake much faster than training with squared error?
+--- A*
+With cross-entropy o(1 - o) cancels, so delta = t - o = -0.99. Squared error keeps that factor (about 0.01)
+>> Correct: squared error gives delta = o(1 - o)(t - o), which is tiny when the sigmoid is saturated. Cross-entropy removes the o(1 - o) factor.
+--- B
+Cross-entropy automatically uses a larger learning rate than squared error does for such confidently wrong examples
+>> Wrong: the learning rate is set by you in both cases. The difference is in the error signal (delta), not in eta.
+--- C
+Squared error has exactly zero gradient everywhere for a unit with a sigmoid output activation, so it can never learn
+>> Wrong: it is not zero everywhere. It is small only where the sigmoid is saturated (output near 0 or 1), which is exactly this case.
+--- D
+Cross-entropy also removes the slope factor h(1 - h) from every hidden unit's delta formula
+>> Wrong: only the output delta changes. The hidden delta formula still contains the usual hidden slope h(1 - h).
+--- explain
+Squared error: delta_k = o(1 - o)(t - o) = 0.99*0.01*(-0.99), about -0.0098, almost no signal. Cross-entropy: delta_k = t - o = -0.99. A saturated, confidently wrong unit still gets a large correction.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 1
+source: W8 Multi-layer networks (non-linearity is essential)
+--- stem
+A network has three hidden layers, but every unit uses the identity activation f(z) = z (no non-linearity). What can this network represent?
+--- A*
+Only a linear function of the inputs, like a single layer
+>> Correct: stacked linear layers collapse: W3(W2(W1 x)) = (W3 W2 W1) x, which is one linear map.
+--- B
+Any function, since it has three hidden layers and plenty of weights
+>> Wrong: without a non-linear activation, depth adds nothing. Representing arbitrary functions needs non-linear units.
+--- C
+The XOR function, because it has more than one layer of units
+>> Wrong: XOR is not linearly separable, and a purely linear network can only give a linear boundary.
+--- D
+Only quadratic functions of the inputs, since there are three layers
+>> Wrong: each linear layer keeps the function linear. Nothing in this network ever squares an input.
+--- explain
+The product of weight matrices is again a single matrix, so a stack of linear layers equals one linear layer. The non-linear activation between layers is what stops the collapse.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 2
+source: W8 Dropout layer
+--- stem
+Which of the following statements about dropout is incorrect?
+
+1. In each training forward pass, a random subset of the neurons is set to zero.
+2. It can be seen as training a large ensemble of thinned networks with far less effort.
+3. At test time, units are still dropped at random with the same probability, so that predictions stay random.
+4. It helps prevent co-adaptation of features and so reduces overfitting.
+--- A*
+Statement 3 is incorrect
+>> Correct choice: at test time dropping is switched off (all units are used), because dropping would make the predictions random.
+--- B
+Statement 1 is incorrect
+>> Statement 1 is true: this is exactly what dropout does during training.
+--- C
+Statement 2 is incorrect
+>> Statement 2 is true: the course describes dropout as like training a large ensemble.
+--- D
+Statement 4 is incorrect
+>> Statement 4 is true: forcing each unit to work with different partners stops co-adapting.
+--- explain
+Dropout is a training-time device. At test time nothing is dropped, because dropping would make the output random, so the predictions are deterministic.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 3
+source: W8 Training deep networks (initialisation, all-zero weights)
+--- stem
+A network has sigmoid hidden units. Every weight and bias is initialised to 0. Which statement describes what goes wrong?
+--- A*
+All hidden units stay identical and get the same update, so the layer acts like one unit
+>> Correct: by symmetry every hidden unit sees the same inputs with the same weights, so each gets the same blame and the same change, forever.
+--- B
+Every sigmoid unit outputs exactly 0, so the network always predicts class 0 for every input
+>> Wrong: sigma(0) = 0.5, not 0. Units output 0.5 initially.
+--- C
+The gradients explode, because multiplying by zero weights makes the error signal grow each layer
+>> Wrong: multiplying by zero weights removes the error signal, it does not amplify it. There is no explosion.
+--- D
+The loss surface becomes flat everywhere, so that no weight in the whole network can ever change
+>> Wrong: the output weights do receive a gradient (the hidden outputs are 0.5, not 0). The problem is symmetry among the hidden units, not a flat surface.
+--- explain
+With all weights equal, hidden units compute the same value and receive the same delta, so they never become different. Small random weights break the symmetry.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 1
+source: W8 Generalisation and capacity (learning curves, validation error)
+--- stem
+A network is trained for many epochs. The losses on the training and validation sets are:
+
+| Epoch | Training loss | Validation loss |
+|---|---|---|
+| 10 | 0.62 | 0.66 |
+| 20 | 0.41 | 0.47 |
+| 30 | 0.28 | 0.40 |
+| 40 | 0.17 | 0.43 |
+| 50 | 0.08 | 0.49 |
+
+Which epoch would you stop at (early stopping)?
+--- A*
+30
+>> Correct: the validation loss is lowest (0.40) at epoch 30, before it starts to rise.
+--- B
+50
+>> This has the lowest training loss but the validation loss has risen to 0.49. The network is overfitting.
+--- C
+40
+>> Validation loss is already rising (0.43 against 0.40), so the network has begun to overfit.
+--- D
+20
+>> Validation loss is still falling here (0.47), so the network is still improving on unseen data.
+--- explain
+Training loss keeps falling, but validation loss is a measure of performance on unseen data. It reaches its minimum at epoch 30 and then rises. Stop there.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 2
+source: W8 Generalisation and capacity (expressive capability)
+--- stem
+Which of the following statements is incorrect?
+
+1. A network with one hidden layer can approximate any bounded continuous function to arbitrary accuracy, given enough hidden units.
+2. Because such a network exists, backpropagation is guaranteed to find its weights.
+3. Every Boolean function can be represented with one hidden layer, but this may need exponentially many hidden units.
+4. Backpropagation converges to a local minimum of the error, not necessarily a global one.
+--- A*
+Statement 2 is incorrect
+>> Correct choice: being able to represent a function is different from being able to learn it. Gradient descent can get stuck in a local minimum.
+--- B
+Statement 1 is incorrect
+>> Statement 1 is true: it is the universal approximation result (Cybenko, Hornik) quoted in the course.
+--- C
+Statement 3 is incorrect
+>> Statement 3 is true: one hidden layer suffices for any Boolean function, but the number of units can grow exponentially with the number of inputs.
+--- D
+Statement 4 is incorrect
+>> Statement 4 is true: the error surface can have many local minima and backpropagation follows the local slope.
+--- explain
+Universal approximation says that a good set of weights exists, not that gradient descent will find it. This is the "representable is not learnable" point of the course.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 1
+source: W8 Pooling layer
+--- stem
+A 2 x 2 max-pooling layer with stride 2 is applied to a stack of feature maps. Which statement is correct?
+--- A*
+It halves width and height of each map, keeps the number of maps, and adds no parameters
+>> Correct: pooling works on each depth slice separately, keeping the largest value in each window, and has no weights.
+--- B
+It halves the number of maps (the depth) and keeps the width and height of each map unchanged
+>> Wrong: pooling works on each depth slice independently, so depth is unchanged. Only width and height shrink.
+--- C
+It has one weight per input value in each window, and these weights are learned by backpropagation
+>> Wrong: max pooling just takes the largest value in each window. It has no weights, so it adds no parameters.
+--- D
+It doubles the width and height of each map so that later layers can see more detail
+>> Wrong: pooling reduces the spatial size (it discards 75% of the values for 2 x 2 with stride 2), which also helps control overfitting.
+--- explain
+Pooling reduces the spatial size, for example 224 x 224 x 64 becomes 112 x 112 x 64. It is applied to each depth slice separately, so depth stays the same, and it has no learnable parameters.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 2
+source: W8 Training deep networks (diminishing gradients), The sigmoid unit
+--- stem
+In a deep network of sigmoid units trained by backpropagation, the layers near the input learn very slowly. What is the main reason?
+--- A*
+Each sigmoid layer scales the error signal by a slope of at most 0.25, so it soon vanishes
+>> Correct: sigma'(z) = sigma(z)(1 - sigma(z)) is at most 0.25, so five layers shrink the signal by at most 0.25^5, about 0.001, from the slopes alone.
+--- B
+The sigmoid derivative is larger than 1 for large inputs, so the error signal explodes
+>> Wrong: the sigmoid derivative is never larger than 0.25. The problem is shrinking, not exploding.
+--- C
+Sigmoid outputs are negative for negative inputs, so the weights keep changing sign
+>> Wrong: sigmoid outputs are always between 0 and 1, never negative.
+--- D
+The forward pass through sigmoid layers is too slow, so there is no time to update early layers
+>> Wrong: this is about the size of the gradient, not computing time.
+--- explain
+Backpropagation multiplies the error signal by each unit's slope on the way back. For a sigmoid the slope is at most 0.25 (at z = 0) and tiny when the unit is saturated. An active ReLU has slope 1, which is why ReLU eases the problem.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 3
+source: W8 Perceptron learning, Optimisation and gradient descent (perceptron against linear unit)
+--- stem
+Which statement about the perceptron update rule and gradient descent on a linear unit is correct?
+--- A*
+The perceptron rule never stops on non-separable data; gradient descent on a linear unit (small eta) converges
+>> Correct: this is the contrast in the course. The perceptron rule only reacts to mistakes. The squared-error loss has one minimum, so gradient descent reaches it with a small enough eta.
+--- B
+Gradient descent on a linear unit needs linearly separable data in order to converge at all
+>> Wrong: it minimises squared error and does not require separability.
+--- C
+The perceptron rule always finds the separator with the widest possible margin, as the SVM does
+>> Wrong: it stops at the first separator it finds, which need not have the widest margin. Maximum margin is the SVM's job.
+--- D
+The perceptron rule changes the weights after every example, whether it was classified correctly or not
+>> Wrong: the perceptron updates only on misclassified examples (y w . x <= 0).
+--- explain
+Perceptron: mistake-driven, needs separable data to terminate, any separator. Linear unit: updates on every example from a loss with one minimum, so it converges for small enough eta even on noisy data.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 2
+source: W8 Convolutional layer (local connectivity, parameter sharing)
+--- stem
+Which of the following statements about a convolutional layer is incorrect?
+
+1. The depth of each filter equals the depth (number of channels) of the input it is applied to.
+2. The number of parameters of the layer grows with the width and height of the input image.
+3. The depth of the output volume equals the number of filters.
+4. All positions in one output depth slice use the same weights and bias.
+--- A*
+Statement 2 is incorrect
+>> Correct choice: the filters are shared across all positions, so the parameter count is filters * (F*F*depth + 1) and does not depend on the image width or height.
+--- B
+Statement 1 is incorrect
+>> Statement 1 is true: a filter extends through the full depth of its input.
+--- C
+Statement 3 is incorrect
+>> Statement 3 is true: each filter produces one activation map, and these are stacked along the depth.
+--- D
+Statement 4 is incorrect
+>> Statement 4 is true: this is parameter sharing, the assumption that a feature useful at one position is useful at another.
+--- explain
+Image width and height change the output size (and the number of neurons and connections) but not the number of parameters, because each filter's weights are reused at every position.
+
+=== Q
+topic: Neural networks
+kind: concept
+diff: 2
+source: W8 Generalisation and capacity, Optimisation and gradient descent (stochastic and mini-batch descent)
+--- stem
+Training uses mini-batch gradient descent. There are 2400 training images and the mini-batch size is 20. How many weight updates are made in one epoch, and what is an epoch?
+--- A*
+120 updates, and an epoch is one pass through the whole training set
+>> Correct: 2400 / 20 = 120 mini-batches per pass, and one pass over all training data is one epoch.
+--- B
+2400 updates, and an epoch is one pass through the whole training set
+>> This is the number of updates for one-example-at-a-time SGD (batch size 1). With batch size 20 there are fewer updates.
+--- C
+1 update, and an epoch is one pass through the whole training set
+>> This is full-batch gradient descent, where all 2400 examples are summed before a single update.
+--- D
+120 updates, and an epoch is a single weight update
+>> The count is right but the definition is wrong: an epoch is a full pass over the training data, not one update.
+--- explain
+Updates per epoch = number of examples / batch size = 2400 / 20 = 120. An epoch is one complete pass over the training set, so it contains many updates.

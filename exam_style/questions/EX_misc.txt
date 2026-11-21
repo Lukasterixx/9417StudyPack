@@ -1,0 +1,737 @@
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 1
+source: W9 k-means by hand (worked example 1)
+--- stem
+Five 1-D points are 1, 2, 4, 9 and 11. We run k-means with k = 2, starting from the centres 1 and 8. Each point goes to its nearest centre, then each centre moves to the mean of its points. What are the two new centres?
+--- A*
+2.3333 and 10.0000
+>> Point 4 is 3 away from the centre 1 but 4 away from the centre 8, so the clusters are {1, 2, 4} and {9, 11}. The means are 7/3 = 2.3333 and 20/2 = 10.
+--- B
+1.5000 and 8.0000
+>> This sends the point 4 to the centre 8 (a misread distance), giving {1, 2} and {4, 9, 11}. But 4 is closer to the centre 1.
+--- C
+2.5000 and 10.0000
+>> 2.5 is the midpoint of the extreme points 1 and 4. The new centre must be the mean of the points, 7/3, not the middle of their range.
+--- D
+2.3333 and 8.0000
+>> The first centre is right, but the second centre was not updated. Both centres move to the mean of their cluster, so {9, 11} gives 10.
+--- explain
+Assign: 1 and 2 are nearest to the centre 1. For 4 the distances are 3 and 4, so it also goes to the centre 1. 9 and 11 go to the centre 8. New centres: (1 + 2 + 4)/3 = 2.3333 and (9 + 11)/2 = 10. Answer: 2.3333 and 10.0000.
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 3
+source: W9 k-means by hand (worked example 1), 2-D version
+--- stem
+Five points in the plane: P1 = (1, 2), P2 = (2, 1), P3 = (3, 4), P4 = (6, 4), P5 = (7, 6). k-means with k = 2 starts from c1 = (1, 1) and c2 = (5, 5). Assign every point to its nearest centre (squared Euclidean distance), then move each centre to the mean of its points. What is the new position of c2?
+--- A*
+(5.3333, 4.6667)
+>> P3 is at squared distance 13 from c1 and 5 from c2, so it joins P4 and P5 in the second cluster. The mean is (16/3, 14/3).
+--- B
+(6.5000, 5.0000)
+>> This is the mean of P4 and P5 only. It leaves P3 with the first cluster, but P3 is closer to c2.
+--- C
+(1.5000, 1.5000)
+>> This is the new position of c1, the mean of P1 and P2. The question asks about c2.
+--- D
+(6.0000, 4.0000)
+>> This takes the median of each coordinate over the cluster. k-means moves the centre to the mean, not the median.
+--- explain
+Squared distances to (c1, c2): P1 (1, 25), P2 (1, 25), P3 (13, 5), P4 (34, 2), P5 (61, 5). So cluster 1 = {P1, P2} and cluster 2 = {P3, P4, P5}. New c2 = ((3 + 6 + 7)/3, (4 + 4 + 6)/3) = (16/3, 14/3) = (5.3333, 4.6667). (The new c1 is (1.5, 1.5).)
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 2
+source: W9 k-means objective (within-cluster sum of squares); worked example 1
+--- stem
+k-means has produced two clusters of 1-D points: {2, 4, 6} and {10, 13}. The k-means objective W is the total squared distance from each point to the centre (mean) of its own cluster. What is W?
+--- A*
+12.50
+>> The centres are 4 and 11.5. Cluster 1 gives 4 + 0 + 4 = 8 and cluster 2 gives 2.25 + 2.25 = 4.5, so W = 12.5.
+--- B
+7.00
+>> This adds the plain distances (2 + 0 + 2 + 1.5 + 1.5). k-means minimises the sum of squared distances.
+--- C
+2.50
+>> This is W divided by the 5 points, an average. The objective as defined in the question is the total.
+--- D
+8.00
+>> This is the squared-distance sum for the first cluster only. The second cluster adds 4.5 more.
+--- explain
+Cluster 1 has mean (2 + 4 + 6)/3 = 4, so its squared distances are 4, 0, 4, total 8. Cluster 2 has mean (10 + 13)/2 = 11.5, so its squared distances are 2.25 and 2.25, total 4.5. W = 8 + 4.5 = 12.5.
+
+=== Q
+topic: Clustering and PCA
+kind: concept
+diff: 2
+source: W9 k-means: choice of k, local minimum, initial seeds, Euclidean distance
+--- stem
+Which of the following statements about k-means clustering are correct? (Select one or more.)
+--- A*
+The number of clusters k has to be chosen before the algorithm is run.
+>> k-means is a partitioning method and needs k as an input. Hierarchical clustering is the one where you decide afterwards where to cut.
+--- B*
+Starting from different initial centres can lead to different final clusterings.
+>> The algorithm only reaches a local minimum of the objective. This is why we restart from several random seeds or use k-means++.
+--- C
+Each point receives a probability of belonging to every cluster.
+>> That describes soft assignment in a Gaussian mixture fitted by EM. In k-means each point belongs to exactly one cluster.
+--- D
+Multiplying one feature by 1000 (for example metres to millimetres) leaves the clusters unchanged.
+>> k-means uses Euclidean distance, so a feature with large numbers dominates the distance. Rescaling a feature can change the clusters.
+--- explain
+Correct: k is an input, and the result depends on the starting centres because k-means finds only a local minimum. Hard (one cluster per point) assignment is the k-means property, and distances depend on the units of the features.
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 3
+source: W9 hierarchical clustering: single and complete linkage, worked example 3
+--- stem
+Four points 1 to 4 have these pairwise distances:
+
+| | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|
+| 1 | 0 | 1 | 3 | 8 |
+| 2 | 1 | 0 | 5 | 9 |
+| 3 | 3 | 5 | 0 | 4 |
+| 4 | 8 | 9 | 4 | 0 |
+
+Agglomerative clustering first merges points 1 and 2 (distance 1). Which merge comes next under single linkage, and which under complete linkage?
+--- A*
+Single: {1, 2} joins 3. Complete: 3 joins 4.
+>> Single: d({1,2}, 3) = min(3, 5) = 3 beats d(3, 4) = 4. Complete: d({1,2}, 3) = max(3, 5) = 5 is now larger than d(3, 4) = 4, so 3 joins 4.
+--- B
+Single: {1, 2} joins 3. Complete: {1, 2} joins 3.
+>> This uses the single-linkage distance 3 for both. Under complete linkage the distance to 3 is the larger value, 5, which loses to 4.
+--- C
+Single: 3 joins 4. Complete: 3 joins 4.
+>> This uses the complete-linkage values for both. Under single linkage the distance from {1, 2} to 3 is the smaller value, 3, which beats 4.
+--- D
+Single: 3 joins 4. Complete: {1, 2} joins 3.
+>> This swaps the two rules. Single linkage takes the closest pair (min), complete linkage the furthest pair (max).
+--- explain
+After merging {1, 2}: single linkage gives d({1,2}, 3) = min(3, 5) = 3, d({1,2}, 4) = min(8, 9) = 8, and d(3, 4) = 4, so the smallest is 3 and {1, 2} joins 3. Complete linkage gives max(3, 5) = 5, max(8, 9) = 9, and d(3, 4) = 4, so the smallest is 4 and 3 joins 4.
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 1
+source: W9 hierarchical clustering: average linkage
+--- stem
+Cluster X = {1, 2} and cluster Y = {3, 4, 5}. The distances between points in X and points in Y are:
+
+| | 3 | 4 | 5 |
+|---|---|---|---|
+| 1 | 5 | 7 | 9 |
+| 2 | 6 | 8 | 10 |
+
+What is the distance between X and Y under average linkage?
+--- A*
+7.5
+>> Average linkage is the mean of all 6 cross-cluster distances: 45/6 = 7.5.
+--- B
+5.0
+>> This is the single-linkage distance, the smallest of the six values.
+--- C
+10.0
+>> This is the complete-linkage distance, the largest of the six values.
+--- D
+7.0
+>> This is the mean of the first row only (5, 7, 9). All six cross-cluster pairs count.
+--- explain
+Sum of the six distances: 5 + 7 + 9 + 6 + 8 + 10 = 45. Average linkage = 45/6 = 7.5.
+
+=== Q
+topic: Clustering and PCA
+kind: concept
+diff: 1
+source: W9 hierarchical clustering: agglomerative algorithm, dendrogram, linkage
+--- stem
+Which statement about hierarchical clustering is INCORRECT?
+
+1. Agglomerative clustering starts with every point in its own cluster.
+2. Cutting a dendrogram at a chosen height gives a flat clustering.
+3. The number of clusters must be fixed before the tree is built.
+4. Single linkage uses the closest pair of points, complete linkage the furthest pair.
+--- A
+Statement 1 is incorrect
+>> Statement 1 is true. Bottom-up (agglomerative) clustering begins with single-point clusters and repeatedly merges the two closest.
+--- B
+Statement 2 is incorrect
+>> Statement 2 is true. The height of each join is the distance at which two clusters merge, so cutting at a height gives a partition.
+--- C*
+Statement 3 is incorrect
+>> This is the false one. The whole tree is built first, and the number of clusters is chosen afterwards by where you cut. That is the advantage over k-means.
+--- D
+Statement 4 is incorrect
+>> Statement 4 is true. Single linkage is the minimum over cross-cluster pairs and complete linkage the maximum.
+--- explain
+Hierarchical clustering does not need the number of clusters in advance: the dendrogram contains every level, and you cut it where you like.
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 2
+source: W9 silhouette
+--- stem
+For one point i, the average distance to the other points in its own cluster is a(i) = 4. The average distance to the points of the nearest other cluster is b(i) = 3. What is the silhouette value s(i) = (b(i) - a(i)) / max(a(i), b(i))?
+--- A*
+-0.2500
+>> The maximum of 4 and 3 is 4, so s = (3 - 4)/4 = -0.25. The point is on average closer to the other cluster, so it may be in the wrong cluster.
+--- B
++0.2500
+>> The sign is flipped (a - b over the maximum). The silhouette is b minus a, so it is negative when a > b.
+--- C
+-0.3333
+>> This divides by the smaller value, 3. The denominator is the larger of a(i) and b(i), which is 4.
+--- D
++0.7500
+>> This is b/a. The formula for a > b is b/a - 1 = -0.25.
+--- explain
+s = (b - a)/max(a, b) = (3 - 4)/4 = -0.25. A negative value means the point is closer, on average, to the neighbouring cluster than to its own.
+
+=== Q
+topic: Clustering and PCA
+kind: concept
+diff: 1
+source: W9 mixture models and EM
+--- stem
+A Gaussian mixture with two components is fitted to 1-D data by the EM algorithm. Which statement is correct?
+--- A*
+Each point gets a probability for each component, and these probabilities add up to 1.
+>> These are the soft assignments (responsibilities) computed in the E step.
+--- B
+EM is guaranteed to reach the global maximum of the likelihood from any starting values.
+>> EM only converges to a local maximum, so the result can depend on the starting values, as with k-means.
+--- C
+EM works out by itself how many components the data contain.
+>> The number of components must be chosen beforehand, just as k is for k-means.
+--- D
+In the E step, each point is assigned wholly to its single nearest component.
+>> That is the hard assignment of k-means. EM gives every component a share of every point.
+--- explain
+EM alternates an E step (soft assignments, which sum to 1 for each point) and an M step (weighted means). It finds a local maximum of the likelihood and needs the number of components in advance.
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 2
+source: W9 mixture posterior (formula sheet, general form)
+--- stem
+A mixture of two Gaussians has mixing weights 0.3 for component 1 and 0.7 for component 2. For a point x, the density of component 1 at x is 0.20 and the density of component 2 at x is 0.05. What is the responsibility (posterior probability) of component 1 for x?
+--- A*
+0.6316
+>> 0.3 * 0.20 = 0.06 and 0.7 * 0.05 = 0.035. The share of component 1 is 0.06/(0.06 + 0.035) = 0.6316.
+--- B
+0.8000
+>> This ignores the mixing weights: 0.20/(0.20 + 0.05). The weights 0.3 and 0.7 must multiply the densities.
+--- C
+0.3684
+>> This is the responsibility of component 2, 0.035/0.095. The question asks for component 1.
+--- D
+0.9032
+>> This attaches the weights the wrong way round (0.7 to component 1 and 0.3 to component 2).
+--- explain
+Responsibility of component 1 = (0.3 * 0.20) / (0.3 * 0.20 + 0.7 * 0.05) = 0.06 / 0.095 = 0.6316.
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 3
+source: W9 EM, M step (weighted mean), worked example 2
+--- stem
+In an EM run with two components, the E step gives these responsibilities for component 1:
+
+| x | 1 | 2 | 6 |
+|---|---|---|---|
+| E[z1] | 0.9 | 0.8 | 0.1 |
+
+What is the new mean of component 1 after the M step?
+--- A*
+1.7222
+>> The weighted mean is (0.9 * 1 + 0.8 * 2 + 0.1 * 6)/(0.9 + 0.8 + 0.1) = 3.1/1.8 = 1.7222.
+--- B
+1.0333
+>> This divides the weighted sum 3.1 by the number of points, 3. The denominator is the total weight, 1.8.
+--- C
+3.0000
+>> This is the plain mean of 1, 2 and 6. The M step weights every point by its responsibility.
+--- D
+2.5833
+>> This divides by 1.2, the total weight of component 2 (0.1 + 0.2 + 0.9). Component 1 needs its own total, 1.8.
+--- explain
+Numerator: 0.9(1) + 0.8(2) + 0.1(6) = 0.9 + 1.6 + 0.6 = 3.1. Denominator: 0.9 + 0.8 + 0.1 = 1.8. New mean = 3.1/1.8 = 1.7222.
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 1
+source: W9 PCA, variance kept
+--- stem
+PCA on a data set gives the covariance-matrix eigenvalues 4.2, 1.8, 0.6 and 0.4. What proportion of the total variance is kept by the first two principal components?
+--- A*
+0.8571
+>> The total is 4.2 + 1.8 + 0.6 + 0.4 = 7.0, and the first two add up to 6.0. 6.0/7.0 = 0.8571.
+--- B
+0.6000
+>> This is the share of the first component alone, 4.2/7.0.
+--- C
+0.9091
+>> This divides by 6.6, leaving the smallest eigenvalue out of the total. The total variance is the sum of all four eigenvalues.
+--- D
+0.9429
+>> This is the share of the first three components, 6.6/7.0.
+--- explain
+Variance kept by the first K components = (sum of the first K eigenvalues)/(sum of all eigenvalues) = (4.2 + 1.8)/7.0 = 0.8571.
+
+=== Q
+topic: Clustering and PCA
+kind: calc
+diff: 2
+source: W9 PCA, how many components to keep
+--- stem
+The eigenvalues of a covariance matrix are 5, 2.5, 1.2, 0.8 and 0.5. What is the smallest number of principal components that keeps at least 90% of the total variance?
+--- A
+2
+>> Two components keep (5 + 2.5)/10 = 75%, which is below 90%.
+--- B
+3
+>> Three components keep (5 + 2.5 + 1.2)/10 = 87%, just below 90%.
+--- C*
+4
+>> Four components keep (5 + 2.5 + 1.2 + 0.8)/10 = 95%, the first value that reaches 90%.
+--- D
+5
+>> Five components keep 100%, but a smaller number already reaches 90%.
+--- explain
+The total is 10. Cumulative shares: 50%, 75%, 87%, 95%, 100%. The first to reach 90% is the fourth, so keep 4 components.
+
+=== Q
+topic: Clustering and PCA
+kind: concept
+diff: 2
+source: W9 PCA algorithm and consequences
+--- stem
+Which of the following statements about PCA are correct? (Select one or more.)
+--- A*
+The data are centred (the mean of each feature is subtracted) before the covariance matrix is formed.
+>> Centring is step 2 of the algorithm. The directions are found for the spread around the mean.
+--- B*
+The first principal component is the eigenvector of the covariance matrix with the largest eigenvalue.
+>> It is the direction of greatest variance, and its eigenvalue is the variance of the data along it.
+--- C
+It uses the class labels to find directions that separate the classes.
+>> PCA is unsupervised. It maximises variance and never sees labels, so the directions need not separate classes.
+--- D
+The new features (the projections on the components) are strongly correlated with one another.
+>> The new features are uncorrelated: their covariance matrix is diagonal, with the eigenvalues on the diagonal.
+--- explain
+PCA centres the data, finds the eigenvectors of the covariance matrix, and sorts them by eigenvalue. It is unsupervised and produces uncorrelated new features.
+
+=== Q
+topic: Learning theory
+kind: calc
+diff: 2
+source: W10 sample complexity for finite H (realisable case), worked example 1
+--- stem
+A finite hypothesis class has |H| = 500 hypotheses and contains the target. Using m >= (1/epsilon)(ln|H| + ln(1/delta)) with natural logs, what is the smallest whole number of examples that guarantees, with probability at least 0.99, that every hypothesis consistent with the training data has true error at most epsilon = 0.05?
+--- A*
+217
+>> ln 500 = 6.2146 and ln 100 = 4.6052. The sum is 10.8198, divided by 0.05 gives 216.4. The count must be a whole number at least this big, so 217.
+--- B
+216
+>> 216 is the rounded value of 216.4, but 216 examples fall short of the bound. Always round up.
+--- C
+313
+>> This uses base-2 logs (log2 500 + log2 100 = 15.61, divided by 0.05 = 312.2, rounded up). The bound uses natural logs.
+--- D
+2164
+>> This uses the agnostic form 1/(2 epsilon^2) instead of 1/epsilon. The realisable bound has 1/epsilon.
+--- explain
+Probability at least 0.99 means delta = 0.01. m >= 20 (ln 500 + ln 100) = 20 (6.2146 + 4.6052) = 20 (10.8198) = 216.4. Round up: 217.
+
+=== Q
+topic: Learning theory
+kind: calc
+diff: 3
+source: W10 sample complexity with conjunctions (|H| = 3^n + 1, worked example 2)
+--- stem
+Instances have n = 3 Boolean variables. The hypothesis class is the set of conjunctions of literals: each variable appears as itself, appears negated, or is left out, and there is also one hypothesis that labels everything negative, so |H| = 3^n + 1. With epsilon = 0.1 and delta = 0.05, what is the smallest m satisfying m >= (1/epsilon)(ln|H| + ln(1/delta))?
+--- A*
+64
+>> |H| = 28. 10 (ln 28 + ln 20) = 10 (3.3322 + 2.9957) = 63.28, rounded up to 64.
+--- B
+63
+>> This uses |H| = 3^3 = 27 (forgetting the extra always-false hypothesis) and rounds 62.9 up. With |H| = 28 the bound is 63.28, so 64.
+--- C
+51
+>> This takes |H| = 2^3 = 8, which is not the class described. 10 (ln 8 + ln 20) = 50.75, rounded up to 51.
+--- D
+92
+>> This uses base-2 logs: 10 (log2 28 + log2 20) = 91.3. The bound uses natural logs.
+--- explain
+|H| = 3^3 + 1 = 28. m >= 10 (ln 28 + ln 20) = 10 (3.3322 + 2.9957) = 63.28. Round up: 64.
+
+=== Q
+topic: Learning theory
+kind: concept
+diff: 2
+source: W10 sample complexity for finite H: how to read the bound
+--- stem
+Consider the bound m >= (1/epsilon)(ln|H| + ln(1/delta)) for a finite hypothesis class. Which of the following statements are correct? (Select one or more.)
+--- A*
+Halving epsilon doubles the number of examples the bound asks for.
+>> The bound is exactly proportional to 1/epsilon, so halving epsilon doubles it.
+--- B
+Doubling |H| doubles the number of examples the bound asks for.
+>> |H| enters through ln|H|. Doubling |H| adds only (ln 2)/epsilon to the bound.
+--- C*
+A sample of at least this size is enough, but fewer examples may also work.
+>> The bound is a sufficient, worst-case guarantee. It is not claimed to be necessary or tight.
+--- D
+delta is the error rate we are aiming for.
+>> delta is the allowed probability of failure (an unlucky sample). The error target is epsilon.
+--- explain
+The bound is linear in 1/epsilon, only logarithmic in |H| and 1/delta, and is sufficient rather than necessary.
+
+=== Q
+topic: Learning theory
+kind: calc
+diff: 3
+source: W10 using the finite-H bound backwards (worked example 3)
+--- stem
+A learner picks a hypothesis consistent with m = 400 training examples from a finite class with |H| = 1000 that contains the target. Using the realisable bound m >= (1/epsilon)(ln|H| + ln(1/delta)) with delta = 0.05, rearranged for epsilon, what error epsilon can be guaranteed with probability at least 0.95?
+--- A*
+0.0248
+>> epsilon = (ln 1000 + ln 20)/400 = (6.9078 + 2.9957)/400 = 0.02476, about 0.0248.
+--- B
+0.0357
+>> This uses base-2 logs: (log2 1000 + log2 20)/400. The bound uses natural logs.
+--- C
+0.1113
+>> This is the agnostic form, the square root of (ln|H| + ln(1/delta))/(2m). The realisable bound has no square root.
+--- D
+0.0098
+>> This uses ln(delta) = -2.9957 in place of ln(1/delta) = +2.9957, so the sum is 3.9121 rather than 9.9035.
+--- explain
+Rearranging m >= (1/epsilon)(ln|H| + ln(1/delta)) gives epsilon >= (ln|H| + ln(1/delta))/m = (6.9078 + 2.9957)/400 = 0.0248.
+
+=== Q
+topic: Learning theory
+kind: calc
+diff: 2
+source: W10 VC dimension of a finite class: d <= log2|H|
+--- stem
+A hypothesis class contains exactly 100 hypotheses. Shattering d points needs a separate hypothesis for each of the 2^d labellings. What is the largest VC dimension this class could have?
+--- A*
+6
+>> 2^6 = 64 is at most 100 but 2^7 = 128 is more than 100. So d is at most log2(100) = 6.64, rounded down to 6.
+--- B
+7
+>> 7 is log2(100) rounded up. Seven points have 128 labellings, more than the 100 hypotheses available, so they cannot be shattered.
+--- C
+50
+>> This halves the number of hypotheses. The number of labellings doubles with each extra point, so d grows like a logarithm.
+--- D
+4
+>> This takes the natural log, ln 100 = 4.6, and rounds down. The labellings are counted in powers of 2, so use log2.
+--- explain
+Shattering d points needs 2^d <= |H| = 100, so d <= log2(100) = 6.64. This is an upper bound on d, so round down: 6.
+
+=== Q
+topic: Learning theory
+kind: concept
+diff: 2
+source: W10 shattering and VC dimension of lines in the plane
+--- stem
+Consider classifiers on the plane that label a point by which side of a line it lies on (either side may be chosen as the positive side). Which of the following statements are correct? (Select one or more.)
+--- A*
+Three points that are not on one straight line can be shattered.
+>> Each of the 8 labellings of a triangle's corners can be produced by some line, so these 3 points are shattered.
+--- B
+Three points on one straight line can be shattered.
+>> The labelling (positive, negative, positive) along the line cannot be produced, because a line that separates the outer two from the middle one does not exist.
+--- C*
+No set of 4 points can be shattered.
+>> Either a convex quadrilateral has a diagonal labelling like XOR, or one point lies inside the triangle of the others. Some labelling always fails.
+--- D
+Shattering 3 points means producing 6 labellings.
+>> 3 points have 2^3 = 8 labellings, and all 8 must be produced.
+--- explain
+Lines in the plane have VC dimension 3: one set of 3 points (non-collinear) is shattered, and no set of 4 is. A bad set, such as 3 collinear points, does not lower the VC dimension.
+
+=== Q
+topic: Learning theory
+kind: concept
+diff: 1
+source: W10 VC dimension of intervals
+--- stem
+Instances are real numbers. The hypothesis class is all intervals [a, b]: a point is labelled positive if it lies inside the interval. What is the VC dimension?
+--- A
+1
+>> Two points can be shattered, so the VC dimension is more than 1. Any labelling of 2 points can be produced by an interval.
+--- B*
+2
+>> Two points can get all four labellings. For three points x1 < x2 < x3, the labelling (positive, negative, positive) is impossible because an interval containing x1 and x3 contains x2.
+--- C
+3
+>> Three points cannot be shattered, because the labelling (positive, negative, positive) is impossible.
+--- D
+Infinite
+>> The class has infinitely many hypotheses, but that does not make its VC dimension infinite. Only its two end points control it, so it stays small.
+--- explain
+Two points are shattered by intervals, but for three points the labelling (1, 0, 1) cannot be made. So VC = 2.
+
+=== Q
+topic: Learning theory
+kind: concept
+diff: 2
+source: W10 VC dimension of axis-aligned rectangles (worked example 7)
+--- stem
+Instances are points in the plane. The hypothesis class is all axis-aligned rectangles: a point inside the rectangle is positive. What is the VC dimension?
+--- A
+2
+>> Rectangles can do more than intervals. Two points are easily shattered.
+--- B
+3
+>> This is the VC dimension of lines in the plane. Rectangles can shatter the 4 points (1, 0), (-1, 0), (0, 1), (0, -1).
+--- C*
+4
+>> The 4 points (1, 0), (-1, 0), (0, 1), (0, -1) are shattered, since a box around any subset misses the others. For 5 points, the leftmost, rightmost, topmost and bottommost points (at most 4) fix a bounding box that must contain any other point.
+--- D
+5
+>> Five points are never shattered. The extreme points in the four directions force a bounding box that contains the remaining point.
+--- explain
+Four points in a diamond can be shattered. Among any 5 points, label the (at most 4) extreme points positive: the smallest rectangle around them contains the remaining point, so it cannot be labelled negative. VC dimension = 4.
+
+=== Q
+topic: Learning theory
+kind: concept
+diff: 1
+source: W10 PAC learning definition
+--- stem
+A learning algorithm is PAC with epsilon = 0.1 and delta = 0.05. Which statement describes the guarantee?
+--- A*
+With probability at least 95%, the learned hypothesis has true error at most 10%.
+>> epsilon is the allowed error and delta is the allowed probability of an unlucky sample, so the confidence is 1 - delta = 95%.
+--- B
+For every possible training sample, the learned hypothesis has true error at most 10%.
+>> PAC allows a failure probability delta, because a bad sample can happen.
+--- C
+With probability at least 90%, the learned hypothesis has true error at most 5%.
+>> This swaps the roles: error 0.1 and failure probability 0.05 are the given values.
+--- D
+The learned hypothesis is wrong on exactly 5% of all new instances drawn at random.
+>> delta is not an error rate. The guarantee bounds the true error by epsilon, not by delta.
+--- explain
+PAC: with probability at least 1 - delta, the true error is at most epsilon. Here that is 95% and 10%.
+
+=== Q
+topic: Linear regression
+kind: concept
+diff: 2
+source: W1 regularisation (ridge and LASSO); R2 ridge and LASSO as constrained problems
+--- stem
+Which of the following statements about ridge and LASSO regression are correct? (Select one or more.)
+--- A*
+LASSO can set some coefficients exactly to zero.
+>> The L1 penalty (diamond constraint) has corners on the axes, so the solution can land with some coefficients equal to 0.
+--- B
+The ridge penalty is lambda times the sum of the absolute values of the coefficients.
+>> That is the LASSO penalty. Ridge penalises the sum of squares.
+--- C*
+Ridge regression has a closed-form solution, in which lambda times the identity matrix is added to X^T X.
+>> Adding lambda to the diagonal of X^T X keeps the normal equations solvable. LASSO has no such closed form.
+--- D
+Increasing lambda in ridge regression makes the training error fall.
+>> A larger penalty pushes the weights towards 0, so the training error can only stay the same or rise.
+--- explain
+LASSO gives sparse solutions, and ridge shrinks without zeroing. Ridge has the closed form with lambda added to the diagonal. A larger lambda never lowers the training error.
+
+=== Q
+topic: Linear regression
+kind: calc
+diff: 3
+source: W1 regularisation; one-parameter picture of ridge versus LASSO
+--- stem
+For a single parameter theta, the squared-error part of the cost is (theta - 5)^2. Ridge adds lambda * theta^2 and LASSO adds lambda * |theta|. With lambda = 2, what are the minimising values of theta for the ridge cost and for the LASSO cost?
+--- A*
+Ridge 1.6667, LASSO 4.0000
+>> Ridge: 2(theta - 5) + 2 * lambda * theta = 0 gives theta = 5/(1 + lambda) = 5/3. LASSO: 2(theta - 5) + lambda = 0 gives theta = 5 - lambda/2 = 4.
+--- B
+Ridge 4.0000, LASSO 1.6667
+>> The two formulas are swapped. Ridge divides by (1 + lambda) and LASSO subtracts lambda/2.
+--- C
+Ridge 2.5000, LASSO 4.0000
+>> The ridge value 2.5 is 5/(1 + lambda/2). The ridge derivative has 2 lambda theta, so the divisor is 1 + lambda = 3.
+--- D
+Ridge 1.6667, LASSO 3.0000
+>> The LASSO value 3 is 5 - lambda. The derivative of lambda * |theta| is lambda (for theta > 0), and the square contributes a 2, so theta = 5 - lambda/2.
+--- explain
+Ridge: d/dtheta [(theta - 5)^2 + 2 theta^2] = 2(theta - 5) + 4 theta = 0, so 6 theta = 10 and theta = 1.6667. LASSO (theta > 0): d/dtheta [(theta - 5)^2 + 2 theta] = 2(theta - 5) + 2 = 0, so theta = 4. Both are shrunk from 5, and LASSO would reach exactly 0 only once lambda is at least 10.
+
+=== Q
+topic: Linear regression
+kind: calc
+diff: 2
+source: W1 ridge regression (closed form with lambda added to the diagonal)
+--- stem
+Fit y = theta * x (no intercept) to the points (x, y) = (1, 2), (2, 3), (3, 7) by minimising sum (y - theta x)^2 + lambda * theta^2 with lambda = 6. What is theta?
+--- A*
+1.4500
+>> theta = sum(xy)/(sum(x^2) + lambda) = 29/(14 + 6) = 1.45.
+--- B
+2.0714
+>> This is the ordinary least-squares value 29/14, with lambda = 0. The penalty adds lambda to the denominator.
+--- C
+1.8125
+>> This adds lambda/m = 2 instead of lambda, giving 29/16. In this cost the penalty is lambda * theta^2 with no 1/m.
+--- D
+0.5800
+>> This adds lambda squared, 36, to the denominator: 29/50. The penalty adds lambda itself.
+--- explain
+sum(x y) = 2 + 6 + 21 = 29 and sum(x^2) = 1 + 4 + 9 = 14. Setting the derivative of the cost to 0 gives theta = 29/(14 + lambda) = 29/20 = 1.45 (shrunk from the unpenalised 2.0714).
+
+=== Q
+topic: Linear regression
+kind: calc
+diff: 1
+source: W1 gradient descent (LMS update on one sample)
+--- stem
+The cost for one training example is J(theta) = (y - theta x)^2 with x = 3 and y = 7. Starting from theta = 1, one gradient-descent step with learning rate 0.01 is theta <- theta - 0.01 * dJ/dtheta. What is the new theta?
+--- A*
+1.24
+>> dJ/dtheta = -2x(y - theta x) = -2 * 3 * 4 = -24. So theta = 1 - 0.01 * (-24) = 1.24.
+--- B
+1.12
+>> This drops the factor 2 from the derivative (using -12). The derivative of a square has a 2.
+--- C
+1.08
+>> This drops the factor x = 3 (using -8). The derivative with respect to theta carries the feature value x.
+--- D
+0.76
+>> This has the sign of the update wrong (1 - 0.24). The derivative is negative, so subtracting it increases theta.
+--- explain
+Prediction: theta * x = 3 and the error is y - 3 = 4. dJ/dtheta = -2 * x * error = -24. New theta = 1 - 0.01 * (-24) = 1.24.
+
+=== Q
+topic: Linear regression
+kind: concept
+diff: 2
+source: W1 gradient descent: choice of learning rate (example J = (theta - 3)^2)
+--- stem
+Gradient descent minimises J(theta) = (theta - 3)^2 with the update theta <- theta - alpha * dJ/dtheta, starting at theta = 0. Each step multiplies the distance (theta - 3) by (1 - 2 alpha). For which learning rate does theta move further and further from 3 with every step?
+--- A
+alpha = 0.1
+>> The factor is 0.8, so the distance shrinks by 20% each step: slow but convergent.
+--- B
+alpha = 0.5
+>> The factor is 0, so theta reaches 3 after a single step.
+--- C
+alpha = 1.0
+>> The factor is -1, so theta bounces between 0 and 6 forever. It does not grow, but it does not converge either.
+--- D*
+alpha = 1.2
+>> The factor is -1.4, so the distance grows by 40% each step and the iterates diverge: 0, 7.2, -2.88, 11.23, ...
+--- explain
+Convergence needs |1 - 2 alpha| < 1, that is 0 < alpha < 1. At alpha = 1.2 the factor is -1.4 and the distance from 3 is multiplied by 1.4 each step, so it grows without bound.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 1
+source: R2 bias-variance tradeoff (target diagram, underfitting)
+--- stem
+A model has a high error on the training data, and its error on the test data is about the same. Which diagnosis fits best?
+--- A*
+High bias and low variance (underfitting).
+>> The model is too simple to capture the pattern, so it is poor on both training and test data.
+--- B
+Low bias and high variance (overfitting).
+>> An overfitted model does very well on the training data and badly on the test data. Here the two errors are similar.
+--- C
+Low bias and low variance.
+>> A model like this would have a low error on training data, not a high one.
+--- D
+High variance, with a test error better than the training error.
+>> The question says the two errors are about the same, and a test error better than the training error is not a sign of high variance.
+--- explain
+High training error means the model cannot fit even the data it sees: high bias (underfitting). The test error being about the same shows the gap between training and test error is small, so variance is low.
+
+=== Q
+topic: Model selection
+kind: calc
+diff: 2
+source: R2 bias-variance decomposition; lab variation (simulated predictions)
+--- stem
+At one input x0 the true function value is f(x0) = 2.0, and the noise has variance 0.04. Four models, each trained on a different data set, predict 2.4, 2.6, 2.2 and 2.8 at x0. Estimate the expected squared test error at x0 as bias^2 + variance + noise variance, taking the variance as the mean squared deviation of the four predictions from their own mean (divide by 4).
+--- A*
+0.34
+>> The mean prediction is 2.5, so bias^2 = 0.5^2 = 0.25. The variance is (0.01 + 0.01 + 0.09 + 0.09)/4 = 0.05. Adding the noise 0.04 gives 0.34.
+--- B
+0.30
+>> This leaves out the irreducible noise variance 0.04 (0.25 + 0.05). The test error includes it.
+--- C
+0.3567
+>> This divides the sum of squared deviations by 3 for the variance (0.0667). The question says to divide by 4.
+--- D
+0.59
+>> This uses the bias 0.5 instead of its square 0.25. Bias enters the error squared.
+--- explain
+Mean prediction = (2.4 + 2.6 + 2.2 + 2.8)/4 = 2.5, so bias = 0.5 and bias^2 = 0.25. Variance = (0.1^2 + 0.1^2 + 0.3^2 + 0.3^2)/4 = 0.2/4 = 0.05. Expected error = 0.25 + 0.05 + 0.04 = 0.34.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 1
+source: W1 regularisation; R2 bias-variance tradeoff
+--- stem
+In ridge regression, the penalty strength lambda is increased from a small value to a large one. What typically happens to the bias and the variance of the fitted model?
+--- A*
+Bias increases and variance decreases.
+>> A larger lambda shrinks the weights towards 0, which gives a simpler model: more bias, less variance.
+--- B
+The bias decreases and the variance increases.
+>> That is what happens when a model becomes more complex, for example with a smaller lambda or more features.
+--- C
+Both the bias and the variance decrease.
+>> There is a trade-off: the simpler model gains stability but loses flexibility, so the bias does not fall.
+--- D
+Both the bias and the variance increase.
+>> The variance falls as the weights are shrunk, because the fit depends less on the particular training sample.
+--- explain
+Larger lambda means a simpler, more constrained model: higher bias, lower variance. Smaller lambda moves the other way, towards overfitting.
+
+=== Q
+topic: Model selection
+kind: concept
+diff: 2
+source: W1 train, validation and test data; model selection by validation error
+--- stem
+A ridge regression is fitted for several values of lambda. The mean squared errors are:
+
+| lambda | 0.01 | 0.1 | 1 | 10 | 100 |
+|---|---|---|---|---|---|
+| training | 0.40 | 0.55 | 0.90 | 1.60 | 2.80 |
+| validation | 2.10 | 1.50 | 1.10 | 1.35 | 2.75 |
+
+Which lambda should be chosen for the final model?
+--- A
+0.01
+>> This has the lowest training error, but training error always falls as lambda gets smaller. It is not a guide to new data, and the validation error is the worst of the small values.
+--- B*
+1
+>> The validation error is lowest here, 1.10. We choose the hyperparameter on validation data.
+--- C
+10
+>> The validation error 1.35 is higher than at lambda = 1. This model is simpler but underfits a little.
+--- D
+100
+>> This model underfits: both its training error and its validation error are large.
+--- explain
+Choose lambda by the lowest validation error, which is 1.10 at lambda = 1. The training error rises steadily with lambda, as expected, and the test set is kept for the final report only.

@@ -1,0 +1,920 @@
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 2
+source: W3 Bayes theorem (class posterior with k classes, total probability); style of practice exam Q3 and Q23
+--- stem
+A factory has three machines. Machine A makes 40% of the items, machine B makes 35% and machine C makes 25%. The fractions of defective items are 1% for A, 3% for B and 4% for C. An item is picked at random from the whole output and it is defective. What is the probability that it was made by machine C? (Round to 4 decimals.)
+--- A*
+0.4082
+>> Right. P(defective) = 0.4(0.01) + 0.35(0.03) + 0.25(0.04) = 0.0245, and P(C | defective) = 0.25(0.04)/0.0245 = 0.01/0.0245 = 0.4082.
+--- B
+0.4286
+>> This is P(B | defective) = 0.0105/0.0245, the posterior of the wrong machine. Machine B contributes 0.0105 and machine C contributes 0.0100, which is why the two are close.
+--- C
+0.5000
+>> This is what you get by ignoring the production shares: 0.04/(0.01 + 0.03 + 0.04) = 0.5. The prior (how much each machine makes) must multiply the defect rate.
+--- D
+0.1633
+>> This is P(A | defective) = 0.004/0.0245. Machine A makes many items but has a low defect rate, so it is the smallest share of the defective items, not machine C's.
+--- explain
+Total probability gives the denominator: P(def) = 0.4(0.01) + 0.35(0.03) + 0.25(0.04) = 0.004 + 0.0105 + 0.010 = 0.0245. Bayes: P(C | def) = 0.010/0.0245 = 0.4082. (The three posteriors are 0.1633, 0.4286, 0.4082 and add to 1.)
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 3
+source: W3 Bayes theorem; reworks the two-jar question of practice exam Q23 with three jars and a die prior
+--- stem
+A fair die is rolled. On a 1 you draw one ball from jar A, on a 2 or 3 you draw from jar B, and on a 4, 5 or 6 you draw from jar C. Jar A is 80% red, jar B is 50% red and jar C is 20% red. The ball you draw is red. What is the probability that it came from jar B? (Round to 4 decimals.)
+--- A
+0.3333
+>> This is the prior P(B) = 2/6, which ignores the red ball. Red balls are more common in the first two jars than in jar C, so the posterior must move away from the prior.
+--- B*
+0.4167
+>> Right. Priors are 1/6, 2/6, 3/6, so P(red) = (1/6)(0.8) + (2/6)(0.5) + (3/6)(0.2) = 0.4 and P(B | red) = (2/6)(0.5)/0.4 = 0.1667/0.4 = 0.4167.
+--- C
+0.4000
+>> This is P(red), the denominator of Bayes rule, not the posterior. The numerator (2/6)(0.5) has to be divided by it.
+--- D
+0.2500
+>> This is P(C | red) = 0.1/0.4, the posterior of the jar with the most likely roll but the least red balls. The question asks about jar B.
+--- explain
+Priors from the die: P(A) = 1/6, P(B) = 2/6, P(C) = 3/6. Total probability: P(red) = 0.1333 + 0.1667 + 0.1 = 0.4. Bayes: P(B | red) = 0.1667/0.4 = 0.4167. (Posteriors: A 0.3333, B 0.4167, C 0.25.)
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 2
+source: W3 Bayes theorem and tutorial Q1 (rare condition, false alarms)
+--- stem
+A screening test is used for a condition that 2% of people have. The test is positive for 90% of the people who have the condition and also positive for 5% of the people who do not. Of all the people who test positive, what fraction do NOT have the condition? (Round to 4 decimals.)
+--- A
+0.2687
+>> This is the fraction of positives who DO have the condition: P(condition | positive) = 0.018/0.067. The question asks for the complement.
+--- B*
+0.7313
+>> Right. Per person: true positives 0.02(0.9) = 0.018, false positives 0.98(0.05) = 0.049. So 0.049/(0.018 + 0.049) = 0.049/0.067 = 0.7313: most positives are false alarms because the condition is rare.
+--- C
+0.0526
+>> This is 0.05/(0.9 + 0.05), which compares the two test rates and forgets how many people are in each group (2% versus 98%).
+--- D
+0.0500
+>> This is the false positive rate P(positive | no condition), a different quantity from P(no condition | positive). Conditioning on the other event changes the answer.
+--- explain
+Take 10,000 people: 200 have the condition, 180 of them test positive; 9,800 do not, and 5% of them (490) test positive. Positives: 180 + 490 = 670, of which 490 are false. 490/670 = 0.7313.
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 1
+source: W3 Basic probability rules (total probability)
+--- stem
+A bag holds three coins: a fair coin (P(heads) = 0.5), a coin with P(heads) = 0.7 and a coin with P(heads) = 0.2. One coin is picked uniformly at random and flipped once. What is the probability of heads? (Round to 4 decimals.)
+--- A
+0.4500
+>> This is the average of 0.7 and 0.2 only, so the fair coin has been left out. All three coins are equally likely to be picked.
+--- B*
+0.4667
+>> Right. Total probability: (1/3)(0.5) + (1/3)(0.7) + (1/3)(0.2) = 1.4/3 = 0.4667.
+--- C
+0.5000
+>> This treats the flip as if the coin were fair. The 0.7 and 0.2 coins do not cancel: their average is 0.45, and with the fair coin it is 0.4667.
+--- D
+0.0700
+>> This multiplies the three probabilities (0.5 x 0.7 x 0.2). Total probability adds the cases, each weighted by 1/3, it does not multiply them.
+--- explain
+P(H) = sum over coins of P(H | coin) P(coin) = (0.5 + 0.7 + 0.2)/3 = 1.4/3 = 0.4667.
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 3
+source: W3 Bayes theorem and likelihood of a specific sequence; style of practice exam Q3
+--- stem
+You have two coins, one fair and one biased with P(heads) = 0.75. You pick one of them with equal chance and flip it three times, getting the exact sequence H, H, T. What is the probability that you picked the biased coin? (Round to 4 decimals.)
+--- A
+0.6923
+>> This drops the tail: 0.75^2 = 0.5625 against 0.5^2 = 0.25 gives 0.5625/0.8125 = 0.6923. The T in the sequence has to be included (0.25 for the biased coin, 0.5 for the fair one).
+--- B
+0.2727
+>> This swaps the roles and uses P(tails) = 0.75 for the biased coin, giving 0.75(0.25)^2 = 0.046875 against 0.125. The biased coin has P(heads) = 0.75, so its H, H, T likelihood is 0.75 x 0.75 x 0.25.
+--- C*
+0.5294
+>> Right. Biased: 0.75 x 0.75 x 0.25 = 0.140625. Fair: 0.5^3 = 0.125. With equal priors, 0.140625/(0.140625 + 0.125) = 0.5294.
+--- D
+0.5000
+>> This is the prior. Because the sequence is slightly more likely under the biased coin (0.1406 against 0.125), the posterior moves a little above 0.5.
+--- explain
+Likelihood of H, H, T: biased 0.75 x 0.75 x 0.25 = 0.140625; fair 0.5 x 0.5 x 0.5 = 0.125. Equal priors cancel: P(biased | data) = 0.140625/(0.140625 + 0.125) = 0.5294.
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 2
+source: W3 Formula sheet (odds form of Bayes theorem)
+--- stem
+In a mail filter, 20% of mails are spam. The word "prize" appears in 60% of spam mails and in 10% of ham (non-spam) mails. A mail contains "prize". What are the posterior odds spam : ham, written as a single number?
+--- A
+6.0
+>> This is only the likelihood ratio 0.6/0.1. Posterior odds are the likelihood ratio times the prior odds.
+--- B
+0.6
+>> This is the posterior PROBABILITY of spam (0.12/0.20). The question asks for odds, which is P(spam)/P(ham) = 0.6/0.4.
+--- C
+0.25
+>> This is the prior odds 0.2/0.8 before looking at the word. The word "prize" favours spam, so the odds must rise.
+--- D*
+1.5
+>> Right. Prior odds 0.2/0.8 = 0.25, likelihood ratio 0.6/0.1 = 6, posterior odds = 0.25 x 6 = 1.5 (a posterior probability of 0.6).
+--- explain
+Posterior odds = likelihood ratio x prior odds = (0.6/0.1) x (0.2/0.8) = 6 x 0.25 = 1.5. Check with the direct route: 0.2(0.6) = 0.12 for spam and 0.8(0.1) = 0.08 for ham, and 0.12/0.08 = 1.5.
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 1
+source: W3 Basic probability rules (conditional probability from a table)
+--- stem
+200 commuters were asked how they travel and what the weather was like that day.
+
+| | Bus | Bike | Car |
+|---|---|---|---|
+| Rain | 40 | 10 | 50 |
+| Dry | 30 | 50 | 20 |
+
+Given that a commuter did NOT take the bus, what is the probability that it was raining? (Round to 4 decimals.)
+--- A
+0.3000
+>> This is P(Rain and not bus) = 60/200, the joint probability. A conditional probability divides by the number of not-bus commuters (130), not by all 200.
+--- B
+0.6000
+>> This is P(not bus | Rain) = 60/100, the reverse conditional. The condition in the question is "did not take the bus", so the denominator is the not-bus group.
+--- C
+0.5714
+>> This is P(Rain | Bus) = 40/70, which conditions on taking the bus instead of not taking it.
+--- D*
+0.4615
+>> Right. Not bus means Bike or Car: 10 + 50 + 50 + 20 = 130 commuters. Of them 10 + 50 = 60 had rain, so 60/130 = 0.4615.
+--- explain
+P(Rain | not bus) = P(Rain and not bus)/P(not bus) = 60/130 = 0.4615. Always check which group the condition selects: here Bike and Car, 130 commuters.
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 2
+source: W3 Basic probability rules; style of practice exam Q18 (loaded die)
+--- stem
+A loaded die shows face k with probability proportional to k (so face 6 is six times as likely as face 1). Let X be the outcome. What is P(X = 5 | X > 2)? (Round to 4 decimals.)
+--- A
+0.2381
+>> This is P(X = 5) = 5/21 with no conditioning. Knowing X > 2 removes faces 1 and 2, so the denominator should shrink.
+--- B
+0.2500
+>> This treats faces 3, 4, 5, 6 as equally likely (1/4), which would be right for a fair die but not for this one.
+--- C
+0.4167
+>> This is 5/12, which leaves face 6 out of the conditioning event. X > 2 means 3, 4, 5 or 6.
+--- D*
+0.2778
+>> Right. P(X = k) = k/21, so P(X > 2) = (3 + 4 + 5 + 6)/21 = 18/21 and P(X = 5 | X > 2) = (5/21)/(18/21) = 5/18 = 0.2778.
+--- explain
+The weights are 1, 2, ..., 6 with total 21, so P(X = k) = k/21. P(X > 2) = 18/21. Then P(X = 5 | X > 2) = P(X = 5)/P(X > 2) = 5/18 = 0.2778.
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 1
+source: W3 Basic probability rules (conditional probability, without replacement)
+--- stem
+Two cards are dealt, one after the other and without replacement, from a well-shuffled 52-card deck (13 hearts). Given that the first card is a heart, what is the probability that the second card is also a heart? (Round to 4 decimals.)
+--- A
+0.2549
+>> This is 13/51, which forgets that the first heart has been removed. Only 12 hearts remain.
+--- B*
+0.2353
+>> Right. After a heart is dealt, 51 cards remain and 12 of them are hearts, so 12/51 = 0.2353.
+--- C
+0.2500
+>> This is 13/52, the answer if the first card were put back (or if its value were unknown). Without replacement the deck changes.
+--- D
+0.2308
+>> This is 12/52. The 12 hearts are right but the deck now has 51 cards, not 52.
+--- explain
+Conditioning on the first card being a heart leaves 51 cards with 12 hearts. P(second heart | first heart) = 12/51 = 0.2353.
+
+=== Q
+topic: Probability and Bayes
+kind: concept
+diff: 2
+source: W3 Basic probability rules (independence, addition rule, conditional probability)
+--- stem
+Events A and B have P(A) = 0.6, P(B) = 0.5 and P(A and B) = 0.2. (Select one or more.) Which statements are correct?
+--- A*
+P(A or B) = 0.9
+>> Correct. Addition rule: P(A) + P(B) - P(both) = 0.6 + 0.5 - 0.2 = 0.9.
+--- B*
+P(A | B) = 0.4
+>> Correct. P(A | B) = P(both)/P(B) = 0.2/0.5 = 0.4.
+--- C
+The two events are independent
+>> Incorrect. Independence needs P(both) = P(A)P(B) = 0.3, but the joint probability is 0.2. In fact P(A | B) = 0.4 differs from P(A) = 0.6.
+--- D
+P(B | A) = 0.5
+>> Incorrect. P(B | A) = 0.2/0.6 = 0.3333. The value 0.5 is P(B), the unconditional probability.
+--- explain
+Check each from the three given numbers: the addition rule gives 0.9, conditioning on B gives 0.4, conditioning on A gives 1/3. Independence would need the joint to equal 0.6 x 0.5 = 0.3, which it does not (0.2).
+
+=== Q
+topic: Probability and Bayes
+kind: calc
+diff: 3
+source: W3 tutorial Q1(c) (two conditionally independent tests)
+--- stem
+A condition is present in 2% of people. A test is positive for 90% of people who have it and for 10% of people who do not. A person is tested twice and both results are positive. Given the person's true status, the two test results are independent. What is the probability that the person has the condition? (Round to 4 decimals.)
+--- A
+0.1552
+>> This is the posterior after only one positive test (0.018/0.116). The second positive test is further evidence and must raise it.
+--- B
+0.1419
+>> This squares the true positive rate but not the false positive rate: 0.02(0.81)/(0.02(0.81) + 0.98(0.1)) = 0.0162/0.1142. Both likelihoods need a second factor (0.9^2 and 0.1^2).
+--- C
+0.8100
+>> This is 0.9 x 0.9, the probability that someone WITH the condition tests positive twice. It is a likelihood, not a posterior, because it ignores the prior and the people without the condition.
+--- D*
+0.6231
+>> Right. With the condition: 0.02(0.9^2) = 0.0162. Without: 0.98(0.1^2) = 0.0098. So 0.0162/(0.0162 + 0.0098) = 0.6231.
+--- explain
+Given the status the results are independent, so P(TT | D) = 0.9^2 = 0.81 and P(TT | not D) = 0.1^2 = 0.01. Then P(D | TT) = 0.02(0.81)/(0.02(0.81) + 0.98(0.01)) = 0.0162/0.0260 = 0.6231. (Equivalently, use 0.1552 from one test as the new prior.)
+
+=== Q
+topic: Probability and Bayes
+kind: concept
+diff: 2
+source: W3 MAP and ML
+--- stem
+(Select one or more.) Which statements about the MAP hypothesis and the ML hypothesis are correct?
+--- A*
+The MAP hypothesis maximises P(D | h) P(h), so P(D) is not needed to find it.
+>> Correct. P(D) is the same for every hypothesis, so dropping it does not change which hypothesis has the largest value (it only stops the scores adding to 1).
+--- B*
+If all hypotheses have the same prior, the MAP and ML hypotheses are the same.
+>> Correct. An equal prior multiplies every candidate by the same constant, so the ranking by P(D | h) P(h) equals the ranking by P(D | h).
+--- C
+The ML hypothesis maximises the posterior P(h | D) whatever the priors are.
+>> Incorrect. ML maximises only the likelihood P(D | h) and ignores the prior. It maximises the posterior only when the priors are equal.
+--- D
+To find the MAP hypothesis one must first compute P(D) exactly.
+>> Incorrect. P(D) is a common divisor and can be skipped when you only want the best hypothesis. You need it only to turn scores into proper posterior probabilities.
+--- explain
+MAP: argmax of likelihood times prior. ML: argmax of likelihood alone. They agree for equal priors, and P(D) never affects the argmax.
+
+=== Q
+topic: Probability and Bayes
+kind: concept
+diff: 1
+source: W3 Bayes theorem (names of the terms)
+--- stem
+In Bayes theorem P(h | D) = P(D | h) P(h) / P(D), with h a hypothesis and D the observed data, which pairing of name and term is correct?
+--- A
+P(h | D) is the prior and P(h) is the posterior.
+>> The names are swapped. The prior is what you believe before seeing the data, P(h), and the posterior is the belief after seeing it, P(h | D).
+--- B
+P(D | h) is the posterior and P(D) is the likelihood.
+>> P(D | h) is how probable the data is under the hypothesis (the likelihood). P(D) is the overall probability of the data, the normalising marginal.
+--- C*
+P(D | h) is the likelihood and P(h) is the prior.
+>> Correct. Likelihood times prior, divided by the marginal P(D), gives the posterior P(h | D).
+--- D
+P(D) is the prior and P(h | D) is the likelihood.
+>> P(D) is the marginal probability of the data and P(h | D) is the posterior. The prior belongs to the hypothesis, P(h).
+--- explain
+Posterior = likelihood x prior / marginal: P(h | D) is the posterior, P(D | h) the likelihood, P(h) the prior, P(D) the marginal.
+
+=== Q
+topic: Naive Bayes
+kind: calc
+diff: 2
+source: W3 Naive Bayes classifier (counting, per-class conditionals); style of practice exam Q21
+--- stem
+Training data for predicting whether a student cycles to class:
+
+| Weather | Weekend | Cycle |
+|---|---|---|
+| sunny | yes | Y |
+| sunny | no | Y |
+| sunny | yes | Y |
+| rainy | yes | Y |
+| rainy | no | N |
+| sunny | no | N |
+| rainy | no | N |
+| rainy | yes | N |
+| sunny | no | N |
+
+Using Naive Bayes with plain counts (no smoothing), what is P(Cycle = Y | Weather = sunny, Weekend = yes)? (Round to 4 decimals.)
+--- A
+0.7826
+>> This divides the counts by all 9 rows instead of the rows of the class, which estimates the joint P(feature, class) and not P(feature | class). The conditionals must use the class size (4 or 5).
+--- B*
+0.8491
+>> Right. Y: (4/9)(3/4)(3/4) = 0.25. N: (5/9)(2/5)(1/5) = 0.0444. Normalise: 0.25/(0.25 + 0.0444) = 0.8491.
+--- C
+0.8755
+>> This leaves out the class priors and compares (3/4)(3/4) = 0.5625 with (2/5)(1/5) = 0.08. The prior 4/9 against 5/9 matters, so it is a different (ML-style) score.
+--- D
+1.0000
+>> This uses the raw count of rows with sunny and weekend together: 2 in class Y and none in class N. Naive Bayes multiplies the separate conditionals (3/4)(3/4) instead, so class N does not get exactly 0 here.
+--- explain
+Priors: P(Y) = 4/9, P(N) = 5/9. Class Y (4 rows): sunny 3/4, weekend yes 3/4. Class N (5 rows): sunny 2/5, weekend yes 1/5. Scores: Y 4/9 x 3/4 x 3/4 = 0.25; N 5/9 x 2/5 x 1/5 = 0.0444. Posterior of Y = 0.25/0.2944 = 0.8491.
+
+=== Q
+topic: Naive Bayes
+kind: calc
+diff: 2
+source: W3 Naive Bayes (NB product versus raw joint count); style of practice exam Q21
+--- stem
+Fruit data (colour, size, tasty):
+
+| Colour | Size | Tasty |
+|---|---|---|
+| red | big | Yes |
+| red | big | Yes |
+| red | small | Yes |
+| green | big | Yes |
+| green | small | Yes |
+| red | small | No |
+| green | big | No |
+| green | small | No |
+
+(Select one or more.) Assume colour and size are conditionally independent given Tasty. Which statements are correct?
+--- A*
+P(colour = red | Tasty = Yes) = 3/5
+>> Correct. Among the 5 Yes rows, 3 are red, so 3/5. The denominator is the class size.
+--- B*
+The Naive Bayes estimate of P(colour = red, size = big | Tasty = Yes) is 9/25.
+>> Correct. Under the assumption the joint is the product of the two conditionals: (3/5)(3/5) = 9/25.
+--- C
+The Naive Bayes estimate of P(colour = red, size = big | Tasty = Yes) is 2/5.
+>> Incorrect. 2/5 is the raw fraction of Yes rows that are red AND big, the empirical joint. Naive Bayes does not count combinations, it multiplies the per-feature conditionals, which gives 9/25.
+--- D
+P(colour = red | Tasty = Yes) = 3/8
+>> Incorrect. 3/8 divides by all 8 rows, which is P(red and Yes). The conditional must divide by the number of Yes rows (5).
+--- explain
+Yes rows: 5. Red among them: 3, big among them: 3, red and big together: 2. Conditional P(red | Yes) = 3/5; NB product (3/5)(3/5) = 9/25 = 0.36, whereas the raw joint count is 2/5 = 0.4.
+
+=== Q
+topic: Naive Bayes
+kind: calc
+diff: 1
+source: W3 Zero-frequency problem and smoothing
+--- stem
+A categorical feature Colour has 3 possible values. Among the 10 training rows of class Yes, 4 have Colour = red. With Laplace smoothing (add 1 to every value's count in the class), what is the estimate of P(Colour = red | Yes)? (Round to 4 decimals.)
+--- A
+0.4000
+>> This is the unsmoothed frequency 4/10. Smoothing changes both the count (+1) and the class total (+3, one per possible value).
+--- B
+0.4545
+>> This is 5/11: it adds 1 to the numerator and only 1 to the denominator. The denominator must grow by the number of values (3), so that the three estimates still sum to 1.
+--- C*
+0.3846
+>> Right. (4 + 1)/(10 + 3) = 5/13 = 0.3846. The 3 is the number of values of this feature. The three smoothed estimates then sum to 1.
+--- D
+0.4167
+>> This is 5/12, which adds 2 to the denominator (for example the number of features). The correct add-on is the number of values of this attribute, here 3.
+--- explain
+Laplace: (count + 1)/(class count + number of values) = (4 + 1)/(10 + 3) = 5/13 = 0.3846.
+
+=== Q
+topic: Naive Bayes
+kind: concept
+diff: 1
+source: W3 Zero-frequency problem and smoothing; Naive Bayes pros and cons
+--- stem
+(Select one or more.) Which statements about Naive Bayes are correct?
+--- A*
+If a feature value never occurs with a class in the training data, the unsmoothed estimate is 0 and the whole score of that class is 0.
+>> Correct. The score is a product, so a single zero factor wipes it out, whatever the other features say.
+--- B*
+Laplace smoothing adds a pseudo-count to each value's count, so no estimate is exactly 0.
+>> Correct. Adding 1 (or another constant) to every count in the class keeps all estimates positive and pulls them slightly towards uniform.
+--- C
+Naive Bayes cannot be used when a feature is numeric.
+>> Incorrect. For numeric features a common choice is a Gaussian per class (mean and variance estimated within each class), used in the same product.
+--- D
+Naive Bayes assumes the features are independent of each other overall, whether or not the class is known.
+>> Incorrect. The assumption is independence GIVEN the class. Features can be strongly dependent overall, for example through the class itself.
+--- explain
+Zero counts kill the product, smoothing fixes that, numeric features use a density such as a Gaussian, and the independence is conditional on the class.
+
+=== Q
+topic: Naive Bayes
+kind: concept
+diff: 2
+source: W3 Naive Bayes subtleties and pros and cons; style of practice exam Q6
+--- stem
+Consider these statements about Naive Bayes.
+
+1. It is a generative model: it estimates P(x | class) and P(class).
+2. Its predicted class probabilities are usually well calibrated, even when the features are strongly dependent given the class.
+3. For a numeric feature, a common choice is to fit one Gaussian per class.
+4. Repeating the same feature many times can make its predictions over-confident.
+
+Which statement is incorrect?
+--- A
+Statement 1 is incorrect
+>> Statement 1 is correct. Naive Bayes models how each class generates the features, P(x | class), together with the class prior, and then uses Bayes rule.
+--- B*
+Statement 2 is incorrect
+>> Right. Naive Bayes is a good classifier but a poor probability estimator: dependent or repeated features are counted as independent evidence, which pushes the probabilities towards 0 and 1.
+--- C
+Statement 3 is incorrect
+>> Statement 3 is correct. Gaussian Naive Bayes estimates a mean and a variance per class for each numeric feature.
+--- D
+Statement 4 is incorrect
+>> Statement 4 is correct. Identical copies are treated as independent evidence, so each copy multiplies the odds again.
+--- explain
+Naive Bayes often picks the right class even if its probabilities are poor. Statement 2 claims the opposite of what the course says: the probabilities are typically over-confident when the independence assumption fails.
+
+=== Q
+topic: Naive Bayes
+kind: calc
+diff: 3
+source: W3 Naive Bayes with a numeric attribute (Gaussian density, per-class parameters)
+--- stem
+A Naive Bayes classifier uses one numeric feature x. Given the class, x is Gaussian with density f(x) = exp(-(x - μ)^2 / (2σ^2)) / (sqrt(2π) σ). Class A has μ = 70, σ = 5 and prior 0.3. Class B has μ = 60, σ = 10 and prior 0.7. For x = 66, what is P(A | x)? (Round to 4 decimals.)
+--- A
+0.6349
+>> This leaves out the priors and compares only the two densities (0.0579 and 0.0333). The prior 0.3 against 0.7 pulls the answer well below this.
+--- B
+0.8023
+>> This swaps the priors (0.7 for A, 0.3 for B). Class A has the prior 0.3.
+--- C*
+0.4270
+>> Right. f_A(66) = 0.0579 and f_B(66) = 0.0333. Scores: A 0.3(0.0579) = 0.01738, B 0.7(0.0333) = 0.02333. P(A | x) = 0.01738/(0.01738 + 0.02333) = 0.4270.
+--- D
+0.2714
+>> This drops the 1/(sqrt(2π) σ) factor and uses only the exponential terms. The factor differs between classes (σ = 5 against 10), so it cannot be dropped.
+--- explain
+f_A(66) = exp(-16/50)/(sqrt(2π)(5)) = 0.7261 x 0.0798 = 0.0579. f_B(66) = exp(-36/200)/(sqrt(2π)(10)) = 0.8353 x 0.0399 = 0.0333. Weighted: 0.3(0.0579) = 0.0174, 0.7(0.0333) = 0.0233. Posterior of A = 0.0174/0.0407 = 0.4270, so B is predicted.
+
+=== Q
+topic: Naive Bayes
+kind: calc
+diff: 2
+source: W3 MAP and ML; Bayes theorem with a third hypothesis
+--- stem
+Three hypotheses h1, h2, h3 have prior probabilities 0.6, 0.3 and 0.1. The observed data D has likelihood P(D | h) equal to 0.2, 0.5 and 0.9 under h1, h2 and h3 respectively. Which hypotheses are the MAP hypothesis and the ML hypothesis?
+--- A
+MAP: h1, ML: h3
+>> The MAP score is likelihood x prior: 0.12, 0.15, 0.09. Picking h1 uses the prior alone (0.6) and ignores that h2 explains the data better.
+--- B*
+MAP: h2, ML: h3
+>> Right. ML picks the largest likelihood (0.9, h3). MAP multiplies by the prior: 0.2(0.6) = 0.12, 0.5(0.3) = 0.15, 0.9(0.1) = 0.09, so h2 wins.
+--- C
+MAP: h3, ML: h2
+>> The labels are swapped. The largest likelihood (0.9) belongs to h3, so that is ML. The largest product with the prior (0.15) belongs to h2, which is MAP.
+--- D
+MAP: h2, ML: h2
+>> h2 does have the largest likelihood-times-prior, but ML ignores the prior. The largest likelihood alone is 0.9, which belongs to h3.
+--- explain
+MAP maximises P(D | h)P(h): 0.12, 0.15, 0.09, so h2. ML maximises P(D | h): 0.2, 0.5, 0.9, so h3. (Normalised posteriors: 0.333, 0.417, 0.25.)
+
+=== Q
+topic: Naive Bayes
+kind: concept
+diff: 2
+source: W3 tutorial Q1(c) and Naive Bayes assumption (conditional independence versus independence)
+--- stem
+A patient takes the same diagnostic test twice, with results T1 and T2. D means the patient has the disease. Which statement expresses "T1 and T2 are conditionally independent given D", the kind of assumption Naive Bayes makes?
+--- A*
+P(T1, T2 | D) = P(T1 | D) P(T2 | D)
+>> Correct. Once the disease status is known, the first result gives no extra information about the second, so the joint conditional probability factorises.
+--- B
+P(T1, T2) = P(T1) P(T2)
+>> This is plain (marginal) independence, which fails here: a positive first result makes disease, and hence a positive second result, more likely.
+--- C
+P(D | T1, T2) = P(D | T1) P(D | T2)
+>> This is not what conditional independence says. It multiplies two posteriors, which would not even sum to 1 over D.
+--- D
+P(T1 | D) = P(T2 | D)
+>> This says the two results are equally likely given D, which only means the two tests are equally reliable. It is not an independence statement.
+--- explain
+Conditional independence given D means P(T1, T2 | D) = P(T1 | D) P(T2 | D). It does not mean P(T1, T2) = P(T1) P(T2): the two results are dependent overall, through D.
+
+=== Q
+topic: Naive Bayes
+kind: calc
+diff: 3
+source: W3 Naive Bayes subtleties (redundant attributes counted twice)
+--- stem
+Two classes have equal priors. A binary feature F equals "yes" with probability 0.5 in class 1 and 0.2 in class 2. An analyst accidentally includes F twice, as two identical columns, in a Naive Bayes model. For an example with F = "yes" in both columns, what is the model's posterior P(class 1)? (Round to 4 decimals.)
+--- A*
+0.8621
+>> Right. Class 1: 0.5 x 0.5 x 0.5 = 0.125. Class 2: 0.5 x 0.2 x 0.2 = 0.02. Posterior 0.125/(0.125 + 0.02) = 0.25/0.29 = 0.8621.
+--- B
+0.7143
+>> This is the posterior when F is included once: 0.5/(0.5 + 0.2). The duplicate column is counted as a second independent piece of evidence, which raises the posterior.
+--- C
+0.9398
+>> This is the posterior for three copies of F (0.125/(0.125 + 0.008)). The model here has exactly two copies.
+--- D
+0.1379
+>> This is the posterior of class 2 (0.02/0.145), the complement. The question asks for class 1.
+--- explain
+With equal priors the posterior ratio is (0.5/0.2)^2 = 6.25, so P(class 1) = 6.25/7.25 = 0.8621. A single copy would give 2.5/3.5 = 0.7143. The extra copy adds no new information but Naive Bayes counts it again, which is why its probabilities are over-confident.
+
+=== Q
+topic: Likelihood
+kind: concept
+diff: 1
+source: R2 Maximum likelihood estimation; W2 Bernoulli log-likelihood
+--- stem
+The data x1, ..., xn are i.i.d. Bernoulli(p), each xi in {0, 1}, and s = x1 + ... + xn is the number of ones. Which expression is the log-likelihood of p (natural log)?
+--- A*
+s ln p + (n - s) ln(1 - p)
+>> Correct. The likelihood is p^s (1 - p)^(n - s), and taking the log turns the product into this sum: each one contributes ln p and each zero contributes ln(1 - p).
+--- B
+p^s (1 - p)^(n - s)
+>> This is the likelihood itself, a product, not its logarithm.
+--- C
+s ln p + n ln(1 - p)
+>> The zeros are counted n times instead of n - s times. Only the n - s observations equal to 0 contribute ln(1 - p).
+--- D
+n ln p + (n - s) ln(1 - p)
+>> The ones are counted n times instead of s times. Only the s observations equal to 1 contribute ln p.
+--- explain
+Per observation the probability is p^xi (1 - p)^(1 - xi). The product over i gives p^s (1 - p)^(n - s). Its log is s ln p + (n - s) ln(1 - p).
+
+=== Q
+topic: Likelihood
+kind: concept
+diff: 2
+source: R2 Maximum likelihood estimation (Gaussian density); style of practice exam Q24
+--- stem
+The data x1, ..., xn are i.i.d. N(μ, 1), with density exp(-(x - μ)^2 / 2) / sqrt(2π). Which expression is the log-likelihood of μ (natural log)?
+--- A
+-(1/2) ln(2π) - (1/2) sum of (xi - μ)^2
+>> The constant -(1/2) ln(2π) appears once per observation, so it must be multiplied by n. This version has it only once.
+--- B
+-(n/2) ln(2π) - (1/2) (sum of xi - μ)^2
+>> The square is applied after summing the xi, which is not the log of the product. Each observation has its own squared deviation, so the sum goes outside the square.
+--- C*
+-(n/2) ln(2π) - (1/2) sum of (xi - μ)^2
+>> Correct. ln of each density is -(1/2) ln(2π) - (1/2)(xi - μ)^2, and the sum over the n observations gives this expression.
+--- D
+product of (2π)^(-1/2) exp(-(1/2)(xi - μ)^2)
+>> This is the likelihood (the product of densities), not the log-likelihood. Taking the log turns it into a sum.
+--- explain
+ln of one density = -(1/2) ln(2π) - (1/2)(xi - μ)^2. Summing over i = 1..n gives -(n/2) ln(2π) - (1/2) sum (xi - μ)^2. Only the last term depends on μ, so maximising it means minimising the sum of squared deviations, which gives μ-hat = the sample mean.
+
+=== Q
+topic: Likelihood
+kind: calc
+diff: 2
+source: R2 Maximum likelihood (Bernoulli MLE) and log-likelihood value
+--- stem
+A coin is flipped 8 times and gives the exact sequence H T T H T T T H (3 heads, 5 tails). Treat the flips as i.i.d. Bernoulli(p) and use the probability of this exact sequence (no binomial coefficient). What is the natural-log log-likelihood of the data at the maximum likelihood estimate of p? (Round to 4 decimals.)
+--- A*
+-5.2925
+>> Right. p-hat = 3/8, so 3 ln(0.375) + 5 ln(0.625) = 3(-0.9808) + 5(-0.4700) = -2.9425 - 2.3500 = -5.2925.
+--- B
+-5.5452
+>> This is the log-likelihood at p = 0.5 (8 ln 0.5). The MLE is p-hat = 3/8, not 1/2, and it gives a higher (less negative) value.
+--- C
+-5.3953
+>> This is the log-likelihood at p = 0.3 (3 ln 0.3 + 5 ln 0.7). It is close to the maximum but lower. The MLE is the sample proportion 3/8 = 0.375.
+--- D
+-2.9425
+>> This is only the heads term, 3 ln(0.375). The 5 tails each contribute ln(0.625) too.
+--- explain
+The MLE of a Bernoulli parameter is the proportion of ones: p-hat = 3/8. Log-likelihood = 3 ln(3/8) + 5 ln(5/8) = -2.9425 - 2.3500 = -5.2925. No other p gives a larger value.
+
+=== Q
+topic: Likelihood
+kind: calc
+diff: 1
+source: R2 Maximum likelihood; practice exam style (exponential density)
+--- stem
+Four waiting times (in minutes) 0.5, 1, 1.5 and 3 are modelled as i.i.d. exponential with density p(x) = λ e^(-λx) for x ≥ 0. What is the maximum likelihood estimate of λ? (Round to 4 decimals.)
+--- A
+1.5000
+>> This is the sample mean, which estimates 1/λ (the mean waiting time), not λ itself.
+--- B*
+0.6667
+>> Right. The log-likelihood is n ln λ - λ sum of xi = 4 ln λ - 6λ. Setting the derivative 4/λ - 6 to zero gives λ-hat = n/sum of xi = 4/6 = 1/mean = 0.6667.
+--- C
+0.1667
+>> This is 1/sum of xi = 1/6, which forgets the factor n in the numerator. The derivative of n ln λ is n/λ.
+--- D
+0.2500
+>> This is 1/n, which ignores the data values entirely. The MLE depends on the sum of the observations.
+--- explain
+ln L(λ) = n ln λ - λ sum xi = 4 ln λ - 6λ. Derivative: 4/λ - 6 = 0, so λ-hat = 4/6 = 0.6667, the reciprocal of the mean 1.5.
+
+=== Q
+topic: Likelihood
+kind: calc
+diff: 2
+source: R2 Maximum likelihood estimation (Gaussian variance divides by n)
+--- stem
+Three measurements 1, 2 and 6 are modelled as i.i.d. Gaussian with unknown mean and variance. What is the maximum likelihood estimate of the variance σ^2? (Round to 4 decimals.)
+--- A
+7.0000
+>> This is the sample variance with n - 1 (14/2). It is unbiased, but the maximum likelihood estimate divides by n.
+--- B*
+4.6667
+>> Right. The mean is 3, the squared deviations are 4, 1, 9 (sum 14), and the MLE divides by n = 3: 14/3 = 4.6667.
+--- C
+2.1602
+>> This is the square root of 4.6667, the standard deviation. The question asks for the variance σ^2.
+--- D
+2.6458
+>> This is sqrt(7), the standard deviation with n - 1. It is neither the variance nor the divide-by-n estimate.
+--- explain
+mu-hat = (1 + 2 + 6)/3 = 3. Squared deviations: 4, 1, 9, sum 14. The MLE is sigma^2-hat = 14/3 = 4.6667 (dividing by n, not n - 1).
+
+=== Q
+topic: Likelihood
+kind: concept
+diff: 1
+source: R2 Maximum likelihood estimation (why use the log)
+--- stem
+Why do we usually maximise the log-likelihood instead of the likelihood itself for i.i.d. data?
+--- A*
+It turns the product over data points into a sum and does not change the maximiser.
+>> Correct. The log is strictly increasing, so the same parameter value gives the maximum, and a sum is much easier to differentiate than a product.
+--- B
+It moves the maximum to a value closer to the true parameter.
+>> The log does not move the maximum at all: the location of the maximum is unchanged (only the height is different).
+--- C
+The likelihood has no maximum but the log-likelihood always has one.
+>> Both have their maximum at the same parameter value, so if one exists, the other does too. The log is a convenience, not a fix for existence.
+--- D
+The log-likelihood is a probability distribution over the parameter.
+>> Neither the likelihood nor the log-likelihood is a distribution over the parameter. They are functions of the parameter with the data fixed and need not sum or integrate to 1.
+--- explain
+log is monotone increasing, so argmax L = argmax ln L, while ln of a product is a sum of logs. That makes derivatives and numerics easier.
+
+=== Q
+topic: Likelihood
+kind: concept
+diff: 2
+source: R2 Maximum likelihood estimation; Exam traps
+--- stem
+(Select one or more.) Which statements about maximum likelihood estimation are correct?
+--- A*
+For fixed data, the likelihood is a function of the parameter.
+>> Correct. We hold the observed data fixed and ask how well each candidate parameter value explains it.
+--- B
+Viewed as a function of the parameter, the likelihood always integrates to 1.
+>> Incorrect. The likelihood is not a distribution over the parameter, so it need not integrate or sum to 1 over the parameter values.
+--- C*
+The parameter that maximises the likelihood also maximises the log-likelihood.
+>> Correct. The log is strictly increasing, so the location of the maximum is unchanged (the value at the maximum is not).
+--- D
+The maximum likelihood estimate of a Gaussian variance divides by n - 1.
+>> Incorrect. The MLE divides by n (and is slightly biased). Dividing by n - 1 gives the unbiased sample variance, which is a different estimator.
+--- explain
+The likelihood is a curve over parameter values with the data fixed. Logs keep the argmax. The Gaussian variance MLE uses n, not n - 1.
+
+=== Q
+topic: Likelihood
+kind: calc
+diff: 2
+source: W3 MAP and ML (likelihood of a hypothesis); R2 Likelihood
+--- stem
+A coin is either fair (p = 0.5) or biased (p = 0.8), where p is the probability of heads. You observe the exact sequence H, H, H, T. By what factor is the observed sequence more likely under p = 0.8 than under p = 0.5?
+--- A
+0.6104
+>> This is the inverse ratio 0.0625/0.1024, which says how much MORE likely the data is under p = 0.5. The question asks about p = 0.8.
+--- B
+0.1024
+>> This is the likelihood of the data under p = 0.8 (0.8^3 x 0.2). A ratio needs the likelihood under p = 0.5 as well.
+--- C*
+1.6384
+>> Right. Under p = 0.8: 0.8^3 x 0.2 = 0.1024. Under p = 0.5: 0.5^4 = 0.0625. The ratio 0.1024/0.0625 = 1.6384.
+--- D
+0.0625
+>> This is the likelihood under p = 0.5 only. The factor asked is the ratio of the two likelihoods.
+--- explain
+Likelihood at p = 0.8: 0.8 x 0.8 x 0.8 x 0.2 = 0.1024. At p = 0.5: 0.5^4 = 0.0625. Ratio = 0.1024/0.0625 = 1.6384, so ML prefers p = 0.8.
+
+=== Q
+topic: Logistic regression
+kind: calc
+diff: 1
+source: W2 Logistic regression (the model); style of practice exam Q12
+--- stem
+A logistic regression model has weight vector β = (-2, 0.5, 1.5), where the first weight is the intercept and multiplies the constant first feature 1. For x = (1, 6, 1), what is P(y = 1 | x)? (Round to 4 decimals.)
+--- A
+0.9890
+>> This drops the intercept: z = 0.5(6) + 1.5(1) = 4.5 instead of 2.5. The first weight is multiplied by the 1 in x and must be included.
+--- B*
+0.9241
+>> Right. z = β.x = -2(1) + 0.5(6) + 1.5(1) = 2.5. Then 1/(1 + e^(-2.5)) = 0.9241.
+--- C
+0.7311
+>> This drops the last feature and uses z = -2 + 3 = 1. All three terms of β.x are needed.
+--- D
+0.0759
+>> This is P(y = 0 | x) = 1 - 0.9241. The question asks for the probability of class 1.
+--- explain
+z = β.x = (-2)(1) + (0.5)(6) + (1.5)(1) = 2.5. P(y = 1 | x) = 1/(1 + e^(-2.5)) = 1/(1 + 0.0821) = 0.9241.
+
+=== Q
+topic: Logistic regression
+kind: calc
+diff: 2
+source: W2 Logistic regression; log-odds equals the linear score
+--- stem
+A logistic regression model (no intercept) has β = (0.4, -0.7). For x = (3, 1), what are the odds P(y = 1 | x) / P(y = 0 | x)? (Round to 4 decimals.)
+--- A
+0.6225
+>> This is the probability P(y = 1 | x) = 1/(1 + e^(-0.5)), not the odds. Odds are p/(1 - p) = 0.6225/0.3775.
+--- B
+0.5000
+>> This is z = β.x, which is the LOG-odds. The odds are e^z.
+--- C*
+1.6487
+>> Right. z = 0.4(3) - 0.7(1) = 0.5. In logistic regression the log-odds equals z, so the odds are e^0.5 = 1.6487.
+--- D
+0.6065
+>> This is e^(-0.5), the odds of class 0 against class 1. The question asks for class 1 against class 0.
+--- explain
+z = β.x = 1.2 - 0.7 = 0.5. Because ln(p/(1 - p)) = z, the odds are e^0.5 = 1.6487 (equivalently p = 0.6225 and 0.6225/0.3775 = 1.6487).
+
+=== Q
+topic: Logistic regression
+kind: concept
+diff: 1
+source: W2 Logistic regression, decision rule and boundary
+--- stem
+A logistic regression model for two features x1 and x2 has P(y = 1 | x) = 1/(1 + e^(-z)) with z = -3 + x1 + 2 x2. Which statement about its decision boundary (where P(y = 1 | x) = 0.5) is correct?
+--- A*
+It is the straight line x1 + 2 x2 = 3.
+>> Correct. P = 0.5 exactly when z = 0, that is -3 + x1 + 2 x2 = 0. This is a straight line, so the model is linear in the features.
+--- B
+It is the straight line x1 + 2 x2 = 3.5.
+>> This solves z = 0.5, mixing up the probability 0.5 with the score. A probability of 0.5 corresponds to a score of 0.
+--- C
+It is a curve, because the sigmoid is not linear.
+>> The sigmoid changes how confident the probability is, not where it equals 0.5. The boundary is z = 0, which is a straight line, so logistic regression is a linear classifier.
+--- D
+It is the straight line x1 + 2 x2 = -3.
+>> The intercept sign has been kept as it is. Setting z = 0 moves the -3 to the other side, giving x1 + 2 x2 = 3.
+--- explain
+Since sigma(z) = 0.5 only at z = 0, the boundary is -3 + x1 + 2 x2 = 0, i.e. x1 + 2 x2 = 3. It is a line even though the probability curve is S-shaped.
+
+=== Q
+topic: Logistic regression
+kind: concept
+diff: 2
+source: W2 Logistic regression (the logit assumption, coefficients); log-odds is linear
+--- stem
+In a fitted logistic regression, the coefficient of feature x2 is β2 = 0.7. Holding all other features fixed, what happens when x2 increases by 1?
+--- A
+The probability P(y = 1) increases by 0.7.
+>> The coefficient is not a change in probability. The effect on the probability depends on where you start on the S-shaped curve, while the effect on the log-odds is the same everywhere.
+--- B*
+The odds P(y = 1)/P(y = 0) are multiplied by e^0.7, about 2.01.
+>> Correct. The log-odds is linear in the features, so a unit rise in x2 adds 0.7 to the log-odds, which multiplies the odds by e^0.7 = 2.01.
+--- C
+The log-odds is multiplied by 0.7.
+>> The log-odds changes by an ADDITION of 0.7 (the model is additive in the log-odds), not by multiplication.
+--- D
+The probability P(y = 1) is multiplied by e^0.7.
+>> It is the odds, not the probability, that are multiplied by e^0.7. A probability cannot be multiplied by 2.01 repeatedly, because it would exceed 1.
+--- explain
+The model says ln(odds) = β.x. Raising x2 by 1 adds β2 = 0.7 to ln(odds), so the odds are multiplied by e^0.7 = 2.0138.
+
+=== Q
+topic: Logistic regression
+kind: concept
+diff: 2
+source: W2 Logistic regression (why not linear regression, pros and cons); R2
+--- stem
+(Select one or more.) Which statements comparing logistic regression with linear regression are correct?
+--- A*
+Logistic regression outputs a value strictly between 0 and 1.
+>> Correct. The sigmoid squashes any score into (0, 1), so the output can be read as a probability.
+--- B*
+Linear regression fitted to 0/1 labels can predict values below 0 or above 1.
+>> Correct. A linear score is unbounded, which is one reason it is not used directly to model probabilities.
+--- C
+Logistic regression has a closed-form solution like the normal equations.
+>> Incorrect. The cross-entropy cost is convex but has no closed-form minimiser, so gradient descent or a similar numerical method is used.
+--- D
+Logistic regression is fitted by minimising the sum of squared errors.
+>> Incorrect. It is fitted by maximum likelihood with a Bernoulli model, which means minimising cross-entropy. Squared error is the loss that comes from Gaussian noise in linear regression.
+--- explain
+The sigmoid bounds the output in (0, 1); a plain linear score is not bounded. Logistic regression has no closed form and uses cross-entropy (Bernoulli MLE), while linear regression has the normal equations and squared error.
+
+=== Q
+topic: Logistic regression
+kind: calc
+diff: 3
+source: W2 Parameter estimation (cross-entropy cost J)
+--- stem
+A logistic regression model predicts P(y = 1 | x) = 0.9, 0.2 and 0.6 for three training examples whose true labels are y = 1, 0 and 1. What is the average cross-entropy cost J = -(1/3) sum of [y ln p + (1 - y) ln(1 - p)], with natural logs? (Round to 4 decimals.)
+--- A
+0.8393
+>> This is the total negative log-likelihood. The cost J divides it by the number of examples (3).
+--- B*
+0.2798
+>> Right. The example terms are ln 0.9 = -0.1054, ln(1 - 0.2) = ln 0.8 = -0.2231 and ln 0.6 = -0.5108. Their sum is -0.8393, so J = 0.8393/3 = 0.2798.
+--- C
+0.7419
+>> This uses ln 0.2 = -1.6094 for the second example. Its label is 0, so the term is ln(1 - 0.2) = ln 0.8, not ln 0.2.
+--- D
+0.1215
+>> This uses base-10 logarithms. The question asks for natural logs, and log10 values are 2.3 times smaller.
+--- explain
+Terms: example 1 (y = 1): ln 0.9 = -0.1054. Example 2 (y = 0): ln(1 - 0.2) = ln 0.8 = -0.2231. Example 3 (y = 1): ln 0.6 = -0.5108. Sum = -0.8393, so J = 0.8393/3 = 0.2798.
+
+=== Q
+topic: Logistic regression
+kind: concept
+diff: 1
+source: W2 Two perspectives (Bernoulli MLE and cross-entropy); tutorial Q3
+--- stem
+Assume y given x is Bernoulli with success probability σ(x.w), and w is fitted by maximum likelihood. Which loss does this minimise?
+--- A
+The sum of squared errors between y and x.w
+>> Squared error comes from assuming Gaussian noise (linear regression). With a Bernoulli outcome the likelihood gives a different loss.
+--- B*
+The cross-entropy (negative Bernoulli log-likelihood)
+>> Correct. The loss is -[y ln p + (1 - y) ln(1 - p)] summed over examples. Course summary: MSE is to Gaussians as cross-entropy is to Bernoullis.
+--- C
+The sum of absolute errors between y and σ(x.w)
+>> Absolute error corresponds to Laplace noise, not to a Bernoulli model for the label.
+--- D
+The number of misclassified training examples
+>> The 0-1 error is not what maximum likelihood minimises. It is not smooth, and the Bernoulli likelihood gives the cross-entropy instead.
+--- explain
+Bernoulli log-likelihood = sum of [y ln p + (1 - y) ln(1 - p)] with p = σ(x.w). Maximising it is the same as minimising the cross-entropy.
+
+=== Q
+topic: Logistic regression
+kind: concept
+diff: 2
+source: W2 Logistic regression (decision rule at score 0); sigmoid properties
+--- stem
+All the weights of a fitted logistic regression model, including the intercept, are multiplied by 3. Which statement about the new model, compared with the old one, is correct?
+--- A*
+The decision boundary is the same, and the probabilities move away from 0.5.
+>> Correct. The score z becomes 3z, which has the same sign and the same zero, so the boundary and the predicted classes are unchanged. A larger |z| pushes sigma(z) closer to 0 or 1.
+--- B
+The decision boundary is the same, and all probabilities are the same.
+>> The boundary is unchanged, but the probabilities are not: sigma(3z) differs from sigma(z) unless z = 0.
+--- C
+The decision boundary moves, because every weight has changed.
+>> Multiplying all weights (intercept included) by a positive number does not move the line z = 0. Only the ratios of the weights set its position.
+--- D
+The predicted classes flip, because every weight has been scaled.
+>> A flip would need a negative multiplier. Multiplying by +3 keeps the sign of z, so every example stays on the same side of the boundary.
+--- explain
+New score = 3z. Same zero, same sign, so the boundary and the classes are unchanged. The probability sigma(3z) is more extreme than sigma(z) whenever z is not 0.
+
+=== Q
+topic: Logistic regression
+kind: concept
+diff: 1
+source: W2 Generative vs discriminative; W3 Discriminative versus generative models
+--- stem
+Which statement correctly contrasts logistic regression with Naive Bayes?
+--- A
+Logistic regression models P(x | y) and P(y); Naive Bayes models P(y | x) directly.
+>> The roles are swapped. Naive Bayes is the generative method and logistic regression the discriminative one.
+--- B
+Both models P(x | y) and P(y), and then apply Bayes rule to classify.
+>> Only Naive Bayes does this. Logistic regression never models how the features are distributed within each class.
+--- C*
+Logistic regression models P(y | x) directly; Naive Bayes models P(x | y) and P(y) and applies Bayes rule.
+>> Correct. Logistic regression is discriminative and Naive Bayes is generative, so only Naive Bayes can generate new examples.
+--- D
+Logistic regression needs the independence of features given the class; Naive Bayes does not.
+>> It is the other way round. Naive Bayes assumes the features are independent given the class. Logistic regression makes no such assumption.
+--- explain
+Discriminative: P(y | x) directly (logistic regression). Generative: P(x | y) and P(y) plus Bayes rule (Naive Bayes, with the conditional independence assumption).
+
+=== Q
+topic: Logistic regression
+kind: concept
+diff: 2
+source: W2 Logistic regression (log-odds linear in features; coefficients)
+--- stem
+(Select one or more.) A logistic regression model has log-odds β0 + β1 x1 + β2 x2. Which statements are correct?
+--- A*
+If β1 > 0, increasing x1 while holding x2 fixed increases P(y = 1 | x).
+>> Correct. A positive β1 raises the log-odds, and the sigmoid is increasing, so the probability of class 1 rises (though not by a fixed amount).
+--- B*
+e^β2 is the factor by which the odds of y = 1 change when x2 increases by one unit.
+>> Correct. The log-odds changes by β2 per unit of x2, so the odds are multiplied by e^β2.
+--- C
+β1 is the change in P(y = 1 | x) for each unit increase in x1.
+>> Incorrect. It is the change in the LOG-ODDS. The change in probability depends on the current value of x, because the sigmoid is S-shaped.
+--- D
+The decision boundary is curved, because the sigmoid is not a straight line.
+>> Incorrect. P = 0.5 exactly when the linear score is 0, so the boundary β0 + β1 x1 + β2 x2 = 0 is a straight line.
+--- explain
+The model says ln(odds) = β0 + β1 x1 + β2 x2. So β1 is a per-unit change in log-odds, e^β1 a per-unit multiplier on the odds, and the boundary is the line where the score is 0.

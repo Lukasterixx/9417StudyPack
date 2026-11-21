@@ -1,0 +1,156 @@
+{
+ "symbols": {
+  "w": "a weight: the strength of one connection; w_ji runs into unit j from unit i",
+  "i": "counts inputs or weights; in w_ji, the unit the wire comes from",
+  "x": "an input value arriving at a unit; x_ji is the signal on the wire into j from i",
+  "k": "counts the output units (the network's last layer)",
+  "h": "counts the hidden units; a unit index, not a layer count",
+  "o": "a unit's output: +1 or -1 for a perceptron, between 0 and 1 for a sigmoid",
+  "delta": "a unit's blame term; the gradient is minus delta times the input, so the minus stays outside",
+  "t": "the target: the correct output the unit should give",
+  "eta": "the learning rate: how big a step each update takes",
+  "d": "one training example (as in t_d, o_d); in dσ/dx, a tiny change",
+  "bf:w": "the weight vector: all of a unit's weights together, bias included",
+  "E": "the error being minimised: half the squared misses added up",
+  "y": "the true label of an example (+1 or -1 for a perceptron, 0 or 1 in the lab)",
+  "sum": "add up the term that follows, once for every value of the index shown",
+  "bf:x": "an input vector with an extra 1 for the bias; in the search loop, the current point",
+  "partial": "a partial derivative: how much the quantity changes when only the next variable changes",
+  "e": "Euler's number, about 2.718, in e^x",
+  "j": "the unit a wire goes into: in w_ji, the receiving unit",
+  "n": "a count: inputs to a unit, or a layer's inputs and outputs (n_in, n_out)",
+  "f": "a function: ReLU's f(x), a layer's output f_i, or the function being differentiated",
+  "c": "an intermediate value (a graph node) in a worked computation; in class weights, a class",
+  "Delta": "the change made to the weight in one update",
+  "sigma": "the sigmoid function, which squashes a total into a number between 0 and 1",
+  "a": "a named quantity in an example: graph node a = e^x, or a dropout neuron's output",
+  "gamma": "the margin of the perceptron's separator; in the weight penalty, the regularisation strength",
+  "p": "the predicted probability of class 1 for an example (the lab's name for o)",
+  "D": "the training dataset (E_D is the error over all of it); D_in is the input depth",
+  "F": "the filter size: its width and height in a convolution",
+  "in": "is a member of the set that follows",
+  "W": "the width of the input image; in a network, a layer's weight matrix",
+  "b": "a layer's bias; in the graph examples, a node b",
+  "g": "the activation function (g' is its slope); in the lab, also one of a composed pair",
+  "P": "zero-padding: how many border rows of zeros are added around the input",
+  "alpha": "the momentum factor; for classes, the weight on class c's loss",
+  "S": "the stride: how far the filter moves each step",
+  "m": "the mini-batch size: how many examples go into one update",
+  "z": "a unit's weighted total before squashing; in the graph rule, a child node",
+  "K": "the number of filters in a convolutional layer; in pooling, one side of the J by K map",
+  "T": "transpose: flips rows and columns, so w^T x is the dot product of w and x",
+  "R": "the radius of the data: the length of the longest input vector",
+  "max": "the largest of the values listed",
+  "nabla": "the gradient: one slope per weight, pointing in the direction the error rises fastest",
+  "log": "the logarithm used in the cross-entropy loss",
+  "H": "the cross-entropy loss between true and predicted classes; H_out is output height",
+  "norm": "the length of a vector (its 2-norm)",
+  "J": "one side length of the feature map being pooled (a J by K map)",
+  "hat:y": "the predicted probabilities, one per class, from the softmax",
+  "L": "the loss (the lab's name for E)",
+  "ln": "the natural logarithm",
+  "bf:p": "the search direction: which way the next step goes",
+  "lambda": "the penalty strength in W1's ridge; in the lab, an eigenvalue of X^T X",
+  "w:freq": "how often a class occurs in the training images",
+  "w:child": "the nodes that this node feeds into directly",
+  "X": "the data matrix: one row per training example",
+  "propto": "is proportional to (the slide prints the class weight alpha like this)",
+  "N": "the number of training examples",
+  "abs": "the absolute value: the size of the number, ignoring sign",
+  "w:net": "a unit's weighted total of its inputs, before squashing"
+ },
+ "sections": {
+  "Neurons and the perceptron": {
+   "i": "counts the inputs to the unit, from the constant 1 up to n",
+   "x": "an input value; x_0 is the constant 1 that carries the bias"
+  },
+  "Perceptron learning": {
+   "i": "counts the training examples",
+   "j": "a second training example: one that is a misclassified negative",
+   "gamma": "the margin: the gap the separator leaves around its closest point",
+   "x": "an example's input values; x_i is training example i"
+  },
+  "Optimisation and gradient descent": {
+   "o": "the linear unit's output: w dot x, with no threshold or squashing",
+   "i": "counts the unit's weights and the inputs they multiply",
+   "d": "one training example, as in t_d and o_d"
+  },
+  "Multi-layer networks": {
+   "W": "a layer's weight matrix; W_2 W_1 x applies one layer after another"
+  },
+  "The sigmoid unit": {
+   "i": "counts the inputs to the unit, from the constant 1 up to n",
+   "x": "an input value, or the total fed into the sigmoid when writing the sigmoid's slope"
+  },
+  "Backpropagation": {
+   "i": "the unit a wire comes from: in w_ji and x_ji, the sending unit",
+   "d": "one training example",
+   "n": "counts training iterations in momentum",
+   "alpha": "the momentum factor: how much of the previous weight change is repeated"
+  },
+  "Generalisation and capacity": {
+   "gamma": "the regularisation strength: how heavily large weights are charged",
+   "i": "the unit a wire comes from, in w_ji",
+   "d": "one training example"
+  },
+  "Neural networks for classification": {
+   "d": "one training example",
+   "t": "the true class of an example, 0 or 1"
+  },
+  "Deep learning and CNNs": {
+   "sigma": "the softmax: turns raw scores into probabilities that add up to 1",
+   "x": "a unit's raw score (ReLU's input, softmax's x_j); in the dropout example, an input value",
+   "y": "the true class as a one-hot vector; in the dropout example, a second input",
+   "i": "counts the classes (in softmax and the loss)",
+   "j": "the class whose probability is being computed; i runs over all classes",
+   "E": "the expected value: the average over the random dropout patterns",
+   "f": "the ReLU activation function",
+   "D": "the depth of the input volume (D_in)",
+   "W": "the width of the input image",
+   "alpha": "the weight on class c's loss"
+  },
+  "Training deep networks": {
+   "alpha": "the weight on class c's loss: rarer classes get a larger weight",
+   "i": "counts the classes",
+   "c": "one class of the images",
+   "y": "the true class as a one-hot vector"
+  },
+  "Automatic differentiation": {
+   "i": "counts the layers of the network",
+   "x": "the input to the function being differentiated; f_0 = x",
+   "e": "Euler's number in e^x; also names a graph node",
+   "W": "the weight matrix of a layer; its rows are the units' weight vectors",
+   "K": "the number of layers; f_K is the final output",
+   "z": "a child node: a node this one feeds directly",
+   "y": "a node in the computation graph, not a label"
+  },
+  "Errors and inconsistencies": {
+   "o": "a unit's output; for a linear unit, just w dot x with no threshold"
+  },
+  "Lab exercises": {
+   "w": "the weight vector (the lab writes it without bold)",
+   "i": "counts training examples",
+   "d": "a tiny change: dL/dw is the slope of the loss as w changes",
+   "x": "an example's inputs (x_i); in Ex 7 and 8, the variable of a function",
+   "y": "an example's true label, 0 or 1",
+   "f": "the function being differentiated, built from graph nodes",
+   "b": "the graph node b = e^a",
+   "c": "the graph node c = a + b",
+   "e": "Euler's number in e^x; also names a graph node",
+   "a": "the graph node a = x squared"
+  },
+  "Backpropagation with numbers": {
+   "x": "an input value fed to a unit (x_1 = 1, x_2 = 0.5)",
+   "i": "the unit a wire comes from"
+  },
+  "Code you should recognise": {
+   "y": "the output of the toy function x squared, not a label",
+   "x": "the variable of the toy function; in Normalize, a pixel value",
+   "delta":"the lab code's error term: opposite in sign to the slides' delta"
+  },
+  "Formula sheet": {
+   "i": "a training example in y_i, x_i; an input or weight in w_i; in w_ji, the sending unit",
+   "n": "the iteration number in momentum; in n_in and n_out, a layer's input or output count"
+  }
+ }
+}
